@@ -1,0 +1,44 @@
+@use '../abstract/variables';
+
+.btn {
+  display: inline-block;
+  border: none;
+  border-radius: variables.$border-radius;
+  background-color: var(--primary);
+  color: variables.$color-light;
+  padding: 1rem 2rem;
+  margin: 0 1rem;
+  font-size: 1.5rem;
+
+  &:hover,
+  &:focus {
+    cursor: pointer;
+    background-color: var(--primary-dark);
+  }
+}
+
+%btn--floating {
+  position: fixed;
+  right: 4rem;
+  bottom: 4rem;
+  width: 5rem;
+  height: 5rem;
+  border: none;
+  border-radius: 50%;
+  background-color: var(--primary);
+  color: variables.$color-light;
+  font-weight: bold;
+  font-size: 3rem;
+  text-align: center;
+  box-shadow: variables.$box-shadow;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus,
+  &:target,
+  &:hover {
+    background-color: var(--primary-dark);
+  }
+}

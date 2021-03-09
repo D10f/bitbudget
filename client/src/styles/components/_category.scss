@@ -1,0 +1,13 @@
+.category {
+  font-size: .85em;
+  text-transform: lowercase;
+  background: darkseagreen;
+  color: white;
+  padding: .2rem 1rem;
+  border-radius: 3px;
+
+  &:hover {
+    background: seagreen;
+    cursor: pointer;
+  }
+}

@@ -1,0 +1,120 @@
+@use '../abstract/variables';
+@use '../components/input';
+
+.settings,
+.profile {
+  margin: 3rem 0;
+  background-color: var(--background-color);
+
+  &__header {
+    text-align: center;
+    color: var(--text-color);
+  }
+}
+
+.settings {
+  &__list {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin: 3rem 0;
+  }
+
+  &__setting {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 50%;
+    margin: 1rem 0;
+    color: var(--text-color);
+  }
+
+  &__text-input {
+    @extend %text-input;
+
+    &--readonly {
+      color: variables.$color-gray-dark;
+
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+
+  &__currency {
+    @extend %select-input;
+    border-bottom: 2px solid var(--primary);
+  }
+
+  &__checkbox {
+    display: none;
+
+    &:checked + .settings__theme::before {
+      opacity: 1;
+    }
+  }
+
+  &__theme {
+    @extend %radio-input;
+
+    &:focus {
+      outline: none;
+    }
+    &:focus::before,
+    &:hover::before {
+      opacity: 1;
+    }
+    &--light {
+      border: 2px solid variables.$color-light;
+    }
+
+    &--dark {
+      border: 2px solid variables.$color-dark;
+    }
+
+    &--blue {
+      border: 2px solid variables.$color-secondary;
+    }
+
+    &--orange {
+      border: 2px solid variables.$color-primary;
+    }
+
+    &--green {
+      border: 2px solid variables.$color-tertiary;
+    }
+
+    &--light::before {
+      background-color: #fff;
+      border: 2px solid #fff;
+    }
+    &--dark::before {
+      background-color: variables.$color-darker;
+      border: 2px solid variables.$color-darker;
+    }
+    &--blue::before {
+      background-color: steelblue;
+      border: 2px solid seetlblue;
+    }
+    &--orange::before {
+      background-color: orangered;
+      border: 2px solid orangered;
+    }
+    &--green::before {
+      background-color: darkseagreen;
+      border: 2px solid darkseagreen;
+    }
+  }
+
+  &__actions {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+.profile {
+  &__category-list {
+    max-width: 40rem;
+  }
+}

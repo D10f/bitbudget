@@ -1,0 +1,105 @@
+import { useState } from 'react';
+import { connect } from 'react-redux';
+import { startSignupUser } from '../redux/actions/user';
+// import axios from 'axios';
+
+const SignUp = ({ startSignupUser, history }) => {
+
+  const [credentials, setCredentials] = useState({
+    username: '',
+    password: '',
+    password2: '',
+    confirmPass: ''
+  });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const { username, password, password2, confirmPass } = credentials;
+
+    // spam bot detected
+    if (password2) {
+      return;
+    }
+
+    if (password !== confirmPass) {
+      console.log('Passwords don\'t match');
+      return;
+    }
+
+    await startSignupUser({ username, password });
+    history.push('/');
+  };
+
+  const handleChange = (e) => {
+    setCredentials({
+      ...credentials,
+      [e.target.name]: e.target.value
+    });
+  };
+
+  return (
+    <form
+      className="form"
+      onSubmit={handleSubmit}
+    >
+      <div className="form__control-group">
+        <label className="form__label">
+          Username
+        </label>
+        <input
+        value={credentials.username}
+        onChange={handleChange}
+        className="form__input"
+        name="username"
+        placeholder="username"
+        />
+      </div>
+      <div className="form__control-group">
+        <label className="form__label">
+          Password
+        </label>
+        <input
+          value={credentials.password}
+          onChange={handleChange}
+          className="form__input"
+          name="password"
+          placeholder="password"
+          type="password"
+        />
+      </div>
+        <input
+          value={credentials.password2}
+          onChange={handleChange}
+          name="password2"
+          className="form__input form__input--hidden"
+          tabIndex="-1"
+          autoComplete="niet"
+          type="hidden"
+        />
+      <div className="form__control-group">
+        <label
+          className="form__label"
+          htmlFor="confirmPass"
+        >Confirm Password
+        </label>
+        <input
+          value={credentials.confirmPass}
+          onChange={handleChange}
+          className="form__input"
+          name="confirmPass"
+          id="confirmPass"
+          type="password"
+          placeholder="confirm password"
+        />
+      </div>
+      <button className="btn">Sign Up</button>
+    </form>
+  );
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  startSignupUser: (user) => dispatch(startSignupUser(user))
+});
+
+export default connect(undefined, mapDispatchToProps)(SignUp);

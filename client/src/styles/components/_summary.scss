@@ -1,0 +1,22 @@
+@use '../abstract/variables';
+
+.summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+  gap: 2rem;
+
+  &__title {
+    grid-area: title;
+    margin: 2rem 0;
+    color: var(--text-color);
+  }
+
+  &__graph {
+    border: 3px dashed darkcyan;
+    background: lightcyan;
+    width: 30rem;
+    height: 30rem;
+  }
+}

@@ -1,0 +1,74 @@
+@use '../abstract/variables';
+@use 'sass:color';
+
+.balance {
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+
+  &__card {
+    flex: 1 0 30%;
+    // min-height: 10rem;
+    border-radius: variables.$border-radius;
+    box-shadow: variables.$box-shadow;
+    display: flex;
+    justify-content: space-between;
+
+    &--1 {
+      background-image: linear-gradient(to right bottom, steelblue, darkslateblue);
+      border: 1px solid darkslateblue;
+
+      &:hover {
+        background-image: linear-gradient(
+          to right bottom,
+          color.adjust(steelblue, $lightness: 10%),
+          color.adjust(darkslateblue, $lightness: 10%)
+        );
+      }
+    }
+
+    &--2 {
+      background-image: linear-gradient(to right bottom, darkseagreen, seagreen);
+      border: 1px solid seagreen;
+
+      &:hover {
+        background-image: linear-gradient(
+          to right bottom,
+          color.adjust(darkseagreen, $lightness: 10%),
+          color.adjust(seagreen, $lightness: 10%)
+        );
+      }
+    }
+
+    &--3 {
+      background-image: linear-gradient(to right bottom, tomato, firebrick);
+      border: 1px solid firebrick;
+
+      &:hover {
+        background-image: linear-gradient(
+          to right bottom,
+          color.adjust(tomato, $lightness: 10%),
+          color.adjust(firebrick, $lightness: 10%)
+        );
+      }
+    }
+  }
+
+  &__card-title {
+    text-transform: uppercase;
+    color: variables.$color-light;
+    padding: 1rem;
+  }
+
+  &__amount {
+    font-weight: bold;
+    font-size: 2rem;
+    text-align: right;
+    color: variables.$color-light;
+    padding: 1rem 2rem;
+  }
+
+  &__total {}
+  &__in {}
+  &__out {}
+}

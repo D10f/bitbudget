@@ -1,0 +1,20 @@
+@use '../components/input';
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  flex-basis: max-content;
+  margin-bottom: 2rem;
+
+  &__date,
+  &__text,
+  &__sort {
+    margin: 0 1rem;
+  }
+
+  &__text {
+    @extend %text-input;
+    flex: 1 0 auto;
+    margin-left: 0;
+  }
+}
