@@ -1,7 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setUser } from './redux/actions/user';
+import useTheme from './hooks/useTheme';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -18,18 +19,13 @@ import AddWallet from './pages/AddWallet';
 import WalletSettings from './pages/WalletSettings';
 import About from './pages/About';
 
-const App = ({ isAuthenticated }) => {
+const App = ({ isAuthenticated, theme, primaryColor }) => {
 
-  // const [loading, setLoading] = useState(true);
-  //
-  // useEffect(() => {
-  //   if (isAuthenticated) {
-  //     // User has refreshed page
-  //     setLoading(false);
-  //   } else {
-  //     setLoading(false);
-  //   }
-  // }, [isAuthenticated]);
+  const updateTheme = useTheme();
+
+  useEffect(() => {
+    updateTheme(theme, primaryColor);
+  }, [theme, primaryColor]);
 
   return (
     <>
@@ -54,10 +50,9 @@ const App = ({ isAuthenticated }) => {
 };
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.user.isAuthenticated
+  isAuthenticated: state.user.isAuthenticated,
+  theme: state.theme.theme,
+  primaryColor: state.theme.primary
 });
 
-const mapDispatchToProps = (dispatch) => ({
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default connect(mapStateToProps)(App);

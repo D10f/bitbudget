@@ -1,11 +1,16 @@
 import { connect } from 'react-redux';
 import useSnapshot from '../hooks/useSnapshot';
-import { updateExpense } from '../redux/actions/expenses';
+import { updateExpense, removeExpense } from '../redux/actions/expenses';
 import ExpenseForm from '../components/ExpenseForm';
 
-const EditExpensePage = ({ updateExpense, expense, history }) => {
+const EditExpensePage = ({ updateExpense, removeExpense, expense, history }) => {
 
   const createSnapshot = useSnapshot();
+
+  const handleDelete = (e) => {
+    removeExpense(expense._id);
+    createSnapshot().then(history.push('/expenses'));
+  };
 
   const onSubmit = (expenseData) => {
     const updatedExpense = {
@@ -19,7 +24,11 @@ const EditExpensePage = ({ updateExpense, expense, history }) => {
 
   return (
     <section className="expense-page">
-      <button className="expense-page__deletebtn">-</button>
+      <button
+        onClick={handleDelete}
+        className="expense-page__deletebtn"
+      >-
+      </button>
       <h3>Edit Expense</h3>
       <ExpenseForm
         expense={expense}
@@ -34,7 +43,8 @@ const mapStateToProps = (state, props) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateExpense: (expense) => dispatch(updateExpense(expense))
+  updateExpense: (expense) => dispatch(updateExpense(expense)),
+  removeExpense: (expenseId) => dispatch(removeExpense(expenseId))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditExpensePage);

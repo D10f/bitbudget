@@ -79,7 +79,7 @@ export const startLogoutUser = (authToken) => {
         del('cryptoKey');
         dispatch(logoutUser());
         dispatch(setExpenses([]));
-        dispatch(setWallets([{ name: 'Default Wallet', budget: 0, currency: '¥', isCurrent: true }]));
+        dispatch(setWallets([{ name: 'Default Wallet', budget: 0, currency: '$', isCurrent: true }]));
       })
       .catch(console.error);
   };

@@ -3,42 +3,21 @@ import { connect } from 'react-redux';
 import { setTheme, setPrimaryColor } from '../redux/actions/theme';
 import { startUpdateUser, logoutUser } from '../redux/actions/user';
 import useSnapshot from '../hooks/useSnapshot';
-import shader from '../utils/colorShader';
+import useTheme from '../hooks/useTheme';
+// import shader from '../utils/colorShader';
 
 const Profile = ({ user, theme, primaryColor, startUpdateUser, logoutUser, setTheme, setPrimaryColor }) => {
 
   const createSnapshot = useSnapshot();
+  const updateTheme = useTheme();
 
   const [passwords, setPasswords] = useState({
     password: '',
     confirm: ''
   });
 
-  const colors = {
-    light: {
-      primary: '#FF8C00',
-      secondary: '#1E90FF',
-      tertiary: '#32CD32',
-      textColor: '#333',
-      backgroundColor: '#F4F4F4'
-    },
-    dark: {
-      primary: shader('#FF8C00', 0.2),
-      secondary: shader('#1E90FF', 0.2),
-      tertiary: shader('#32CD32', 0.2),
-      textColor: '#F4F4F4',
-      backgroundColor: '#333'
-    }
-  };
-
-  const rootEl = document.querySelector(':root');
-
   useEffect(() => {
-    rootEl.style.setProperty('--primary', colors[theme][primaryColor]);
-    rootEl.style.setProperty('--primary-light', shader(colors[theme][primaryColor], 0.2));
-    rootEl.style.setProperty('--primary-dark', colors['dark'][primaryColor]);
-    rootEl.style.setProperty('--background-color', colors[theme]['backgroundColor']);
-    rootEl.style.setProperty('--text-color', colors[theme]['textColor']);
+    updateTheme(theme, primaryColor);
   }, [theme, primaryColor]);
 
   const handleThemeChange = (e) => {

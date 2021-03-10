@@ -1,30 +1,31 @@
 import { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
-import ExpenseList from './ExpenseList';
 import { sortExpenses, switchSortOrder } from '../redux/actions/filters';
 import { selectSortedExpenses } from '../redux/selectors/expenses';
+import ExpenseList from './ExpenseList';
+import Graph from './Graph';
 
 const Summary = ({ expenses, sortBy, sortDesc, switchSortOrder, sortExpenses }) => {
 
   const [viewAmount, setViewAmount] = useState(5);
   const [latest, setLatest] = useState(expenses.slice(expenses.length - viewAmount));
 
-  const handleSort = useCallback((e) => {
-    const newSortValue = e.target.id;
-
-    if (newSortValue === sortBy) {
-      switchSortOrder();
-    }
-
-    sortExpenses(newSortValue);
-  }, [sortExpenses]);
+  // const handleSort = useCallback((e) => {
+  //   const newSortValue = e.target.id;
+  //
+  //   if (newSortValue === sortBy) {
+  //     switchSortOrder();
+  //   }
+  //
+  //   sortExpenses(newSortValue);
+  // }, [sortExpenses]);
 
   return (
     <>
       <h3 className="summary__title">Last {viewAmount} Expenses</h3>
       <div className="summary">
         <ExpenseList expenses={expenses} />
-        <article className="summary__graph"></article>
+        <Graph expenses={expenses} />
       </div>
 
       <h3 className="summary__title">This Month</h3>

@@ -23,7 +23,8 @@ export const addExpense = (expense = {}) => ({
 // };
 
 export const removeExpense = (expenseId) => ({
-  type: REMOVE_EXPENSE
+  type: REMOVE_EXPENSE,
+  payload: expenseId
 });
 
 export const updateExpense = (expense = {}) => ({
