@@ -15,8 +15,7 @@ const useRestore = () => {
     try {
       const response = await axios.get('http://localhost:5000/snapshot', config);
       const decryptedBuffer = await decryptData(response.data.snapshot.data.data); // What a mouthful!
-      const decoder = new TextDecoder();
-      const decodedData = decoder.decode(decryptedBuffer) ;
+      const decodedData = new TextDecoder().decode(decryptedBuffer);
       const store = JSON.parse(decodedData);
       return store;
     } catch (e) {

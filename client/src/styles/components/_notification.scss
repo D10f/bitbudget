@@ -1,0 +1,75 @@
+@use '../base/animations';
+
+.notification {
+  position: absolute;
+  top: 6rem;
+  right: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+  align-items: flex-end;
+  z-index: 10;
+  max-width: 90vw;
+
+  &__message {
+    position: relative;
+    padding: 1rem 2rem;
+    border-radius: 3px;
+    max-width: 30ch;
+
+    &--error {
+      border: 1px solid orangered;
+      background-color: rgba(orangered, 0.5);
+      color: whitesmoke;
+    }
+
+    &--message {
+      border: 1px solid darkgreen;
+      background-color: rgba(limegreen, 0.5);
+      color: whitesmoke;
+    }
+  }
+
+  /* progress bar styles */
+  &__duration {
+    background: transparent;
+
+    &[value] {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      position: absolute;
+      top: calc(100% - 3px);
+      left: 0;
+      height: 3px;
+      display: block;
+      width: 100%;
+      border: none;
+      // margin-top: 20px;
+      // transition: all .2s ease;
+    }
+
+    &::-webkit-progress-bar {
+      // background-color: whitesmoke;
+    }
+
+    &--error {
+      &[value]::-moz-progress-bar {
+        background-color: orangered;
+      }
+      &[value]::-webkit-progress-value {
+        background-color: orangered;
+      }
+    }
+
+    &--message {
+      &[value]::-moz-progress-bar {
+        background-color: limegreen;
+      }
+      &[value]::-webkit-progress-value {
+        background-color: limegreen;
+      }
+    }
+  }
+}

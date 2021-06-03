@@ -2,11 +2,23 @@ import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import { setTheme, setPrimaryColor } from '../redux/actions/theme';
 import { startUpdateUser, logoutUser } from '../redux/actions/user';
+import { addError, addMessage } from '../redux/actions/notifications';
 import useSnapshot from '../hooks/useSnapshot';
 import useTheme from '../hooks/useTheme';
 // import shader from '../utils/colorShader';
 
-const Profile = ({ user, theme, primaryColor, startUpdateUser, logoutUser, setTheme, setPrimaryColor }) => {
+const Profile = ({
+  history,
+  user,
+  theme,
+  primaryColor,
+  startUpdateUser,
+  logoutUser,
+  setTheme,
+  setPrimaryColor,
+  addMessage,
+  addError
+}) => {
 
   const createSnapshot = useSnapshot();
   const updateTheme = useTheme();
@@ -37,7 +49,7 @@ const Profile = ({ user, theme, primaryColor, startUpdateUser, logoutUser, setTh
     const {password, confirm} = passwords;
 
     if (password && password !== confirm) {
-      return console.log('Passwords do not match');
+      return addError('Passwords do not match.');
     }
 
     if (password) {
@@ -47,6 +59,12 @@ const Profile = ({ user, theme, primaryColor, startUpdateUser, logoutUser, setTh
     }
 
     createSnapshot();
+  };
+
+  const handleLogout = () => {
+    logoutUser(user.token);
+    addMessage('Logged out successfully.');
+    history.push('/login');
   };
 
   return (
@@ -163,7 +181,7 @@ const Profile = ({ user, theme, primaryColor, startUpdateUser, logoutUser, setTh
 
       <div className="settings__actions">
         <button onClick={handleSave} className="btn btn--action">Save Changes</button>
-        <button onClick={() => logoutUser(user.token)} className="btn btn--action">Logout</button>
+        <button onClick={handleLogout} className="btn btn--action">Logout</button>
       </div>
     </section>
   );
@@ -179,7 +197,9 @@ const mapDispatchToProps = (dispatch) => ({
   setTheme: (theme) => dispatch(setTheme(theme)),
   setPrimaryColor: (color) => dispatch(setPrimaryColor(color)),
   startUpdateUser: (updates, authToken) => dispatch(startUpdateUser(updates, authToken)),
-  logoutUser: (authToken) => dispatch(logoutUser(authToken))
+  logoutUser: (authToken) => dispatch(logoutUser(authToken)),
+  addError: msg => dispatch(addError(msg)),
+  addMessage: msg => dispatch(addMessage(msg))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

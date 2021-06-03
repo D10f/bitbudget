@@ -37,3 +37,9 @@ export const SET_PRIMARY_COLOR = 'SET_PRIMARY_COLOR';
 export const SET_CATEGORIES = 'SET_CATEGORIES';
 export const ADD_CATEGORY = 'ADD_CATEGORY';
 export const REMOVE_CATEGORY  = 'REMOVE_CATEGORY';
+
+/* Errors Messages and Notifications */
+export const ADD_ERROR  = 'ADD_ERROR';
+export const REMOVE_ERROR  = 'REMOVE_ERROR';
+export const ADD_MSG  = 'ADD_MSG';
+export const REMOVE_MSG  = 'REMOVE_MSG';

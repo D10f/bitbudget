@@ -1,9 +1,13 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { startSignupUser } from '../redux/actions/user';
+import { addError } from '../redux/actions/notifications';
+import useSnapshot from '../hooks/useSnapshot';
 // import axios from 'axios';
 
-const SignUp = ({ startSignupUser, history }) => {
+const SignUp = ({ startSignupUser, addError, history }) => {
+
+  const createSnapshot = useSnapshot();
 
   const [credentials, setCredentials] = useState({
     username: '',
@@ -24,6 +28,7 @@ const SignUp = ({ startSignupUser, history }) => {
 
     if (password !== confirmPass) {
       console.log('Passwords don\'t match');
+      addError('Passwords don\'t match');
       return;
     }
 
@@ -99,7 +104,8 @@ const SignUp = ({ startSignupUser, history }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  startSignupUser: (user) => dispatch(startSignupUser(user))
+  startSignupUser: (user) => dispatch(startSignupUser(user)),
+  addError: (error) => dispatch(addError(error))
 });
 
 export default connect(undefined, mapDispatchToProps)(SignUp);

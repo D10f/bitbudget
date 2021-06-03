@@ -1,6 +1,7 @@
 import { SET_USER, LOGOUT_USER, UPDATE_USER } from '../actionTypes';
 import { addWallet, setWallets } from './wallet';
 import { setExpenses } from './expenses';
+import { addError } from './notifications';
 import { generateCryptoKey } from '../../utils/crypto';
 import { del } from 'idb-keyval';
 import axios from 'axios';
@@ -20,7 +21,6 @@ export const startLoginUser = (userData = {}) => {
 
     return axios.post('http://localhost:5000/login', userData, config)
       .then(({ data }) => {
-
         const { user, token } = data;
 
         return generateCryptoKey(userData.password)
@@ -48,16 +48,19 @@ export const startSignupUser = (userData = {}) => {
 
     return axios.post('http://localhost:5000/signup', userData, config)
     .then(({ data }) => {
-
       const { user, token } = data;
 
       generateCryptoKey(userData.password)
-      .then(() => {
-        user.token = token;
-        dispatch(setUser(user));
-      });
+        .then(() => {
+          user.token = token;
+          dispatch(setUser(user));
+        });
     })
-    .catch(console.error);
+    .catch(error => {
+      const { errors } = error.response.data;
+      // show an error message onto the screen
+      errors.forEach(error => dispatch(addError(error.msg)));
+    });
   };
 };
 

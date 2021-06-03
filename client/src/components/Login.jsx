@@ -7,7 +7,15 @@ import { setExpenses } from '../redux/actions/expenses';
 import { setWallets } from '../redux/actions/wallet';
 import { setCategories } from '../redux/actions/categories';
 
-const Login = ({ startLoginUser, setExpenses, setWallets, setCategories, setTheme, setPrimaryColor, history }) => {
+const Login = ({
+  startLoginUser,
+  setExpenses,
+  setWallets,
+  setCategories,
+  setTheme,
+  setPrimaryColor,
+  history
+}) => {
 
   const [credentials, setCredentials] = useState({ username: '', password: '' });
   const restoreSnapshot = useRestore();
@@ -17,8 +25,6 @@ const Login = ({ startLoginUser, setExpenses, setWallets, setCategories, setThem
     startLoginUser(credentials).then(token => {
       restoreSnapshot(token)
         .then(store => {
-
-          console.log(store);
 
           if (!store) {
             throw new Error('Something went wrong retrieving your data, please try again or contact support');

@@ -26,7 +26,7 @@ const useTheme = () => {
     rootEl.style.setProperty('--primary-dark', colors['dark'][primaryColor]);
     rootEl.style.setProperty('--background-color', colors[theme]['backgroundColor']);
     rootEl.style.setProperty('--text-color', colors[theme]['textColor']);
-  }
+  };
 };
 
 export default useTheme;

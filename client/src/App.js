@@ -10,6 +10,7 @@ import Signup from './components/Signup';
 import Login from './components/Login';
 import Profile from './components/Profile';
 import PrivateRoute from './components/PrivateRoute';
+import Notification from './components/Notification';
 
 import Dashboard from './pages/Dashboard';
 import ExpensePage from './pages/ExpensePage';
@@ -19,7 +20,7 @@ import AddWallet from './pages/AddWallet';
 import WalletSettings from './pages/WalletSettings';
 import About from './pages/About';
 
-const App = ({ isAuthenticated, theme, primaryColor }) => {
+const App = ({ isAuthenticated, theme, primaryColor, filters }) => {
 
   const updateTheme = useTheme();
 
@@ -30,6 +31,7 @@ const App = ({ isAuthenticated, theme, primaryColor }) => {
   return (
     <>
       <Sidebar />
+      <Notification />
       <main className="main">
         <Header />
         <Switch>
@@ -52,7 +54,8 @@ const App = ({ isAuthenticated, theme, primaryColor }) => {
 const mapStateToProps = (state) => ({
   isAuthenticated: state.user.isAuthenticated,
   theme: state.theme.theme,
-  primaryColor: state.theme.primary
+  primaryColor: state.theme.primary,
+  filters: state.filters
 });
 
 export default connect(mapStateToProps)(App);

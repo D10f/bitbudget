@@ -8,11 +8,11 @@ import App from './App';
 
 import './styles.scss';
 
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./serviceWorker.js')
-    .then(() => console.log('Service Worker registered'))
-    .catch((err) => console.error(err));
-}
+// if ('serviceWorker' in navigator) {
+//   navigator.serviceWorker.register('./serviceWorker.js')
+//     .then(() => console.log('Service Worker registered'))
+//     .catch((err) => console.error(err));
+// }
 
 ReactDOM.render(
   <React.StrictMode>

@@ -8,7 +8,9 @@ import filtersReducer from '../reducers/filtersReducer';
 import walletReducer from '../reducers/walletReducer';
 import themeReducer from '../reducers/themeReducer';
 import categoriesReducer from '../reducers/categoriesReducer';
+import notificationReducer from '../reducers/notificationReducer';
 
+/* Whitelist refers the reducers that will persist in session storage */
 const persistConfig = {
   key: 'root',
   storage: sessionStorage,
@@ -28,7 +30,8 @@ const rootReducer = combineReducers({
   filters: filtersReducer,
   wallets: walletReducer,
   theme: themeReducer,
-  categories: categoriesReducer
+  categories: categoriesReducer,
+  notifications: notificationReducer
 });
 
 export default persistReducer(persistConfig, rootReducer);

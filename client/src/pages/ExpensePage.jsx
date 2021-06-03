@@ -21,6 +21,7 @@ const ExpensePage = ({ expenses, sortBy, sortDesc, sortExpenses, switchSortOrder
   return (
     <section className="expense">
       <Link to="/add-expense" className="expense-page__addbtn">+</Link>
+      <ExpenseFilters />
       {
         expenses.length
         ? <ExpenseList expenses={expenses} sortBy={sortBy} sortDesc={sortDesc} handleSort={handleSort} />

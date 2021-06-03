@@ -1,8 +1,9 @@
+import 'react-dates/lib/css/_datepicker.css';
+import 'react-dates/initialize';
+
 import { useState } from 'react';
 import { connect } from 'react-redux';
 import { DateRangePicker } from 'react-dates';
-import 'react-dates/initialize';
-import 'react-dates/lib/css/_datepicker.css';
 import { setTextFilter, setStartDate, setEndDate } from '../redux/actions/filters';
 
 export const ExpenseFilters = ({ filters, setTextFilter, setStartDate, setEndDate }) => {

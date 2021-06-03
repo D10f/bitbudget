@@ -14,7 +14,6 @@ const Graph = ({ expenses }) => {
     const graph = svg
       .append('g')
       .attr('transform', `translate(${canvas.clientWidth / 2}, ${canvas.clientHeight / 2})`)
-
     const pie = d3.pie()
       .sort(null)
       .value(d => d.amount);
