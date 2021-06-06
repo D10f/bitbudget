@@ -23,7 +23,7 @@ router.post('/signup', signupCheck, async (req, res) => {
     let user = await User.findOne({ username });
 
     if (user) {
-      return res.status(400).json({ message: 'That user already exists' });
+      return res.status(400).send('That user already exists.');
     }
 
     user = new User({ username, password });
@@ -42,8 +42,8 @@ router.post('/signup', signupCheck, async (req, res) => {
 
     res.status(201).send({ user, token });
   } catch (err) {
-    console.log(err, err.message);
-    res.status(500).send({ message: err.message });
+    console.log(err.message);
+    res.status(500).send(err.message);
   }
 
 });

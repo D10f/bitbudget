@@ -14,21 +14,27 @@ export const createSnapshot = async (data, password = '') => {
   };
 
   const dataJSON = JSON.stringify(snapshotData);
-
   const dataBlob = new Blob([dataJSON], { type: 'application/json' });
   const dataBuffer = await dataBlob.arrayBuffer();
-  console.log(dataBuffer);
   const encryptedData = await encryptData(dataBuffer);
-  return await axios.post(
-    'http://localhost:5000/snapshot',
-    { data: encryptedData },
-    {
-      headers: {
-        'Content-type': 'application/octet-stream',
-        'Authorization': `Bearer ${data.user.token}`
-      }
-    }
-  );
+  return fetch('http://localhost:5000/snapshot', {
+    method: 'POST',
+    headers: {
+      'Content-type': 'application/octet-stream',
+      'Authorization': `Bearer ${data.user.token}`
+    },
+    body: encryptedData
+  })
+  // return await axios.post(
+  //   'http://localhost:5000/snapshot',
+  //   { data: encryptedData },
+  //   {
+  //     headers: {
+  //       'Content-type': 'application/octet-stream',
+  //       'Authorization': `Bearer ${data.user.token}`
+  //     }
+  //   }
+  // );
 };
 
 export const restoreSnapshot = async (user, password) => {

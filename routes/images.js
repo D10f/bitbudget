@@ -88,7 +88,6 @@ router.delete('/image/:id', auth, async (req, res) => {
       throw new Error('Image does not exist or could not be found.');
     }
 
-    console.log('removing this image');
     await img.remove();
     res.send();
 

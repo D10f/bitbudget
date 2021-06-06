@@ -5,6 +5,7 @@ import { removeError, removeMessage } from '../redux/actions/notifications';
 const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }) => {
 
   const [progress, setProgress] = useState(100);
+  const [progressUpdate, setProgressUpdate] = useState(true);
 
   // Update progress bar every 16ms for smooth transition, calculate how many
   // updates it will require give the duration of the message.
@@ -15,6 +16,8 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
 
     let _progress = UNITS;
     return setInterval(() => {
+      if (!progressUpdate) return;
+
       if (_progress <= 0) {
         return type === 'error'
           ? removeError(id)
@@ -24,7 +27,7 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
       _progress -= INTERVAL;
       setProgress(_progress);
     }, 16); // 16ms
-  }, []);
+  }, [progressUpdate]);
 
 
   useEffect(() => {
@@ -35,7 +38,11 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
   }, [countDown]);
 
   return (
-    <article className={`notification__message notification__message--${type}`}>
+    <article
+      className={`notification__message notification__message--${type}`}
+      onMouseEnter={() => {}}
+      onMouseLeave={() => {}}
+    >
       <p>{msg}</p>
       <progress
         className={`notification__duration notification__duration--${type}`}

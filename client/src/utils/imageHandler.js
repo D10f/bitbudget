@@ -56,7 +56,6 @@ export const removeImage = async (url, token) => {
     });
 
     if (!res.ok) throw new Error('Network error: could not remove image');
-    return 'AAAAAAAAA'
   } catch (err) {
     return err;
   }

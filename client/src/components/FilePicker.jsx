@@ -46,10 +46,7 @@ const FilePicker = ({
 
   const handleRemoveImage = () => {
     startRemoveExpenseImage(expenseId, imageUrl)
-      .then(() => {
-        console.log('sdfsfsd');
-        setImageUrl('');
-      })
+      .then(() => setImageUrl(''))
   };
 
   return (
@@ -60,7 +57,7 @@ const FilePicker = ({
         onClick={() => filepicker.current.click()}
         disabled={disabled}
       >
-        Add Image
+        { imageUrl ? "Replace Image" : "Add Image"}
       </button>
       {imageUrl && (
         <button

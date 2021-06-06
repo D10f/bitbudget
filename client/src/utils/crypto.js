@@ -15,8 +15,8 @@ export const generateCryptoKey = async (password) => {
     );
 
     // Store key material in indexedDB
-    set('cryptoKey', keyMaterial)
-      .then(() => console.log('key saved'));
+    await set('cryptoKey', keyMaterial);
+    console.log('key saved');
 
   } catch (e) {
     console.error(e.message)

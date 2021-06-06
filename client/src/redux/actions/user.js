@@ -45,7 +45,7 @@ export const startLoginUser = (credentials = {}) => {
           return false; // signals the component not to redirect to main screen
         }
 
-        // error coming from elsewhere e.g., network unavailable
+        // error coming from elsewhere e.g., network error, decryption failed...
         dispatch(addError(err.message));
         dispatch(setUser({}));
         dispatch(logoutUser());
@@ -70,9 +70,8 @@ export const startSignupUser = (credentials = {}) => {
         return createSnapshot(currentState, credentials.password);
       })
       .catch(error => {
-        console.log('Error during signup');
         if (error.response.data) {
-          error.response.data.errors.forEach(err => dispatch(addError(err.msg)));
+          dispatch(addError(error.response.data));
           return false; // signals the component not to redirect anywhere
         } else {
           dispatch(addError('Something went wrong, please check your connection or try again later'));
