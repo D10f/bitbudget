@@ -98,9 +98,14 @@
     }
   }
 
-  &__image {
+  &__image-container {
+    margin: 0 auto;
     max-width: 80rem;
     max-height: 60rem;
+  }
+
+  &__image {
+    width: 100%;
   }
 
   &__title {

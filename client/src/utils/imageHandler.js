@@ -20,6 +20,7 @@ export const uploadImage = (file, expenseId, token) => {
           body: encryptedData
         }
       )
+      .then(res => res.text())
     });
 };
 
@@ -45,48 +46,18 @@ export const loadImage = async (url, token) => {
   }
 };
 
-const resizeImageAndUpload = (file, width, token, collectionId) => {
-  return new Promise((resolve, reject) => {
-    // const reader = new FileReader(file);
+export const removeImage = async (url, token) => {
+  try {
+    const res = await fetch(url, {
+      method: 'DELETE',
+      headers: {
+        'Authorization': `Bearer ${token}`
+      }
+    });
 
-    // reader.onload = e => {
-    //   const img    = new Image();
-    //   img.src = e.target.result;
-    //
-    //   img.onload = ev => {
-    //     const canvas = document.createElement('canvas');
-    //     const MAX_WIDTH  = 800;
-    //     const MAX_HEIGHT = 600;
-    //     let width  = img.width;
-    //     let height = img.height;
-    //     // Add the resizing logic
-    //     if (width > height) {
-    //       if (width > MAX_WIDTH) {
-    //         height *= MAX_WIDTH / width;
-    //         width = MAX_WIDTH;
-    //       }
-    //     } else {
-    //       if (height > MAX_HEIGHT) {
-    //         width *= MAX_HEIGHT / height;
-    //         height = MAX_HEIGHT;
-    //       }
-    //     }
-    //     canvas.width  = width;
-    //     canvas.height = height;
-    //     const ctx = canvas.getContext('2d');
-    //     ctx.drawImage(img, 0, 0, width, height);
-    //     canvas.toBlob(blob => {
-    //       blob.arrayBuffer()
-    //       .then(encryptData)
-    //       .then(uploadImage)
-    //       .then(resolve)
-    //       .catch(reject)
-    //     }, 'image/jpeg');
-    //   }
-    // }
-    //
-    // reader.readAsDataURL(file);
-  });
+    if (!res.ok) throw new Error('Network error: could not remove image');
+    return 'AAAAAAAAA'
+  } catch (err) {
+    return err;
+  }
 };
-
-export default resizeImageAndUpload;

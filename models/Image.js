@@ -1,4 +1,8 @@
+const fs = require('fs');
+const { promisify } = require('util');
 const mongoose = require('mongoose');
+
+const unlink = promisify(fs.unlink);
 
 const imageSchema = mongoose.Schema({
   location: {
@@ -17,5 +21,11 @@ const imageSchema = mongoose.Schema({
 }, { timestamps: true });
 
 const Image = mongoose.model('image', imageSchema);
+
+imageSchema.pre('remove', async function(next) {
+  console.log(`deleting image at ${this.location}`)
+  unlink(this.location);
+  next();
+});
 
 module.exports = Image;

@@ -1,19 +1,25 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { connect } from 'react-redux';
 import { addError } from '../redux/actions/notifications';
-import { startUpdateExpenseImage } from '../redux/actions/expenses';
 import { uploadImage } from '../utils/imageHandler';
+import {
+  startUpdateExpenseImage,
+  startRemoveExpenseImage
+} from '../redux/actions/expenses';
 
 const FilePicker = ({
   authToken,
   addError,
   startUpdateExpenseImage,
+  startRemoveExpenseImage,
+  imageUrl,
   setImageUrl,
   expenseId,
   disabled
 }) => {
 
   const filepicker = useRef(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   const handleFileSelect = (e) => {
     const file = e.target.files[0];
@@ -25,13 +31,25 @@ const FilePicker = ({
       return addError('File size cannot be greater than 1MB');
     }
 
-    uploadImage(file, expenseId, authToken)
-      .then(res => res.text())
-      .then(url => {
-        startUpdateExpenseImage(expenseId, url);
-        setImageUrl(url);
+    startUpdateExpenseImage(file, expenseId)
+      .then(setImageUrl)
+      .catch(addError);
+
+    // uploadImage(file, expenseId, authToken)
+    //   .then(res => res.text())
+    //   .then(url => {
+    //     startUpdateExpenseImage(expenseId, url);
+    //     setImageUrl(url);
+    //   })
+    //   .catch(err => addError(err));
+  };
+
+  const handleRemoveImage = () => {
+    startRemoveExpenseImage(expenseId, imageUrl)
+      .then(() => {
+        console.log('sdfsfsd');
+        setImageUrl('');
       })
-      .catch(err => addError(err));
   };
 
   return (
@@ -44,6 +62,15 @@ const FilePicker = ({
       >
         Add Image
       </button>
+      {imageUrl && (
+        <button
+          className="btn"
+          type="button"
+          onClick={handleRemoveImage}
+        >
+        Remove Image
+        </button>
+      )}
       {!disabled && (
         <input
           className="form__input--file"
@@ -64,6 +91,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   addError: (msg, duration) => dispatch(addError(msg, duration)),
   startUpdateExpenseImage: (id, url) => dispatch(startUpdateExpenseImage(id, url)),
+  startRemoveExpenseImage: (id, url) => dispatch(startRemoveExpenseImage(id, url)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FilePicker);

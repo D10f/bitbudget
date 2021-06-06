@@ -142,6 +142,7 @@ const ExpenseForm = ({ onSubmit, expense, addError }) => {
             {expense ? 'Update Expense' : 'Create New Expense'}
           </button>
           <FilePicker
+            imageUrl={imageUrl}
             setImageUrl={setImageUrl}
             expenseId={expense ? expense._id : ''}
             disabled={expense ? false : true}

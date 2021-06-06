@@ -10,7 +10,7 @@ const mkdir = promisify(fs.mkdir);
 const router = express.Router();
 
 /**
-* @route  POST /image
+* @route  POST /image/:filename/:expenseId
 * @desc   Creates a new image associated with an owner and collectionId
 * @access private
 */
@@ -49,7 +49,7 @@ router.post('/image/:filename/:expenseId', auth, async (req, res) => {
 });
 
 /**
-* @route  GET /image
+* @route  GET /image/:id
 * @desc   Returns an image
 * @access private
 */
@@ -68,6 +68,29 @@ router.get('/image/:id', auth, async (req, res) => {
         if (err) console.error(err);
       }
     );
+
+  } catch (err) {
+    console.log(err, err.message);
+    res.status(400).send(err.message);
+  }
+});
+
+/**
+* @route  DELETE /image/:id
+* @desc   Deletes an image
+* @access private
+*/
+router.delete('/image/:id', auth, async (req, res) => {
+  try {
+    const img = await Image.findById(req.params.id);
+
+    if (!img) {
+      throw new Error('Image does not exist or could not be found.');
+    }
+
+    console.log('removing this image');
+    await img.remove();
+    res.send();
 
   } catch (err) {
     console.log(err, err.message);

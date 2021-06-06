@@ -28,7 +28,9 @@ const ExpenseImage = ({ addError, url, authToken }) => {
   }, [url]);
 
   return (
-    <img ref={imgEl} className="expense__image" />
+    <div className="expense__image-container">
+      { url && <img ref={imgEl} className="expense__image" />}
+    </div>
   );
 };
 
