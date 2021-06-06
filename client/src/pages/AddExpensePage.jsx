@@ -1,23 +1,21 @@
 import { connect } from 'react-redux';
-import useSnapshot from '../hooks/useSnapshot';
-import { addExpense } from '../redux/actions/expenses';
+import { startAddExpense } from '../redux/actions/expenses';
 import { selectCurrentWallet } from '../redux/selectors/expenses';
 import { v4 as uuidv4 } from 'uuid';
 
 import ExpenseForm from '../components/ExpenseForm';
 
-const AddExpensePage = ({ addExpense, wallet, history }) => {
-
-  const createSnapshot = useSnapshot();
+const AddExpensePage = ({ startAddExpense, wallet, history }) => {
 
   const onSubmit = (expenseData) => {
     const expense = {
-      ...expenseData,
       _id: uuidv4(),
+      ...expenseData,
       wallet: wallet.id
     };
-    addExpense(expense);
-    createSnapshot().then(history.push('/expenses'));
+
+    startAddExpense(expense)
+      .then(() => history.push('/expenses'));
   };
 
   return (
@@ -33,7 +31,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  addExpense: (expense) => dispatch(addExpense(expense))
+  startAddExpense: (expense) => dispatch(startAddExpense(expense))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddExpensePage);

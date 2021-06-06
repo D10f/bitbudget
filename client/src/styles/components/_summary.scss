@@ -13,6 +13,16 @@
     color: var(--text-color);
   }
 
+  &__chart {
+    min-height: 20rem;
+    // transition: transform 0.4s;
+
+    // &:hover {
+    //   transform: scale(1.2);
+    // }
+  }
+
+  // this one is a placeholder
   &__graph {
     border: 3px dashed darkcyan;
     background: lightcyan;

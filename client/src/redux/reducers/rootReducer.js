@@ -17,7 +17,6 @@ const persistConfig = {
   whitelist: [
     'user',
     'expenses',
-    'filters',
     'wallets',
     'theme',
     'categories'

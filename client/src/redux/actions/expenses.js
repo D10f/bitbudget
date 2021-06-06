@@ -1,59 +1,84 @@
-import { ADD_EXPENSE, REMOVE_EXPENSE, UPDATE_EXPENSE, SET_EXPENSES } from '../actionTypes';
-import axios from 'axios';
+import {
+  ADD_EXPENSE,
+  REMOVE_EXPENSE,
+  UPDATE_EXPENSE,
+  UPDATE_EXPENSE_IMAGE,
+  SET_EXPENSES
+} from '../actionTypes';
+import { addMessage, addError } from './notifications';
+import { createSnapshot } from '../../utils/snapshot';
 
 export const addExpense = (expense = {}) => ({
   type: ADD_EXPENSE,
   payload: expense
 });
 
-// export const startAddExpense = (expense = {}, authToken) => {
-//   return (dispatch) => {
-//
-//     const config = {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${authToken}`
-//       }
-//     };
-//
-//     return axios.post('http://localhost:5000/expenses', expense, config)
-//       .then(({ data }) => dispatch(addExpense(data)))
-//       .catch(console.error);
-//   };
-// };
+export const startAddExpense = (expense = {}) => {
+  return (dispatch, getState) => {
+    dispatch(addExpense(expense));
+    dispatch(addMessage('Expense created successfully.'));
+    const currentState = getState();
+    return createSnapshot(currentState)
+      .catch(err => {
+        console.error(err);
+        dispatch(addError('Error synchronizing data, please check your network connection and try again later.'));
+      });
+  };
+};
 
 export const removeExpense = (expenseId) => ({
   type: REMOVE_EXPENSE,
   payload: expenseId
 });
 
+export const startRemoveExpense = (expenseId) => {
+  return (dispatch, getState) => {
+    dispatch(removeExpense(expenseId));
+    dispatch(addMessage('Expense deleted successfully.'))
+    const currentState = getState();
+    return createSnapshot(currentState)
+      .catch(err => {
+        console.error(err);
+        dispatch(addError('Error synchronizing data, please check your network connection and try again later.'));
+      });
+  };
+}
+
 export const updateExpense = (expense = {}) => ({
   type: UPDATE_EXPENSE,
   payload: expense
 });
 
-// export const startUpdateExpense = (expense = {}, authToken) => {
-//   return (dispatch) => {
-//     const config = {
-//       headers: {
-//         'Content-Type': 'application/json',
-//         'Authorization': `Bearer ${authToken}`
-//       }
-//     };
-//
-//     const updates = {
-//       title: expense.title,
-//       description: expense.description,
-//       amount: expense.amount,
-//       createdAt: expense.createdAt,
-//       location: expense.location
-//     };
-//
-//     return axios.put(`http://localhost:5000/expenses/${expense._id}`, updates, config)
-//       .then(({ data }) => dispatch(updateExpense(data)))
-//       .catch(console.error);
-//   };
-// };
+export const startUpdateExpense = (expense = {}) => {
+  return (dispatch, getState) => {
+    dispatch(updateExpense(expense));
+    dispatch(addMessage('Expense updated successfully.'))
+    const currentState = getState();
+    return createSnapshot(currentState)
+      .catch(err => {
+        console.error(err);
+        dispatch(addError('Error synchronizing data, please check your network connection and try again later.'));
+      });
+  };
+};
+
+export const updateExpenseImage = (id = '', url = '') => ({
+  type: UPDATE_EXPENSE_IMAGE,
+  payload: { id, url }
+});
+
+export const startUpdateExpenseImage = (id = '', url = '') => {
+  return (dispatch, getState) => {
+    dispatch(updateExpenseImage(id, url));
+    dispatch(addMessage('Image attached successfuly'));
+    const currentState = getState();
+    return createSnapshot(currentState)
+      .catch(err => {
+        console.error(err);
+        dispatch(addError('Error synchronizing data, please check your network connection and try again later.'));
+      });
+  };
+};
 
 export const setExpenses = (expenses = []) => ({
   type: SET_EXPENSES,

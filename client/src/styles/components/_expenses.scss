@@ -11,7 +11,7 @@
 
     // This is for the summary component alignment
     align-self: flex-start;
-    flex: 1;
+    flex: 0 0 auto;
   }
 
   &__item {
@@ -43,11 +43,12 @@
       color: var(--primary);
     }
 
-    &:target:not(&--headers) .expense__title,
-    &:focus:not(&--headers) .expense__title,
-    &:hover:not(&--headers) .expense__title {
-      font-weight: bold;
-    }
+    // Expense list overflowed on dashboard because of this
+    // &:target:not(&--headers) .expense__title,
+    // &:focus:not(&--headers) .expense__title,
+    // &:hover:not(&--headers) .expense__title {
+    //   font-weight: bold;
+    // }
 
     &:target:not(&--headers) .expense__description,
     &:focus:not(&--headers) .expense__description {
@@ -95,6 +96,11 @@
         }
       }
     }
+  }
+
+  &__image {
+    max-width: 80rem;
+    max-height: 60rem;
   }
 
   &__title {

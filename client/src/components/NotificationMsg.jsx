@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { removeError, removeMessage } from '../redux/actions/notifications';
 
@@ -6,18 +6,12 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
 
   const [progress, setProgress] = useState(100);
 
-  useEffect(() => {
-    const counter = countDown();
-    return () => {
-      clearInterval(counter);
-    };
-  }, []);
-
-  // Visual updates should happen at most every 16ms to achieve 60FPS for best UX
-  const countDown = () => {
+  // Update progress bar every 16ms for smooth transition, calculate how many
+  // updates it will require give the duration of the message.
+  const countDown = useCallback(() => {
     const DURATION   = duration; // 5000 ms by default
     const UNITS      = 100;
-    const INTERVAL   = UNITS / (DURATION / 16); // magic number 16 explained above
+    const INTERVAL   = UNITS / (DURATION / 16); // 16ms
 
     let _progress = UNITS;
     return setInterval(() => {
@@ -29,8 +23,16 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
 
       _progress -= INTERVAL;
       setProgress(_progress);
-    }, 16); // magic number 16 explained above
-  };
+    }, 16); // 16ms
+  }, []);
+
+
+  useEffect(() => {
+    const counter = countDown();
+    return () => {
+      clearInterval(counter);
+    };
+  }, [countDown]);
 
   return (
     <article className={`notification__message notification__message--${type}`}>

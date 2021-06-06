@@ -1,8 +1,7 @@
 import { useEffect } from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setUser } from './redux/actions/user';
-import useTheme from './hooks/useTheme';
+import updateTheme from './utils/updateTheme';
 
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
@@ -21,8 +20,6 @@ import WalletSettings from './pages/WalletSettings';
 import About from './pages/About';
 
 const App = ({ isAuthenticated, theme, primaryColor, filters }) => {
-
-  const updateTheme = useTheme();
 
   useEffect(() => {
     updateTheme(theme, primaryColor);

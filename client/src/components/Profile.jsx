@@ -1,11 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { connect } from 'react-redux';
 import { setTheme, setPrimaryColor } from '../redux/actions/theme';
-import { startUpdateUser, logoutUser } from '../redux/actions/user';
+import { startUpdateUser, startLogoutUser } from '../redux/actions/user';
 import { addError, addMessage } from '../redux/actions/notifications';
-import useSnapshot from '../hooks/useSnapshot';
-import useTheme from '../hooks/useTheme';
-// import shader from '../utils/colorShader';
 
 const Profile = ({
   history,
@@ -13,24 +10,17 @@ const Profile = ({
   theme,
   primaryColor,
   startUpdateUser,
-  logoutUser,
+  startLogoutUser,
   setTheme,
   setPrimaryColor,
   addMessage,
   addError
 }) => {
 
-  const createSnapshot = useSnapshot();
-  const updateTheme = useTheme();
-
   const [passwords, setPasswords] = useState({
     password: '',
     confirm: ''
   });
-
-  useEffect(() => {
-    updateTheme(theme, primaryColor);
-  }, [theme, primaryColor]);
 
   const handleThemeChange = (e) => {
     setTheme(e.target.id);
@@ -52,19 +42,23 @@ const Profile = ({
       return addError('Passwords do not match.');
     }
 
-    if (password) {
-      startUpdateUser({ password }, user.token)
-        .then(() => createSnapshot())
-        .catch(console.error);
+    if (password && password.length < 8) {
+      return addError('Passwords must be at least 8 characters long.');
     }
 
-    createSnapshot();
+    const updates = password ? { password } : {};
+
+    startUpdateUser(updates)
+      .then(() => addMessage('User profile updated.'))
+      .catch(console.error);
   };
 
   const handleLogout = () => {
-    logoutUser(user.token);
-    addMessage('Logged out successfully.');
     history.push('/login');
+    startLogoutUser()
+      .then(() => {
+        addMessage('Logged out successfully.');
+      })
   };
 
   return (
@@ -197,7 +191,7 @@ const mapDispatchToProps = (dispatch) => ({
   setTheme: (theme) => dispatch(setTheme(theme)),
   setPrimaryColor: (color) => dispatch(setPrimaryColor(color)),
   startUpdateUser: (updates, authToken) => dispatch(startUpdateUser(updates, authToken)),
-  logoutUser: (authToken) => dispatch(logoutUser(authToken)),
+  startLogoutUser: (authToken) => dispatch(startLogoutUser(authToken)),
   addError: msg => dispatch(addError(msg)),
   addMessage: msg => dispatch(addMessage(msg))
 });

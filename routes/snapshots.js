@@ -11,13 +11,9 @@ const router = express.Router();
 * @desc   Creates a new snapshot for a user's current state
 * @access private
 */
-router.post('/snapshot', auth, newSnapshotCheck, async (req, res) => {
-
-  // TODO: Accept raw data
-  const data = Buffer.from(Object.values(req.body.data));
-
+router.post('/snapshot', auth, async (req, res) => {
   try {
-    snapshot = new Snapshot({ data, author: req.user._id });
+    snapshot = new Snapshot({ data: req.body, author: req.user._id });
     await snapshot.save();
 
     res.status(201).send('Snapshot Created Successfully');

@@ -47,7 +47,7 @@ export const deriveKey = async (salt = crypto.getRandomValues(new Uint8Array(32)
 export const encryptData = async (data) => {
 
   // Initialization vector is different everytime
-  const iv = crypto.getRandomValues(new Uint8Array(12));
+  const iv = crypto.getRandomValues(new Uint8Array(16));
   const { key, salt } = await deriveKey();
 
   const encryptedBuffer = await crypto.subtle.encrypt(
@@ -68,8 +68,8 @@ export const decryptData = async (encryptedBuffer) => {
   const encryptedBytes = new Uint8Array(encryptedBuffer);
 
   const salt = encryptedBytes.slice(0, 32);
-  const iv = encryptedBytes.slice(32, 32 + 12);
-  const data = encryptedBytes.slice(32 + 12);
+  const iv = encryptedBytes.slice(32, 32 + 16);
+  const data = encryptedBytes.slice(32 + 16);
 
   const { key } = await deriveKey(salt);
 

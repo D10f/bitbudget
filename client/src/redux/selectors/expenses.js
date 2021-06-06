@@ -54,7 +54,7 @@ export const selectSortedExpenses = createSelector(
 );
 
 export const selectCurrentMonthExpenses = createSelector(
-  [selectExpenses],
+  [selectCurrentWalletExpenses],
   expenses => {
     const firstOfMonth = moment().startOf('month');
     const lastOfMonth = moment().endOf('month');
@@ -70,7 +70,7 @@ export const selectCurrentMonthExpenses = createSelector(
 );
 
 export const selectLastMonthExpenses = createSelector(
-  [selectExpenses],
+  [selectCurrentWalletExpenses],
   expenses => {
     const firstOfMonth = moment().subtract(1, 'month').startOf('month');
     const lastOfMonth = moment().subtract(1, 'month').endOf('month');

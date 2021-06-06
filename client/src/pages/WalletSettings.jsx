@@ -1,11 +1,10 @@
 import { connect } from 'react-redux';
-import useSnapshot from '../hooks/useSnapshot';
-import { updateWallet } from '../redux/actions/wallet';
+import { startUpdateWallet } from '../redux/actions/wallet';
+import { addMessage } from '../redux/actions/notifications';
 import WalletForm from '../components/WalletForm';
 
-const WalletSettings = ({ wallet, updateWallet }) => {
+const WalletSettings = ({ wallet, startUpdateWallet }) => {
 
-  const createSnapshot = useSnapshot();
 
   const handleSubmit = (name, budget, currency) => {
     const newWallet = {
@@ -16,8 +15,8 @@ const WalletSettings = ({ wallet, updateWallet }) => {
       isCurrent: true
     };
 
-    updateWallet(newWallet);
-    createSnapshot();
+    startUpdateWallet(newWallet)
+      .then(() => addMessage('Wallet updated.'))
   };
 
   return (
@@ -30,7 +29,7 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  updateWallet: (wallet) => dispatch(updateWallet(wallet))
+  startUpdateWallet: (wallet) => dispatch(startUpdateWallet(wallet))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(WalletSettings);

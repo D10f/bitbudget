@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+// import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { selectSortedExpenses} from '../redux/selectors/expenses';
@@ -8,7 +8,9 @@ import ExpenseList from '../components/ExpenseList';
 
 const ExpensePage = ({ expenses, sortBy, sortDesc, sortExpenses, switchSortOrder}) => {
 
-  const handleSort = useCallback((e) => {
+  console.log('expense page rendering');
+
+  const handleSort = (e) => {
     const newSortValue = e.target.id;
 
     if (newSortValue === sortBy) {
@@ -16,7 +18,17 @@ const ExpensePage = ({ expenses, sortBy, sortDesc, sortExpenses, switchSortOrder
     }
 
     sortExpenses(newSortValue);
-  }, [sortExpenses]);
+  };
+
+  // const handleSort = useCallback((e) => {
+  //   const newSortValue = e.target.id;
+  //
+  //   if (newSortValue === sortBy) {
+  //     switchSortOrder();
+  //   }
+  //
+  //   sortExpenses(newSortValue);
+  // }, [sortExpenses]);
 
   return (
     <section className="expense">

@@ -53,7 +53,7 @@ router.post('/signup', signupCheck, async (req, res) => {
 * @desc   Authenticate and login user
 * @access public
 */
-router.post('/login', loginCheck, async (req, res) => {
+router.post('/login', async (req, res) => {
 
   const { username, password } = req.body;
 
@@ -63,9 +63,8 @@ router.post('/login', loginCheck, async (req, res) => {
     await user.save();
     res.send({ user, token });
   } catch (err) {
-    res.status(400).send({ error: err.message });
+    res.status(400).send(err.message);
   }
-
 });
 
 /**

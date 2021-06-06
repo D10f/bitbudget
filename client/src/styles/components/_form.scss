@@ -16,6 +16,11 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+
+    &--center {
+      justify-content: center;
+      gap: 2rem;
+    }
   }
 
   &__label {
@@ -26,7 +31,12 @@
   &__input {
     @extend %text-input;
     min-width: 25rem;
+
+    &--file {
+      display: none;
+    }
   }
+
 
   &__category {
     @extend %radio-input;

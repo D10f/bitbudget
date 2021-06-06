@@ -7,19 +7,21 @@ const Graph = ({ expenses }) => {
 
   useEffect(() => {
     const canvas = svgRef.current;
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
     const svg = d3
       .select(canvas)
-      .attr('width', canvas.clientWidth)
-      .attr('height', canvas.clientHeight)
+      .attr('width', width)
+      .attr('height', width)
     const graph = svg
       .append('g')
-      .attr('transform', `translate(${canvas.clientWidth / 2}, ${canvas.clientHeight / 2})`)
+      .attr('transform', `translate(${width / 2}, ${width / 2})`)
     const pie = d3.pie()
       .sort(null)
       .value(d => d.amount);
     const arcPath = d3.arc()
-      .outerRadius(canvas.clientHeight / 2)
-      .innerRadius(canvas.clientHeight / 4)
+      .outerRadius(width / 2 - 3)
+      .innerRadius(width / 4 - 3)
     const color = d3.scaleOrdinal(d3['schemeSet3'])
     color.domain(expenses.map(d => d.category))
 
@@ -36,7 +38,7 @@ const Graph = ({ expenses }) => {
   }, [expenses]);
 
   return (
-    <svg ref={svgRef}></svg>
+    <svg className="summary__chart" ref={svgRef}></svg>
   );
 };
 

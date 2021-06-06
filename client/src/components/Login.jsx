@@ -1,46 +1,17 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import useRestore from '../hooks/useRestore';
 import { startLoginUser } from '../redux/actions/user';
-import { setTheme, setPrimaryColor } from '../redux/actions/theme';
-import { setExpenses } from '../redux/actions/expenses';
-import { setWallets } from '../redux/actions/wallet';
-import { setCategories } from '../redux/actions/categories';
 
-const Login = ({
-  startLoginUser,
-  setExpenses,
-  setWallets,
-  setCategories,
-  setTheme,
-  setPrimaryColor,
-  history
-}) => {
+const Login = ({ startLoginUser, history }) => {
 
   const [credentials, setCredentials] = useState({ username: '', password: '' });
-  const restoreSnapshot = useRestore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    startLoginUser(credentials).then(token => {
-      restoreSnapshot(token)
-        .then(store => {
-
-          if (!store) {
-            throw new Error('Something went wrong retrieving your data, please try again or contact support');
-          }
-
-          setExpenses(store.expenses);
-          setWallets(store.wallets);
-          setCategories(store.categories);
-          setTheme(store.theme.theme);
-          setPrimaryColor(store.theme.primary);
-          history.push('/');
-        });
-    })
-    .catch(err => {
-      history.push('/');
-    });
+    startLoginUser(credentials)
+      .then(done => {
+        if (done) history.push('/');
+      })
   };
 
   const handleChange = (e) => {
@@ -84,11 +55,6 @@ const Login = ({
 
 const mapDispatchToProps = (dispatch) => ({
   startLoginUser: (userCredentials) => dispatch(startLoginUser(userCredentials)),
-  setExpenses: (expenses) => dispatch(setExpenses(expenses)),
-  setWallets: (wallets) => dispatch(setWallets(wallets)),
-  setCategories: (categories) => dispatch(setCategories(categories)),
-  setTheme: (theme) => dispatch(setTheme(theme)),
-  setPrimaryColor: (color) => dispatch(setPrimaryColor(color))
 });
 
 export default connect(undefined, mapDispatchToProps)(Login);

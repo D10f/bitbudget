@@ -1,12 +1,9 @@
 import { connect } from 'react-redux';
-import useSnapshot from '../hooks/useSnapshot';
-import { addWallet, setCurrentWallet } from '../redux/actions/wallet';
+import { addWallet } from '../redux/actions/wallet';
 import { v4 as uuidv4 } from 'uuid';
 import WalletForm from '../components/WalletForm';
 
-const AddWallet = ({ addWallet, setCurrentWallet, history }) => {
-
-  const createSnapshot = useSnapshot();
+const AddWallet = ({ addWallet, history }) => {
 
   const handleSubmit = (name, budget, currency) => {
 
@@ -19,8 +16,6 @@ const AddWallet = ({ addWallet, setCurrentWallet, history }) => {
     };
 
     addWallet(newWallet);
-    setCurrentWallet(newWallet.id);
-    createSnapshot().then(history.push('/settings'));
   };
 
   return (
@@ -29,8 +24,7 @@ const AddWallet = ({ addWallet, setCurrentWallet, history }) => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  addWallet: (wallet) => dispatch(addWallet(wallet)),
-  setCurrentWallet: (id) => dispatch(setCurrentWallet(id))
+  addWallet: (wallet) => dispatch(addWallet(wallet))
 });
 
 export default connect(undefined, mapDispatchToProps)(AddWallet);

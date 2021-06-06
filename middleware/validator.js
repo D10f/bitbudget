@@ -50,7 +50,7 @@ exports.addWalletCheck = [
 ];
 
 exports.newSnapshotCheck = [
-  body('data', 'You must provide data for this snapshot').not().isEmpty(),
+  body('You must provide data for this snapshot').not().isEmpty(),
   function (req, res, next) {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {

@@ -1,3 +1,6 @@
+# Local uploads (development purposes)
+uploads/
+
 # Logs
 logs
 *.log

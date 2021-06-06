@@ -1,23 +1,34 @@
+import { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
 import 'react-dates/lib/css/_datepicker.css';
 import 'react-dates/initialize';
-
-import { useState } from 'react';
-import { connect } from 'react-redux';
 import { DateRangePicker } from 'react-dates';
 import { setTextFilter, setStartDate, setEndDate } from '../redux/actions/filters';
 
-export const ExpenseFilters = ({ filters, setTextFilter, setStartDate, setEndDate }) => {
+export const ExpenseFilters = ({
+  setTextFilter,
+  setStartDate,
+  setEndDate,
+  startDate,
+  endDate
+}) => {
 
-  const [calendarFocused, setCalendarFocus] = useState(null);
+  const [calendarFocus, setCalendarFocus] = useState(null);
 
-  const onTextChange = (e) => {
-    setTextFilter(e.target.value);
-  };
-  const onFocusChange = (calendarFocused) => setCalendarFocus(calendarFocused);
+  const onTextChange = (e) => setTextFilter(e.target.value);
+  const onFocusChange = (calendarFocus) => setCalendarFocus(calendarFocus);
   const onDatesChange = ({ startDate, endDate }) => {
     setStartDate(startDate);
     setEndDate(endDate);
   };
+
+  useEffect(() => {
+    return () => {
+      setTextFilter('');
+      setStartDate(null);
+      setEndDate(null);
+    };
+  }, []);
 
   return (
     <form className="filters" onSubmit={() => {}}>
@@ -27,11 +38,11 @@ export const ExpenseFilters = ({ filters, setTextFilter, setStartDate, setEndDat
         placeholder="Search through your expenses"
       />
       <DateRangePicker
-        startDate={filters.startDate}
+        startDate={startDate}
         startDateId="your_unique_start_date_id"
-        endDate={filters.endDate}
+        endDate={endDate}
         endDateId="your_unique_end_date_id"
-        focusedInput={calendarFocused}
+        focusedInput={calendarFocus}
         onFocusChange={onFocusChange}
         onDatesChange={onDatesChange}
         numberOfMonths={1}
@@ -44,7 +55,8 @@ export const ExpenseFilters = ({ filters, setTextFilter, setStartDate, setEndDat
 };
 
 const mapStateToProps = (state) => ({
-  filters: state.filters
+  startDate: state.filters.startDate,
+  endDate: state.filters.endDate
 });
 
 const mapDispatchToProps = (dispatch) => ({

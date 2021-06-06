@@ -6,7 +6,9 @@ const PrivateRoute = ({ component: Component, isAuthenticated, addError, ...rest
   <Route
     {...rest}
     render={props => {
-      if (isAuthenticated) return <Component {...props} />
+      if (isAuthenticated) {
+        return <Component {...props} />
+      }
       addError('You are not authorized, please login.');
       return <Redirect to="/login" />
     }}
