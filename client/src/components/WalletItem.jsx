@@ -4,7 +4,7 @@ import { setCurrentWallet } from '../redux/actions/wallet';
 const WalletItem = ({ wallet, setCurrentWallet }) => {
 
   const { id, name, isCurrent } = wallet;
-  
+
   return (
     <li className={isCurrent ? "sidebar__item sidebar__item--active" : "sidebar__item"}>
       <button

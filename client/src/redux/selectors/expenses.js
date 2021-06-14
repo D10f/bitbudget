@@ -85,16 +85,33 @@ export const selectLastMonthExpenses = createSelector(
   }
 );
 
+export const selectCategoryCount = createSelector(
+  [selectCurrentMonthExpenses],
+  (expenses) => {
+    const categoryCount = expenses.reduce((acc, { category }) => {
+      return acc[category]
+        ? { ...acc, [category]: acc[category] + 1 }
+        : { ...acc, [category]: 1 }
+    }, {});
+
+    return Object.values(categoryCount);
+  }
+);
+
 export const selectIncomeAmount = createSelector(
   [selectCurrentWalletExpenses],
   (expenses) => expenses.reduce((acc, val) => {
-    return val.amount > 0 ? acc + val.amount : 0;
+    return val.category.toLowerCase() === 'income'
+      ? acc + val.amount
+      : acc;
   }, 0)
 );
 
 export const selectExpensesAmount = createSelector(
   [selectCurrentWalletExpenses],
   (expenses) => expenses.reduce((acc, val) => {
-    return val.amount < 0 ? acc + val.amount : 0;
+    return val.category.toLowerCase() !== 'income'
+      ? acc + val.amount
+      : acc;
   }, 0)
 );

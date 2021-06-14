@@ -1,6 +1,9 @@
+import { connect } from 'react-redux';
+import { selectCurrentWallet } from '../redux/selectors/expenses';
 import ExpenseItem from './ExpenseItem';
 
 const ExpenseList = ({
+  wallet,
   expenses,
   sortBy = '',
   sortDesc = true,
@@ -45,8 +48,8 @@ const ExpenseList = ({
       {
         expenses && (
         expenses.map(expense => (
-          <li className="expense__item" key={expense._id}>
-            <ExpenseItem {...expense} />
+          <li className="expense__item" key={expense._id} tabIndex="-1">
+            <ExpenseItem currency={wallet.currency} {...expense} />
           </li>
         )))
       }
@@ -54,4 +57,8 @@ const ExpenseList = ({
   );
 };
 
-export default ExpenseList;
+const mapStateToProps = state => ({
+  wallet: selectCurrentWallet(state)
+});
+
+export default connect(mapStateToProps)(ExpenseList);

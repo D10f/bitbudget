@@ -1,69 +1,79 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { connect } from 'react-redux';
 import { sortExpenses, switchSortOrder } from '../redux/actions/filters';
 import {
   selectCurrentWalletExpenses,
   selectCurrentMonthExpenses,
-  selectLastMonthExpenses
+  selectLastMonthExpenses,
+  selectCategoryCount
 } from '../redux/selectors/expenses';
 
 import ExpenseList from './ExpenseList';
-import Graph from './Graph';
+import GraphDoughnut from './GraphDoughnut';
 
 const Summary = ({
   expenses,
   currentMonthExpenses,
   lastMonthExpenses,
+  categoryCount,
   sortBy,
   sortDesc,
   switchSortOrder,
-  sortExpenses
+  sortExpenses,
+  currency
 }) => {
 
   const [viewAmount, setViewAmount] = useState(5);
-  const [latest, setLatest] = useState(expenses.slice(expenses.length - viewAmount));
+  const [latest, setLatest] = useState(expenses.slice(Math.max(0, expenses.length - viewAmount)));
 
-  console.log('Summary rendering');
+  const latestTotalAmount = useCallback(() => {
+    return latest.map(expense => expense.amount / 100);
+  }, latest);
 
-  // const handleSort = useCallback((e) => {
-  //   const newSortValue = e.target.id;
-  //
-  //   if (newSortValue === sortBy) {
-  //     switchSortOrder();
-  //   }
-  //
-  //   sortExpenses(newSortValue);
-  // }, [sortExpenses]);
+  const latestLabels = useCallback(() => {
+    return latest.map(expense => `${expense.title}`);
+  }, latest);
+
+  const latestExpensesTitle = `Last ${viewAmount} Expenses.`
 
   return (
-    <>
-      <h3 className="summary__title">Last {viewAmount} Expenses</h3>
+    <section className="summaries">
       <div className="summary">
-        <ExpenseList expenses={expenses} />
-        <Graph expenses={expenses} />
+        <h3 className="summary__title">{latestExpensesTitle}</h3>
+        <ExpenseList expenses={latest} />
+        <GraphDoughnut
+          data={latestTotalAmount()}
+          labels={latestLabels()}
+          title={latestExpensesTitle}
+        />
       </div>
-
-      <h3 className="summary__title">This Month</h3>
       <div className="summary">
-        <ExpenseList expenses={currentMonthExpenses} />
-        <Graph expenses={currentMonthExpenses} />
+        <h3 className="summary__title">This Month</h3>
+        <GraphDoughnut
+          data={categoryCount}
+          labels={expenses.map(expense => `${expense.category}`)}
+        />
       </div>
-
-      <h3 className="summary__title">Last Month</h3>
-      <div className="summary">
-        <ExpenseList expenses={lastMonthExpenses} />
-        <Graph expenses={lastMonthExpenses} />
-      </div>
-    </>
+    </section>
   );
 };
 
+
+//
+// <h3 className="summary__title">Last Month</h3>
+// <div className="summary">
+//   <ExpenseList expenses={lastMonthExpenses} />
+//   <GraphDoughnut expenses={lastMonthExpenses} />
+// </div>
+
 const mapStateToProps = (state) => ({
   expenses: selectCurrentWalletExpenses(state),
+  categoryCount: selectCategoryCount(state),
   currentMonthExpenses: selectCurrentMonthExpenses(state),
   lastMonthExpenses: selectLastMonthExpenses(state),
   sortBy: state.filters.sortBy,
-  sortDesc: state.filters.sortDesc
+  sortDesc: state.filters.sortDesc,
+  currency: state.wallets.currency
 });
 
 const mapDispatchToProps = (dispatch) => ({

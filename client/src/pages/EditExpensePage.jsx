@@ -17,24 +17,16 @@ const EditExpensePage = ({ startUpdateExpense, startRemoveExpense, expense, hist
     };
 
     startUpdateExpense(updatedExpense)
-      .then(() => {
-        if (navigateOnSave) {
-          history.push('/expenses');
-        }
-      })
+      .then(() => history.push('/expenses'))
   };
 
   return (
     <section className="expense-page">
-      <button
-        onClick={handleDelete}
-        className="expense-page__deletebtn"
-      >-
-      </button>
       <h3>Edit Expense</h3>
       <ExpenseForm
         expense={expense}
         onSubmit={onSubmit}
+        onDelete={handleDelete}
       />
     </section>
   );

@@ -1,7 +1,13 @@
 @use '../abstract/variables';
 
+.summaries {
+  // display: flex;
+  // gap: 2rem;
+}
+
 .summary {
   display: flex;
+  // flex-direction: column;
   justify-content: space-between;
   align-items: center;
   margin: 2rem 0;
@@ -11,15 +17,15 @@
     grid-area: title;
     margin: 2rem 0;
     color: var(--text-color);
+    /* TEST FOR ACCESSIBILITY */
+    visibility: hidden;
+    width: 0;
+    height: 0;
   }
 
   &__chart {
     min-height: 20rem;
-    // transition: transform 0.4s;
-
-    // &:hover {
-    //   transform: scale(1.2);
-    // }
+    flex: 0 1 auto;
   }
 
   // this one is a placeholder

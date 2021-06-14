@@ -8,8 +8,6 @@ import ExpenseList from '../components/ExpenseList';
 
 const ExpensePage = ({ expenses, sortBy, sortDesc, sortExpenses, switchSortOrder}) => {
 
-  console.log('expense page rendering');
-
   const handleSort = (e) => {
     const newSortValue = e.target.id;
 
@@ -19,25 +17,21 @@ const ExpensePage = ({ expenses, sortBy, sortDesc, sortExpenses, switchSortOrder
 
     sortExpenses(newSortValue);
   };
-
-  // const handleSort = useCallback((e) => {
-  //   const newSortValue = e.target.id;
-  //
-  //   if (newSortValue === sortBy) {
-  //     switchSortOrder();
-  //   }
-  //
-  //   sortExpenses(newSortValue);
-  // }, [sortExpenses]);
+  // <Link to="/add-expense" className="expense-page__addbtn">+</Link>
 
   return (
     <section className="expense">
-      <Link to="/add-expense" className="expense-page__addbtn">+</Link>
       <ExpenseFilters />
       {
         expenses.length
-        ? <ExpenseList expenses={expenses} sortBy={sortBy} sortDesc={sortDesc} handleSort={handleSort} />
-        : <p className="expense__empty">There are no expenses yet</p>
+        ? (<>
+            <ExpenseList expenses={expenses} sortBy={sortBy} sortDesc={sortDesc} handleSort={handleSort} />
+            <Link to="/add-expense" className="btn btn--action mt2 is-center">Add Expense</Link>
+           </>)
+        : (<>
+            <p className="expense__empty">There are no expenses yet</p>
+            <Link to="/add-expense" className="btn btn--action">Add Your First Expense</Link>
+           </>)
       }
     </section>
   );

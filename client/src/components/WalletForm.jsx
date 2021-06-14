@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import numeral from 'numeral';
 import { selectCurrentWallet } from '../redux/selectors/expenses';
 
 const WalletForm = ({ wallet, handleSubmit }) => {
 
   const [name, setName] = useState(wallet ? wallet.name : '');
-  const [budget, setBudget] = useState(wallet ? wallet.budget : '');
+  const [budget, setBudget] = useState(wallet ? numeral(wallet.budget / 100).format(`0,0.00`) : '');
   const [currency, setCurrency] = useState(wallet ? wallet.currency : '$');
 
   const handleClick = () => {
@@ -14,12 +14,16 @@ const WalletForm = ({ wallet, handleSubmit }) => {
       return console.log('You must provide name, budget and currency values');
     }
 
-    handleSubmit(name, budget, currency);
+    handleSubmit(
+      name,
+      parseFloat(budget, 10) * 100,
+      currency
+    );
   };
 
   useEffect(() => {
     setName(wallet ? wallet.name : '');
-    setBudget(wallet ? wallet.budget : '');
+    setBudget(wallet ? numeral(wallet.budget / 100).format(`0,0.00`) : '');
     setCurrency(wallet ? wallet.currency : '$');
   }, [wallet]);
 
@@ -75,7 +79,6 @@ const WalletForm = ({ wallet, handleSubmit }) => {
       </ul>
 
       <div className="settings__actions">
-        <Link to="/add-wallet" className="btn btn--action">New Wallet</Link>
         <button
           className="btn btn--action"
           onClick={handleClick}

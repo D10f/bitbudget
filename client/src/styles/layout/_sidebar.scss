@@ -65,7 +65,7 @@
     }
 
     &:hover::before {
-      transform: translateX(0);
+      // transform: translateX(0);
     }
 
     &::before {
@@ -87,11 +87,13 @@
 
   &__wallet {
     position: relative;
+    display: inline-block;
     width: 4rem;
     height: 4rem;
     border: none;
     border-radius: 5px;
     font-size: 1.6rem;
+    background-color: variables.$color-light;
 
     &:hover {
       cursor: pointer;
@@ -114,6 +116,14 @@
       color: variables.$color-light;
       opacity: 0;
       pointer-events: none;
+    }
+
+    /* the button to add more wallets */
+    &--last {
+      font-size: 2rem;
+      text-align: center;
+      color: variables.$color-dark;
+      border-radius: 50%;
     }
   }
 

@@ -7,13 +7,24 @@
   background-color: var(--primary);
   color: variables.$color-light;
   padding: 1rem 2rem;
-  margin: 0 1rem;
+  // margin: 0 1rem;
   font-size: 1.5rem;
 
   &:hover,
   &:focus {
     cursor: pointer;
     background-color: var(--primary-dark);
+  }
+
+  &--warning {
+    background-color: variables.$color-lighter;
+    border: 2px solid variables.$color-danger;
+    color: variables.$color-dark;
+
+    &:hover {
+      background-color: variables.$color-danger;
+      color: variables.$color-light;
+    }
   }
 }
 

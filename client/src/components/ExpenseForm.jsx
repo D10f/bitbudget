@@ -4,12 +4,13 @@ import { SingleDatePicker } from 'react-dates';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import moment from 'moment';
+import numeral from 'numeral';
 import { addError } from '../redux/actions/notifications';
 import CategoryList from './CategoryList';
 import FilePicker from './FilePicker';
 import ExpenseImage from './ExpenseImage';
 
-const ExpenseForm = ({ onSubmit, expense, addError }) => {
+const ExpenseForm = ({ onSubmit, onDelete, expense, addError }) => {
 
   const [imageUrl, setImageUrl] = useState(expense ? expense.imageUrl : '');
   const [text, setText] = useState({
@@ -18,7 +19,8 @@ const ExpenseForm = ({ onSubmit, expense, addError }) => {
     location: expense ? expense.location : ''
   });
   const [createdAt, setCreatedAt] = useState(expense ? moment(expense.createdAt) : moment());
-  const [amount, setAmount] = useState(expense ? (expense.amount / 100).toString() : '');
+  // const [amount, setAmount] = useState(expense ? (expense.amount / 100).toString() : '');
+  const [amount, setAmount] = useState(expense ? numeral(expense.amount / 100).format(`0,0.00`) : '');
   const [category, setCategory] = useState(expense ? expense.category : 'Other');
   const [calendarFocus, setCalendarFocus] = useState(false);
   const submitBtn = useRef(null);
@@ -48,8 +50,8 @@ const ExpenseForm = ({ onSubmit, expense, addError }) => {
   const onFormSubmit = (e) => {
     e.preventDefault();
 
-    if (!text.description || !amount){
-      addError('Please provide a description and amount for this expense.');
+    if (!text.title || !amount){
+      addError('Please provide a title and amount for this expense.');
     } else {
       onSubmit({
         title: text.title,
@@ -147,6 +149,16 @@ const ExpenseForm = ({ onSubmit, expense, addError }) => {
             expenseId={expense ? expense._id : ''}
             disabled={expense ? false : true}
           />
+          {
+            expense && (
+              <button
+                onClick={onDelete}
+                className="btn btn--action btn--warning"
+              >
+                Delete Expense
+              </button>
+            )
+          }
         </div>
       </form>
     </>

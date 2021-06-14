@@ -9,6 +9,7 @@ const initialState = [
   'Tickets',
   'Electronics',
   'Home',
+  'Income',
   'Other'
 ];
 

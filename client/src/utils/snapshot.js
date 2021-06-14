@@ -17,14 +17,15 @@ export const createSnapshot = async (data, password = '') => {
   const dataBlob = new Blob([dataJSON], { type: 'application/json' });
   const dataBuffer = await dataBlob.arrayBuffer();
   const encryptedData = await encryptData(dataBuffer);
-  return fetch('http://localhost:5000/snapshot', {
-    method: 'POST',
-    headers: {
+  return axios.post('http://localhost:5000/snapshot',
+    encryptedData,
+    {
+      headers: {
       'Content-type': 'application/octet-stream',
       'Authorization': `Bearer ${data.user.token}`
-    },
-    body: encryptedData
-  })
+      }
+    }
+  )
   // return await axios.post(
   //   'http://localhost:5000/snapshot',
   //   { data: encryptedData },

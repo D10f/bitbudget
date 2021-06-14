@@ -1,4 +1,18 @@
 /* Additional classes used for simple things like margins, centering, etc */
+
+.mt2 {
+  margin-top: 2rem;
+}
+.mr2 {
+  margin-right: 2rem;
+}
+.mb2 {
+  margin-bottom: 2rem;
+}
+.ml2 {
+  margin-left: 2rem;
+}
+
 .disabled {
   pointer-events: none;
   filter: grayscale(1);

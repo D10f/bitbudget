@@ -174,7 +174,7 @@ const Profile = ({
       </ul>
 
       <div className="settings__actions">
-        <button onClick={handleSave} className="btn btn--action">Save Changes</button>
+        <button onClick={handleSave} className="btn btn--action mr2">Save Changes</button>
         <button onClick={handleLogout} className="btn btn--action">Logout</button>
       </div>
     </section>
