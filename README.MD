@@ -25,6 +25,20 @@ A web application to handle your expenses securely and comfortably through out a
 | METHOD  | ENDPOINT  | DESCRIPTION |
 |----------------------------------------|--------------| --- |
 | ![padlock](assets/lock-green.png) GET  | /wallet/{id} | Retrieves the specified wallet
-| ![padlock](assets/lock-green.png) POST  | /wallet/search/{id} | Retrives expenses based on payload query |
+| ![padlock](assets/lock-green.png) POST  | /wallet/s/{id} | Retrives expenses based on the payload query parameters |
 | ![padlock](assets/lock-green.png) POST | /wallet/{id} | Creates the specified wallet |
 | ![padlock](assets/lock-green.png) PUT  | /wallet/{id} | Updates the specified wallet |
+
+### Expenses
+
+| METHOD  | ENDPOINT  | DESCRIPTION |
+|----------------------------------------|--------------| --- |
+| ![padlock](assets/lock-green.png) GET  | /expense/image/{id} | Retrieves the specified expense's associated image
+| ![padlock](assets/lock-green.png) POST  | /expense/image/{id} | Updates the specified expense's associated image
+| ![padlock](assets/lock-green.png) POST  | /expense/{walletId} | Creates a new expense associated to the specified wallet |
+| ![padlock](assets/lock-green.png) POST | /wallet/{id} | Creates the specified wallet |
+| ![padlock](assets/lock-green.png) PUT  | /wallet/{id} | Updates the specified wallet |
+
+## Database Schema Design
+
+![database schema](assets/db_schema.jpeg)
