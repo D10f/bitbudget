@@ -10,6 +10,14 @@ A web application to handle your expenses securely and comfortably through out a
 + Dark theme, light theme, orange theme, unicorn theme...
 + Client-side encryption means your expenses are safe.
 
+## Two Password System
+
+When you create an account you will be prompted for a username and a password, which is used to login the next time you visit Gadget Budget. An additional password is required in order to generate the necessary encryption keys to protect your data as you use the application, which by default is the same as your login password. This is done for your convenience but at the cost of security. You will be prompted to update your encryption password the first time you login, but it is up to you to decide whether this trade-off between convenience and security is worth it.
+
+Please note:
+- **We cannot reset your encryption password**. If you forget it you will lose access to your data.
+- If you forget your *login password* we can provide a password reset **if** you also provided an email address.
+
 ## REST API endpoints
 
 ### Users
@@ -42,7 +50,7 @@ A web application to handle your expenses securely and comfortably through out a
 
 ## Database Schema Design
 
-Gadget Budget is designed to know the least amount of information as possible about your account and how you use the application. The only data that is not encrypted is the bare minimum required to get things working: your username. You can, if you want, provide an email address for password recovery purposes if you want (note: password recovery refers to your password to gain access to your account, and not your encryption password).
+Gadget Budget is designed to know the least amount of information as possible about your account and how you use the application. The only data that is not encrypted is the bare minimum required to get things working: your username. You can, if you want, provide an email address for password recovery purposes (note: password recovery refers to your password to gain access to your account, and not your encryption password).
 
 In order to provide search functionality for your expenses, these are sorted by month. Other than that no other information can be retrieved from the data stored in the database, such as the precise date, the amount, the name of the wallet it was created under or any other sensitive details.
 
