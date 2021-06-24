@@ -1,28 +1,46 @@
+import { useCallback } from 'react';
 import { connect } from 'react-redux';
-import numeral from 'numeral';
+import { formatAsCurrency } from '../utils/expenses';
 import {
   selectCurrentWallet,
   selectIncomeAmount,
   selectExpensesAmount
 } from '../redux/selectors/expenses';
 
-const Balance = ({ wallet: { budget, currency }, incomeAmount, expensesAmount }) => {
+const Balance = ({ wallet: { budget, currency }, incomeAmount, expenseAmount }) => {
 
-  const remainingBudget = Math.floor(((expensesAmount - incomeAmount) * 100) / budget) || 0;
+  const getAvailableBudget = useCallback(() => {
+    const percentage = (expenseAmount - incomeAmount) * 100 / budget;
+    const normalizedPercentage = Math.max(Math.floor(percentage), 0);
+    const formattedBudget = formatAsCurrency(budget);
+
+    return budget > 0
+      ? `${currency}${formattedBudget} (${normalizedPercentage}%)`
+      : `${currency}0.00`;
+
+  }, [budget, incomeAmount, expenseAmount]);
+
+  const getIncomeAmount = useCallback(() => {
+    return `${currency}${formatAsCurrency(incomeAmount)}`;
+  }, [incomeAmount]);
+
+  const getExpenseAmount = useCallback(() => {
+    return `${currency}${formatAsCurrency(expenseAmount)}`;
+  }, [expenseAmount]);
 
   return (
-    <header className="balance">
+    <header className="balance mb2">
       <article className="balance__card balance__card--1">
         <h3 className="balance__card-title">Budget</h3>
-        <p className="balance__amount">{currency}{numeral(budget / 100).format(`0,0.00`)}({remainingBudget}%)</p>
+        <p className="balance__amount">{getAvailableBudget()}</p>
       </article>
       <article className="balance__card balance__card--2">
         <h3 className="balance__card-title">Income</h3>
-        <p className="balance__amount">{currency}{numeral(incomeAmount / 100).format(`0,0.00`)}</p>
+        <p className="balance__amount">{getIncomeAmount()}</p>
       </article>
       <article className="balance__card balance__card--3">
         <h3 className="balance__card-title">Expenses</h3>
-        <p className="balance__amount">{currency}{numeral(expensesAmount / 100).format(`0,0.00`)}</p>
+        <p className="balance__amount">{getExpenseAmount()}</p>
       </article>
     </header>
   );
@@ -31,7 +49,7 @@ const Balance = ({ wallet: { budget, currency }, incomeAmount, expensesAmount })
 const mapStateToProps = (state) => ({
   wallet: selectCurrentWallet(state),
   incomeAmount: selectIncomeAmount(state),
-  expensesAmount: selectExpensesAmount(state)
+  expenseAmount: selectExpensesAmount(state)
 });
 
 export default connect(mapStateToProps)(Balance);

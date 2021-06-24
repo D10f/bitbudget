@@ -1,9 +1,10 @@
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
-const GraphDoughnut = ({ data, labels, title }) => {
+const ChartDoughnut = ({ data, labels, title }) => {
 
   const canvasRef = useRef(null);
+  const [chart, setChart] = useState(undefined);
 
   useEffect(() => {
     const config = {
@@ -48,14 +49,24 @@ const GraphDoughnut = ({ data, labels, title }) => {
         }
       }
     };
-    new Chart(canvasRef.current.getContext('2d'), config);
-  }, [data]);
+
+    if (canvasRef.current) {
+      // First render
+      setChart(new Chart(canvasRef.current.getContext('2d'), config));
+      canvasRef.current = null;
+    } else {
+      // Data is updated
+      chart.data.datasets[0].data = data;
+      chart.update();
+    }
+
+  }, [canvasRef.current, data, labels, title]);
 
   return (
-    <div className="summary__chart">
+    <div className="summary__doughnutchart">
       <canvas ref={canvasRef}></canvas>
     </div>
   );
 };
 
-export default GraphDoughnut;
+export default ChartDoughnut;

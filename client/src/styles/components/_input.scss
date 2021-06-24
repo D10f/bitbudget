@@ -32,7 +32,7 @@
   border: 1px solid variables.$color-gray-dark;
 
   &:hover {
-    cursor: pointer;
+    cursor: default;
     background-color: variables.$color-light;
   }
 }

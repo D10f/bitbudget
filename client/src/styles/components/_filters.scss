@@ -1,3 +1,4 @@
+@use '../abstract/variables';
 @use '../components/input';
 
 .filters {
@@ -16,5 +17,43 @@
     @extend %text-input;
     flex: 1 0 auto;
     margin-left: 0;
+  }
+
+  // Used for the current month picker in the dashboard
+  &__picker {
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+
+    &--year,
+    &--month {
+      @extend %select-input;
+      border-bottom: 2px solid var(--primary);
+      display: inline-block;
+
+      &:hover {
+        background-color: unset;
+      }
+    }
+
+    &--month {
+      min-width: 10rem;
+    }
+
+    &--btn {
+      @extend %select-input;
+      border-bottom: 2px solid variables.$color-gray-dark;
+
+      &:hover {
+        cursor: pointer;
+        border-bottom: 2px solid var(--primary);
+        background-color: #fff;
+      }
+
+      &:active {
+        color: variables.$color-light;
+        background-color: var(--primary);
+      }
+    }
   }
 }

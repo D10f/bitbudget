@@ -35,7 +35,7 @@ export const ExpenseFilters = ({
       <input
         className="filters__text"
         onChange={onTextChange}
-        placeholder="Search through your expenses"
+        placeholder="Accommodation in Langkawi"
       />
       <DateRangePicker
         startDate={startDate}

@@ -2,7 +2,15 @@ import { Link } from 'react-router-dom';
 import numeral from 'numeral';
 import moment from 'moment';
 
-const ExpenseItem = ({ _id, title, category, amount, createdAt, description, currency }) => {
+const ExpenseItem = ({
+  _id,
+  title,
+  category,
+  amount,
+  createdAt,
+  description,
+  currency
+}) => {
 
   const isIncome = category.toLowerCase() === 'income';
 

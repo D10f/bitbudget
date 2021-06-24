@@ -16,7 +16,7 @@ const WalletForm = ({ wallet, handleSubmit }) => {
 
     handleSubmit(
       name,
-      parseFloat(budget, 10) * 100,
+      Math.abs(parseFloat(budget, 10) * 100),
       currency
     );
   };

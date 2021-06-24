@@ -8,10 +8,10 @@
 .summary {
   display: flex;
   // flex-direction: column;
-  justify-content: space-between;
+  justify-content: space-around;
   align-items: center;
   margin: 2rem 0;
-  gap: 2rem;
+  // gap: 2rem;
 
   &__title {
     grid-area: title;
@@ -26,6 +26,11 @@
   &__chart {
     min-height: 20rem;
     flex: 0 1 auto;
+  }
+
+  &__linechart {
+    height: 20rem;
+    // flex: 0 0 100%;
   }
 
   // this one is a placeholder

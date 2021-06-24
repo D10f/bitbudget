@@ -2,6 +2,7 @@ import {
   SET_TEXT_FILTER,
   SET_START_DATE,
   SET_END_DATE,
+  SET_CURRENT_MONTH,
   SWITCH_SORT_ORDER,
   SORT_BY_DATE,
   SORT_BY_TITLE,
@@ -11,17 +12,22 @@ import {
 
 export const setTextFilter = (text = '') => ({
   type: SET_TEXT_FILTER,
-  text
+  payload: text
 });
 
 export const setStartDate = (startDate) => ({
   type: SET_START_DATE,
-  startDate
+  payload: startDate
 });
 
 export const setEndDate = (endDate) => ({
   type: SET_END_DATE,
-  endDate
+  payload: endDate
+});
+
+export const setCurrentMonth = (month) => ({
+  type: SET_CURRENT_MONTH,
+  payload: month
 });
 
 export const switchSortOrder = () => ({

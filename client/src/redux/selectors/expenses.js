@@ -24,9 +24,16 @@ export const selectExpenseItems = createSelector(
   (expenses, { text, startDate, endDate }) => {
     return expenses.filter(expense => {
       const createdAtMoment = moment(expense.createdAt);
-      const startDateMatch = startDate ? createdAtMoment.isSameOrAfter(startDate, 'day') : true;
-      const endDateMatch = endDate ? createdAtMoment.isSameOrBefore(endDate, 'day') : true;
-      const textMatch = text ? expense.title.toLowerCase().includes(text.toLowerCase()) : true;
+
+      const startDateMatch = startDate
+        ? createdAtMoment.isSameOrAfter(startDate, 'day')
+        : true;
+      const endDateMatch = endDate
+        ? createdAtMoment.isSameOrBefore(endDate, 'day')
+        : true;
+      const textMatch = text
+        ? expense.title.toLowerCase().includes(text.toLowerCase())
+        : true;
 
       return startDateMatch && endDateMatch && textMatch;
     });
@@ -38,26 +45,31 @@ export const selectSortedExpenses = createSelector(
   (expenses, { sortBy, sortDesc }) => {
     return expenses.sort((a, b) => {
 
-      // Check if sortBy value should be lowercased for consistent results
-      if (sortBy === 'title' || sortBy === 'description' || sortBy === 'category') {
+      // Check if sorting involves string values, apply lowercase if so.
+      if (
+        sortBy === 'title' || sortBy === 'description' || sortBy === 'category'
+      ) {
         return sortDesc
           ? a[sortBy].toLowerCase() < b[sortBy].toLowerCase()
-          : a[sortBy].toLowerCase() > b[sortBy].toLowerCase();
+          : a[sortBy].toLowerCase() > b[sortBy].toLowerCase()
       };
 
       // Cases where sorting does not involve strings.
       return sortDesc
         ? a[sortBy] < b[sortBy]
-        : a[sortBy] > b[sortBy];
+        : a[sortBy] > b[sortBy]
     });
   }
 );
 
+// Selects expenses for the 'current' month
 export const selectCurrentMonthExpenses = createSelector(
-  [selectCurrentWalletExpenses],
-  expenses => {
-    const firstOfMonth = moment().startOf('month');
-    const lastOfMonth = moment().endOf('month');
+  [selectCurrentWalletExpenses, selectFilters],
+  (expenses, filters) => {
+    const firstOfMonth = moment(filters.currentMonth).startOf('month');
+    const lastOfMonth = moment(filters.currentMonth).endOf('month');
+    // const firstOfMonth = moment().startOf('month');
+    // const lastOfMonth = moment().endOf('month');
 
     return expenses.filter(({ createdAt }) => {
       const createdAtMoment = moment(createdAt);
@@ -99,7 +111,8 @@ export const selectCategoryCount = createSelector(
 );
 
 export const selectIncomeAmount = createSelector(
-  [selectCurrentWalletExpenses],
+  // [selectCurrentWalletExpenses],
+  [selectCurrentMonthExpenses],
   (expenses) => expenses.reduce((acc, val) => {
     return val.category.toLowerCase() === 'income'
       ? acc + val.amount
@@ -108,7 +121,8 @@ export const selectIncomeAmount = createSelector(
 );
 
 export const selectExpensesAmount = createSelector(
-  [selectCurrentWalletExpenses],
+  // [selectCurrentWalletExpenses],
+  [selectCurrentMonthExpenses],
   (expenses) => expenses.reduce((acc, val) => {
     return val.category.toLowerCase() !== 'income'
       ? acc + val.amount
