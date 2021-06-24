@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const auth = require('../middleware/auth');
-const { addExpenseCheck } = require('../middleware/validator');
 
 const Expense = require('../models/Expense');
 
@@ -43,7 +42,7 @@ router.get('/expenses/:id', auth, async (req, res) => {
 * @desc   Creates a new expense
 * @access private
 */
-router.post('/expenses', auth, addExpenseCheck, async (req, res) => {
+router.post('/expenses', auth, async (req, res) => {
   const {
     title,
     amount,
@@ -77,7 +76,7 @@ router.post('/expenses', auth, addExpenseCheck, async (req, res) => {
 * @desc   Updates an existing expense
 * @access private
 */
-router.put('/expenses/:id', auth, addExpenseCheck, async (req, res) => {
+router.put('/expenses/:id', auth, async (req, res) => {
   try {
     let expense = await Expense.findOne({
       _id: req.params.id,

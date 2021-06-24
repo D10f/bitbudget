@@ -3,8 +3,6 @@ const bodyParser = require('body-parser');
 const app = express();
 require('./db/mongoose');
 
-const PORT = process.env.PORT || 5000;
-
 // Used to process custom request headers and cross-site origins
 app.use((req, res, next) => {
   res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
@@ -18,8 +16,8 @@ app.use(bodyParser.raw({ limit: '2mb' }));
 app.use(bodyParser.json());
 app.use(require('./routes/users'));
 app.use(require('./routes/wallets'));
-app.use(require('./routes/expenses'));
-app.use(require('./routes/snapshots'));
-app.use(require('./routes/images'));
+// app.use(require('./routes/expenses'));
+// app.use(require('./routes/snapshots'));
+// app.use(require('./routes/images'));
 
-app.listen(PORT, () => console.log(`Listening to port ${PORT}`));
+module.exports = app;

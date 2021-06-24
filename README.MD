@@ -1,6 +1,6 @@
 # Gadget Budget
 
-A web application to handle your expenses securely and comfortably through out all of your devices.
+A web application to manage your expenses securely and privately.
 
 ## Features
 
@@ -10,7 +10,7 @@ A web application to handle your expenses securely and comfortably through out a
 + Dark theme, light theme, orange theme, unicorn theme...
 + Client-side encryption means your expenses are safe.
 
-## Two Password System
+## Two-Password System
 
 When you create an account you will be prompted for a username and a password, which is used to login the next time you visit Gadget Budget. An additional password is required in order to generate the necessary encryption keys to protect your data as you use the application, which by default is the same as your login password. This is done for your convenience but at the cost of security. You will be prompted to update your encryption password the first time you login, but it is up to you to decide whether this trade-off between convenience and security is worth it.
 
@@ -23,30 +23,32 @@ Please note:
 ### Users
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
-| ------------------------------------------ | -------- | ---------------------------------- |
-| ![open padlock](assets/lock-gray.png) POST | /signup  | Used to signup new users           |
-| ![open padlock](assets/lock-gray.png) POST | /login   | Used to login existing user        |
-| ![padlock](assets/lock-green.png)     PUT  | /profile | Used to update an existing profile |
+| ------------------------------------------ | ------------ | ---------------------------------- |
+| ![padlock](assets/lock-green.png)     GET  | /user/logout | Logs the user out of the account   |
+| ![open padlock](assets/lock-gray.png) POST | /user/signup | Used to signup new users           |
+| ![open padlock](assets/lock-gray.png) POST | /user/login  | Used to login existing user        |
+| ![padlock](assets/lock-green.png)     PUT  | /user/update | Used to update an existing profile |
 
 ### Wallets
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
-| ---------------------------------------- | -------------- | ------------------------------------------------------- |
-| ![padlock](assets/lock-green.png) GET    | /wallet/{id}   | Retrieves the specified wallet                          |
-| ![padlock](assets/lock-green.png) POST   | /wallet/s/{id} | Retrives expenses based on the payload query parameters |
-| ![padlock](assets/lock-green.png) POST   | /wallet/{id}   | Creates the specified wallet                            |
-| ![padlock](assets/lock-green.png) PUT    | /wallet/{id}   | Updates the specified wallet                            |
-| ![padlock](assets/lock-green.png) DELETE | /wallet/{id}   | Deletes the specified wallet                            |
+| ---------------------------------------- | ------------------- | ------------------------------------------------------- |
+| ![padlock](assets/lock-green.png) GET    | /wallet/{id}        | Retrieves the specified wallet                          |
+| ![padlock](assets/lock-green.png) POST   | /wallet             | Creates a new wallet                                    |
+| ![padlock](assets/lock-green.png) POST   | /wallet/search/{id} | Retrieves expenses based on the payload query parameters |
+| ![padlock](assets/lock-green.png) PUT    | /wallet/{id}        | Updates the specified wallet                            |
+| ![padlock](assets/lock-green.png) DELETE | /wallet/{id}        | Deletes the specified wallet                            |
 
 ### Expenses
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
 | ---------------------------------------- | ------------------------ | -------------------------------------------------------- |
-| ![padlock](assets/lock-green.png) GET    | /expense/image/{id}      | Retrieves the specified expense's associated image       |
-| ![padlock](assets/lock-green.png) POST   | /expense/image/{id}      | Updates the specified expense's associated image         |
+| ![padlock](assets/lock-green.png) GET    | /expense/image/{expId}   | Retrieves the specified expense's associated image       |
+| ![padlock](assets/lock-green.png) POST   | /expense/image/{expId}   | Updates the specified expense's associated image         |
 | ![padlock](assets/lock-green.png) POST   | /expense/{walId}         | Creates a new expense associated to the specified wallet |
 | ![padlock](assets/lock-green.png) PUT    | /expense/{expId}         | Updates the specified expense                            |
 | ![padlock](assets/lock-green.png) DELETE | /expense/{expId}/{walId} | Deletes the specified expense                            |
+| ![padlock](assets/lock-green.png) DELETE | /expense/image/{expId}   | Deletes the specified expense's associated image         |
 
 ## Database Schema Design
 

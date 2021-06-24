@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
-const crypto = require('crypto');
+// const bcrypt = require('bcryptjs');
+const argon2 = require('argon2');
 const jwt = require('jsonwebtoken');
-const Snapshot = require('./Snapshot');
 
 const userSchema = mongoose.Schema({
   username: {
     type: String,
     required: [true, '[DB_ERR] You must provide a username'],
+    trim: true
+  },
+  email: {
+    type: String,
     trim: true
   },
   password: {
@@ -19,29 +22,28 @@ const userSchema = mongoose.Schema({
       type: String,
       required: true
     }
-  }]
-}, { timestamps: true });
-
-userSchema.virtual('userSnapshots', {
-  ref: 'Snapshot',
-  localField: '_id',
-  foreignField: 'author'
+  }],
+  settings: {
+    type: Buffer
+  }
 });
 
 userSchema.pre('save', async function(next) {
-
   // Hash the plaintext password only if it has been modified
   if (this.isModified('password')) {
-    this.password = await bcrypt.hash(this.password, 12);
+    if (this.password.length < 8) {
+      throw new Error('Please enter a password at least 8 characters long');
+    }
+    this.password = await argon2.hash(this.password);
   }
 
   next();
 });
 
-userSchema.pre('remove', async function(next){
-  await Snapshot.deleteMany({ author: this._id });
-  next();
-});
+// userSchema.pre('remove', async function(next){
+//   await Snapshot.deleteMany({ author: this._id });
+//   next();
+// });
 
 userSchema.methods.generateAuthToken = function(){
 
@@ -60,7 +62,7 @@ userSchema.methods.toJSON = function () {
   const userObject = this.toObject();
 
   delete userObject._id;
-  delete userObject._v;
+  delete userObject.__v;
   delete userObject.password;
   delete userObject.tokens;
   delete userObject.createdAt;
@@ -77,7 +79,7 @@ userSchema.statics.loginWithUsernameAndPassword = async (username, password) => 
     throw new Error('Invalid credentials');
   }
 
-  const isMatch = await bcrypt.compare(password, user.password);
+  const isMatch = await argon2.verify(user.password, password);
 
   if (!isMatch) {
     throw new Error('Invalid credentials');

@@ -1,7 +1,6 @@
-const { v4: uuidv4 } = require('uuid');
 const express = require('express');
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Wallet = require('../models/Wallet');
 
 const { signupCheck, loginCheck } = require('../middleware/validator');
 const auth = require('../middleware/auth');
@@ -13,36 +12,32 @@ const router = express.Router();
 * @desc   Register a new user
 * @access public
 */
-router.post('/signup', signupCheck, async (req, res) => {
+router.post('/user/signup', signupCheck, async (req, res) => {
 
-  // res.set('Access-Control-Allow-Origin', '*');
-
-  const { username, password } = req.body;
+  const { username, password, email } = req.body;
 
   try {
-    let user = await User.findOne({ username });
+    const user = await User.findOne({ username });
 
     if (user) {
-      return res.status(400).send('That user already exists.');
+      return res.status(400).json('That user already exists.');
     }
 
-    user = new User({ username, password });
-    const token = user.generateAuthToken();
-    // const wallet = {
-    //   id: uuidv4(),
-    //   name: 'Default Wallet',
-    //   budget: 0,
-    //   currency: '$',
-    //   isCurrent: true
-    // };
+    if (email) {
+      const exists = await User.findOne({ email });
+      if (exists) return res.status(400).json('That email already exists.');
+    }
 
-    // user.wallets = [wallet];
+    const newUser = new User({ username, password, email });
+    const token = newUser.generateAuthToken();
+    await newUser.save();
 
-    await user.save();
+    const newWallet = new Wallet();
+    await newWallet.save();
 
-    res.status(201).send({ user, token });
+    res.status(201).send({ user: newUser, token, wallet: newWallet._id });
   } catch (err) {
-    console.log(err.message);
+    console.error(err);
     res.status(500).send(err.message);
   }
 
@@ -53,7 +48,7 @@ router.post('/signup', signupCheck, async (req, res) => {
 * @desc   Authenticate and login user
 * @access public
 */
-router.post('/login', async (req, res) => {
+router.post('/user/login', loginCheck, async (req, res) => {
 
   const { username, password } = req.body;
 
@@ -63,7 +58,7 @@ router.post('/login', async (req, res) => {
     await user.save();
     res.send({ user, token });
   } catch (err) {
-    res.status(400).send(err.message);
+    res.status(400).json(err.message);
   }
 });
 
@@ -72,25 +67,36 @@ router.post('/login', async (req, res) => {
 * @desc   Updates an existing user
 * @access private
 */
-router.put('/user', auth, async (req, res) => {
+router.put('/user/update', auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['password'];
+  const allowedUpdates = ['email', 'password'];
   const isValidRequest = updates.every(field => allowedUpdates.includes(field));
 
   if (!isValidRequest) {
-    return res.status(400).send({ message: 'Invalid fields provided for update' });
+    return res.status(400).json('Invalid fields provided for update.');
+  }
+
+  // Protects against undefined and empty string password updates
+  if (!updates.length || (updates.includes('password') && !req.body['password'])) {
+    return res.status(400).json('Please enter a password at least 8 characters long');
+  }
+
+  // Protects against updating emails to already existing addresses
+  const needCheckEmail = req.body['email'] && req.body['email'] !== '';
+  if (needCheckEmail) {
+    const exists = await User.findOne({email: req.body['email'] });
+    if (exists) return res.status(400).json('That address is already in use');
   }
 
   try {
     const user = req.user;
     updates.forEach(update => user[update] = req.body[update]);
 
-    await user.save()
-    res.send(user)
+    await user.save();
+    res.send(user);
 
   } catch(err) {
-    // 400 cause client sent us invalid data (error returned from validator)
-    res.status(400).send(err)
+    res.status(400).json(err.message);
   }
 });
 
@@ -99,7 +105,7 @@ router.put('/user', auth, async (req, res) => {
 * @desc   Logs current user out of the session
 * @access private
 */
-router.get('/users/logout', auth, async (req, res, next) => {
+router.get('/user/logout', auth, async (req, res, next) => {
   try {
     req.user.tokens = req.user.tokens.filter(token => {
       return token.token !== req.token;
@@ -109,18 +115,8 @@ router.get('/users/logout', auth, async (req, res, next) => {
     res.send();
 
   } catch (err) {
-    res.status(500).send()
+    res.status(500).send();
   }
-})
-
-/**
-* @route  GET users/me
-* @desc   Get logged in user
-* @access private
-*/
-router.get('/users/me', auth, (req, res) => {
-  return res.send(req.user);
 });
-
 
 module.exports = router;

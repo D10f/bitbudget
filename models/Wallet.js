@@ -1,24 +1,16 @@
 const mongoose = require('mongoose');
 
 const WalletSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: [true, '[MONGODB_ERR] You must provide a name for this wallet'],
-    unique: true,
-    trim: true
-  },
-  currency: {
-    type: String,
-    required: [true, '[MONGODB_ERR] You must choose a currency'],
-  },
-  budget: {
-    type: Number
-  },
-  author: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'user'
+  data: {
+    type: Buffer
   }
-}, { timestamps: true });
+});
+
+WalletSchema.methods.toJSON = function () {
+  const walletObject = this.toObject();
+  delete walletObject.__v;
+  return walletObject;
+};
 
 const Wallet = mongoose.model('wallet', WalletSchema);
 
