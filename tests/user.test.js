@@ -1,39 +1,10 @@
 const request = require('supertest');
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
 const app = require('../app');
 const User = require('../models/User');
-const Wallet = require('../models/Wallet');
+const { userOne, userTwo, setupDatabaseForUserTest} = require('./fixtures/db');
 require('../db/mongoose');
 
-const userOneId = new mongoose.Types.ObjectId();
-const userOne = {
-  _id: userOneId,
-  username: 'Mike Myers',
-  email: 'michaelmyers@example.com',
-  password: 'mikewhat55!',
-  tokens: [{
-    token: jwt.sign({ _id: userOneId }, process.env.JWT_SECRET)
-  }]
-};
-
-const userTwoId = new mongoose.Types.ObjectId();
-const userTwo = {
-  _id: userTwoId,
-  username: 'Oscar Myers',
-  email: 'oscarmyers@example.com',
-  password: 'oscarwhooo6!',
-  tokens: [{
-    token: jwt.sign({ _id: userTwoId }, process.env.JWT_SECRET)
-  }]
-};
-
-beforeEach(async () => {
-  await User.deleteMany();
-  await Wallet.deleteMany();
-  await new User(userOne).save();
-  await new User(userTwo).save();
-});
+beforeEach(setupDatabaseForUserTest);
 
 // Test for signup success
 test('Should signup a new user without email', async () => {

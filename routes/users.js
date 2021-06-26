@@ -81,7 +81,7 @@ router.put('/user/update', auth, async (req, res) => {
     return res.status(400).json('Please enter a password at least 8 characters long');
   }
 
-  // Protects against updating emails to already existing addresses
+  // Protects against updating emails to an already existing address
   const needCheckEmail = req.body['email'] && req.body['email'] !== '';
   if (needCheckEmail) {
     const exists = await User.findOne({email: req.body['email'] });

@@ -16,8 +16,7 @@ app.use(bodyParser.raw({ limit: '2mb' }));
 app.use(bodyParser.json());
 app.use(require('./routes/users'));
 app.use(require('./routes/wallets'));
-// app.use(require('./routes/expenses'));
-// app.use(require('./routes/snapshots'));
-// app.use(require('./routes/images'));
+app.use(require('./routes/expenses'));
+app.use(require('./routes/images'));
 
 module.exports = app;

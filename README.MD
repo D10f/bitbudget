@@ -20,35 +20,41 @@ Please note:
 
 ## REST API endpoints
 
-### Users
+### /user
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
-| ------------------------------------------ | ------------ | ---------------------------------- |
-| ![padlock](assets/lock-green.png)     GET  | /user/logout | Logs the user out of the account   |
-| ![open padlock](assets/lock-gray.png) POST | /user/signup | Used to signup new users           |
-| ![open padlock](assets/lock-gray.png) POST | /user/login  | Used to login existing user        |
-| ![padlock](assets/lock-green.png)     PUT  | /user/update | Used to update an existing profile |
+| ------------------------------------------ | ------- | ---------------------------------- |
+| ![padlock](assets/lock-green.png)     GET  | /logout | Logs the user out of the account   |
+| ![open padlock](assets/lock-gray.png) POST | /signup | Used to signup new users           |
+| ![open padlock](assets/lock-gray.png) POST | /login  | Used to login existing user        |
+| ![padlock](assets/lock-green.png)     PUT  | /update | Used to update an existing profile |
 
-### Wallets
-
-| METHOD  | ENDPOINT  | DESCRIPTION |
-| ---------------------------------------- | ------------------- | ------------------------------------------------------- |
-| ![padlock](assets/lock-green.png) GET    | /wallet/{id}        | Retrieves the specified wallet                          |
-| ![padlock](assets/lock-green.png) POST   | /wallet             | Creates a new wallet                                    |
-| ![padlock](assets/lock-green.png) POST   | /wallet/search/{id} | Retrieves expenses based on the payload query parameters |
-| ![padlock](assets/lock-green.png) PUT    | /wallet/{id}        | Updates the specified wallet                            |
-| ![padlock](assets/lock-green.png) DELETE | /wallet/{id}        | Deletes the specified wallet                            |
-
-### Expenses
+### /wallet
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
-| ---------------------------------------- | ------------------------ | -------------------------------------------------------- |
-| ![padlock](assets/lock-green.png) GET    | /expense/image/{expId}   | Retrieves the specified expense's associated image       |
-| ![padlock](assets/lock-green.png) POST   | /expense/image/{expId}   | Updates the specified expense's associated image         |
-| ![padlock](assets/lock-green.png) POST   | /expense/{walId}         | Creates a new expense associated to the specified wallet |
-| ![padlock](assets/lock-green.png) PUT    | /expense/{expId}         | Updates the specified expense                            |
-| ![padlock](assets/lock-green.png) DELETE | /expense/{expId}/{walId} | Deletes the specified expense                            |
-| ![padlock](assets/lock-green.png) DELETE | /expense/image/{expId}   | Deletes the specified expense's associated image         |
+| ---------------------------------------- | ------------ | -------------------------------------------------------- |
+| ![padlock](assets/lock-green.png) GET    | /{id}        | Retrieves the specified wallet                           |
+| ![padlock](assets/lock-green.png) GET    | /s/{id}?q=12 | Retrieves expenses based on the payload query parameters |
+| ![padlock](assets/lock-green.png) POST   | /            | Creates a new wallet                                     |
+| ![padlock](assets/lock-green.png) PUT    | /{id}        | Updates the specified wallet data (not expenses)         |
+| ![padlock](assets/lock-green.png) DELETE | /{id}        | Deletes the specified wallet                             |
+
+### /expense
+
+| METHOD  | ENDPOINT  | DESCRIPTION |
+| ---------------------------------------- | ----------------------- | -------------------------------------------------------- |
+| ![padlock](assets/lock-green.png) POST   | /{walletId}             | Creates a new expense associated to the specified wallet |
+| ![padlock](assets/lock-green.png) PUT    | /{expenseId}            | Updates the specified expense                            |
+| ![padlock](assets/lock-green.png) DELETE | /{expenseId}/{walletId} | Deletes the specified expense and reference from wallet  |
+
+
+### /image
+
+| METHOD  | ENDPOINT  | DESCRIPTION |
+| ---------------------------------------- | ----- | ----------------------------- |
+| ![padlock](assets/lock-green.png) GET    | /{id} | Retrieves the specified image |
+| ![padlock](assets/lock-green.png) POST   | /{id} | Updates the specified image   |
+| ![padlock](assets/lock-green.png) DELETE | /{id} | Deletes the specified image   |
 
 ## Database Schema Design
 

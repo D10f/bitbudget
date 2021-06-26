@@ -12,13 +12,34 @@ const router = express.Router();
 */
 router.get('/wallet/:id', auth, async (req, res) => {
   try {
-    const wallet = await Wallet.findById(req.params.id);
+    const wallet = await Wallet.findById(req.params.id).lean();
 
     if (!wallet) {
       return res.status(400).json('No wallet found by that ID');
     }
 
     res.send(wallet);
+  } catch (err) {
+    console.error(err)
+    res.status(500).json(err.message);
+  }
+});
+
+/**
+* @route  GET /wallet/s/:id
+* @desc   Returns expenses for the specified wallet using a query string
+* @access private
+*/
+router.get('/wallet/s/:id', auth, async (req, res) => {
+  try {
+    const wallet = await Wallet.findById(req.params.id);
+
+    if (!wallet) {
+      return res.status(400).json('Cannot find wallet with that id');
+    }
+
+    const expenses = await wallet.getExpenses(req.query);
+    res.status(200).send(expenses);
   } catch (err) {
     console.error(err)
     res.status(500).json(err.message);
@@ -38,34 +59,33 @@ router.post('/wallet', auth, async (req, res) => {
 
   try {
     const data = Buffer.from(req.body.data);
-    console.log(data)
     const wallet = new Wallet(data);
     await wallet.save();
     res.status(201).send(wallet);
   } catch (err) {
+
+    // If Buffer.from() fails here is because data is of invalid type
+    if (err.message.startsWith('The first argument must be of type string')) {
+      return res.status(400).json('Invalid data type provided');
+    }
+
     res.status(500).json(err.message);
   }
 });
 
 /**
-* @route  POST /wallet/search/:id
-* @desc   Returns expenses for the specified wallet using the body query params
+* @route  PUT /wallets/:id
+* @desc   Updates an existing wallet's data (not the expense list)
 * @access private
 */
-router.post('/wallet/search/:id', auth, async (req, res) => {
-  console.log('sfdsdfsd')
-  // A string array containing the dates to retrieve in a ['MMYY'] format
-  // e.g., [1221, 0122, 0222] matches Dec 2021, Jan 2022 and Feb 2022
-  const { query } = req.body;
+router.put('/wallet/:id', auth, async (req, res) => {
+  const updates = Object.keys(req.body);
+  const allowedUpdates = ['data'];
+  const isValidRequest = updates.every(field => allowedUpdates.includes(field));
 
-  // Convert the string array into an object to define the projected properties
-  // from the MongoDB document e.g., {1221: 1, 0122: 1, 0222: 1}
-  // const projectedProperties = query.reduce((acc, val) => {
-  //   return acc[val] ? acc : { ...acc, acc[val]: 1 };
-  // }, {});
-
-  console.log(projectedProperties);
-  return projectedProperties;
+  if (!isValidRequest) {
+    return res.status(400).json('Invalid fields provided for update.');
+  }
 
   try {
     const wallet = await Wallet.findById(req.params.id);
@@ -74,50 +94,12 @@ router.post('/wallet/search/:id', auth, async (req, res) => {
       return res.status(400).json('Cannot find wallet with that id');
     }
 
-    let results = [];
-    results = query.map(date => {
+    updates.forEach(update => wallet[update] = req.body[update]);
 
-    });
-
-    res.status(200).send(results);
+    await wallet.save();
+    res.status(202).send(wallet);
   } catch (err) {
-    res.status(500).json(err.message);
-  }
-});
-
-/**
-* @route  PUT /wallets/:id
-* @desc   Updates an existing wallet
-* @access private
-*/
-router.put('/wallets/:id', auth, async (req, res) => {
-  try {
-    let wallet = await Wallet.findOne({
-      _id: req.params.id,
-      author: req.user.id
-    });
-
-    if (!wallet) {
-      return res.status(400).send({ message: 'Cannot find wallet with that id' });
-    }
-
-    const updates = Object.keys(req.body);
-    const allowedUpdates = ['name', 'description', 'budget'];
-    const isValidRequest = updates.every(field => allowedUpdates.includes(field));
-
-    if (!isValidRequest) {
-      return res.status(400).send({ message: 'Invalid fields provided for update' });
-    }
-
-    wallet = await Wallet.findByIdAndUpdate(
-      req.params.id,
-      req.body,
-      { new: true, runValidators: true }
-    );
-
-    res.status(201).send(wallet);
-  } catch (e) {
-    res.status(500).send({ message: e.message });
+    res.status(500).json( err.message );
   }
 });
 
@@ -126,20 +108,18 @@ router.put('/wallets/:id', auth, async (req, res) => {
 * @desc   Deletes an existing wallet
 * @access private
 */
-router.delete('/wallets/:id', auth, async (req, res) => {
+router.delete('/wallet/:id', auth, async (req, res) => {
   try {
-    let wallet = await Wallet.findOne({
-      _id: req.params.id,
-      author: req.user.id
-    });
+    let wallet = await Wallet.findById(req.params.id);
 
     if (!wallet) {
-      return res.status(400).send({ message: 'Cannot find wallet with that id' });
+      return res.status(400).json('Cannot find wallet with that id');
     }
 
-    await Wallet.findByIdAndRemove(req.params.id);
+    // await Wallet.findByIdAndRemove(req.params.id);
+    await wallet.remove();
 
-    res.status(200).send({ message: 'Wallet deleted' });
+    res.status(200).json('Wallet deleted successfully');
   } catch (e) {
     res.status(500).send({ message: e.message });
   }

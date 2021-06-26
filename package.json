@@ -12,7 +12,9 @@
   },
   "jest": {
     "watchPathIgnorePatterns": [
-      "node_modules"
+      "node_modules",
+      "client",
+      "package.json"
     ]
   },
   "keywords": [],
@@ -20,6 +22,7 @@
   "license": "ISC",
   "dependencies": {
     "argon2": "^0.28.2",
+    "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
     "env-cmd": "^10.1.0",
     "express": "^4.17.1",
