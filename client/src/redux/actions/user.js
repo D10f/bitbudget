@@ -7,7 +7,7 @@ import { setCategories } from './categories';
 import { setTheme, setPrimaryColor } from './theme';
 import { addError } from './notifications';
 import { v4 as uuidv4 } from 'uuid';
-import { createSnapshot, restoreSnapshot } from '../../utils/snapshot';
+import { createUserSnapshot, restoreUserSnapshot, createSnapshot, restoreSnapshot } from '../../utils/snapshot';
 
 export const setUser = (user = {}) => ({
   type: SET_USER,
@@ -16,66 +16,102 @@ export const setUser = (user = {}) => ({
 
 export const startLoginUser = (credentials = {}) => {
   return (dispatch, getState) => {
-
+    const endpoint = 'http://localhost:5000/user/login';
     const config = {
       headers: {
         'Content-Type': 'application/json'
       }
     };
 
-    return axios.post('http://localhost:5000/login', credentials, config)
-      .then(response => {
-        const { user, token } = response.data;
-        user.token = token;
-        dispatch(setUser(user));
-        return restoreSnapshot(user, credentials.password);
-      })
-      .then(store => {
-        dispatch(setExpenses(store.expenses));
-        dispatch(setWallets(store.wallets));
-        dispatch(setCategories(store.categories));
-        dispatch(setTheme(store.theme.theme));
-        dispatch(setPrimaryColor(store.theme.primary));
-        return true; // signals the component that can redirect to main screen
+    return axios.post(endpoint, credentials, config)
+      .then(res => {
+        const { user, token } = res.data;
+        const userObject = {
+          username: user.username,
+          email: user.email || '',
+          token
+        };
+
+        // Fetched user data and updating Redux state
+        dispatch(setUser(userObject));
+
+        // Make another request for the encrypted data, using fetch this time as
+        // it's actually much easier for handling ArrayBuffers (yes, even with
+        // "responseType: arrayBuffer" option)
+        const fetchConfig = {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+
+        return fetch('http://localhost:5000/user/settings', fetchConfig)
+          .then(response => response.arrayBuffer())
       })
       .catch(err => {
-        // error coming from server middleware
-        if (err.response) {
-          dispatch(addError(err.response.data));
-          return false; // signals the component not to redirect to main screen
-        }
-
-        // error coming from elsewhere e.g., network error, decryption failed...
-        dispatch(addError(err.message));
-        dispatch(setUser({}));
-        dispatch(logoutUser());
+        console.log(err.response.data);
+        dispatch(addError(err.response.data));
+        return false; // signals component not to redirect
       });
   };
 };
 
+export const startRestoreUserSettings = (userSettings, decryptionPassword) => {
+  return dispatch => {
+    console.log(userSettings)
+    console.log(userSettings.length)
+    return restoreUserSnapshot(userSettings, decryptionPassword)
+      .then(settings => {
+        dispatch(setWallets(settings.wallets));
+        dispatch(setCategories(settings.categories));
+        dispatch(setTheme(settings.theme.theme));
+        dispatch(setPrimaryColor(settings.theme.primary));
+        return true; // signals component to redirect to dashboard
+      })
+      .catch(err => {
+        console.error(err.message);
+        dispatch(addError(err.message));
+        return false; // signals component not to redirect
+      })
+  }
+};
+
 export const startSignupUser = (credentials = {}) => {
   return (dispatch, getState) => {
+    const endpoint = 'http://localhost:5000/user/signup';
     const config = {
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       }
     };
 
-    return axios.post('http://localhost:5000/signup', credentials, config)
-      .then(response => {
-        const { user, token } = response.data;
+    return axios.post(endpoint, credentials, config)
+      .then(res => {
+        const { user, token, walletId } = res.data;
         user.token = token;
-        dispatch(setUser(user))
-        const currentState = getState();
-        return createSnapshot(currentState, credentials.password);
+        dispatch(setUser(user));
+
+        const firstWallet = {
+          id: walletId,
+          name: 'My First Wallet',
+          budget: 0,
+          currency: '$',
+          isCurrent: true
+        };
+
+        dispatch(setWallets([firstWallet]));
+
+        // syncrhonize an encrypted snapshot
+        const state = getState();
+
+        createUserSnapshot(state, credentials.password)
+          .catch(console.error);
+
+        return true; // signals component to redirect to dashboard
       })
-      .catch(error => {
-        if (error.response.data) {
-          dispatch(addError(error.response.data));
-          return false; // signals the component not to redirect anywhere
-        } else {
-          dispatch(addError('Something went wrong, please check your connection or try again later'));
-        }
+      .catch(err => {
+        console.error(err.response.data);
+        dispatch(addError(err.response.data));
+        return false; // signals component not to redirect to dashboard
       });
   };
 };
@@ -86,9 +122,8 @@ export const logoutUser = () => ({
 
 export const startLogoutUser = () => {
   return (dispatch, getState) => {
-
     const { user } = getState();
-
+    const endpoint = 'http://localhost:5000/user/logout';
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -96,22 +131,18 @@ export const startLogoutUser = () => {
       }
     };
 
-    // del('cryptoKey')
-    clear();
-    dispatch(logoutUser());
-    dispatch(setExpenses([]));
-    dispatch(
-      setWallets([{
-        id: uuidv4(),
-        name: 'Default Wallet',
-        budget: 0,
-        currency: '$',
-        isCurrent: true
-      }])
-    );
-
-    return axios.get('http://localhost:5000/users/logout', config)
-      .catch(console.error);
+    return axios.get(endpoint, config)
+      .then(() => {
+        // del('cryptoKey')
+        clear();
+        dispatch(logoutUser());
+        dispatch(setExpenses([]));
+        dispatch(setWallets([]));
+      })
+      .catch(err => {
+        console.error(err.response.data);
+        dispatch(addError(err.response.data));
+      });
   };
 };
 
@@ -124,7 +155,6 @@ export const startUpdateUser = (updates) => {
   return (dispatch, getState) => {
 
     const currentState = getState();
-
     const config = {
       headers: {
         'Content-Type': 'application/json',
@@ -132,11 +162,17 @@ export const startUpdateUser = (updates) => {
       }
     };
 
-    return axios.put('http://localhost:5000/user', updates, config)
-      .then(user => {
-        dispatch(updateUser({ updates }));
-        return createSnapshot(currentState, updates.password); // snapshot with new password
+    return axios.put('http://localhost:5000/user/update', updates, config)
+      .then(res => {
+        console.log(res);
       })
-      .catch(console.error);
+
+    // const user = await res.json();
+    // dispatch(updateUser({ updates }));
+    // return createSnapshot(currentState, updates.password); // snapshot with new password
+    // .then(user => {})
+    // .catch(console.error);
+
+
   };
 };

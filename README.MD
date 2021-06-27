@@ -23,11 +23,12 @@ Please note:
 ### /user
 
 | METHOD  | ENDPOINT  | DESCRIPTION |
-| ------------------------------------------ | ------- | ---------------------------------- |
-| ![padlock](assets/lock-green.png)     GET  | /logout | Logs the user out of the account   |
-| ![open padlock](assets/lock-gray.png) POST | /signup | Used to signup new users           |
-| ![open padlock](assets/lock-gray.png) POST | /login  | Used to login existing user        |
-| ![padlock](assets/lock-green.png)     PUT  | /update | Used to update an existing profile |
+| ------------------------------------------ | --------- | -------------------------------------------- |
+| ![padlock](assets/lock-green.png)     GET  | /logout   | Logs the user out of the account             |
+| ![open padlock](assets/lock-gray.png) POST | /signup   | Used to signup new users                     |
+| ![open padlock](assets/lock-gray.png) POST | /login    | Used to login existing user                  |
+| ![padlock](assets/lock-green.png)     POST | /settings | Used to update a user's (encrypted) settings |
+| ![padlock](assets/lock-green.png)     PUT  | /update   | Used to update an existing profile           |
 
 ### /wallet
 

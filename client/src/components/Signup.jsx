@@ -12,24 +12,20 @@ const SignUp = ({ startSignupUser, addError, history }) => {
     confirmPass: ''
   });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
 
     const { username, password, password2, confirmPass } = credentials;
 
     // spam bot detected
-    if (password2) {
-      return;
+    if (password2) return;
+    if (password !== confirmPass) return addError("Passwords don't match");
+    if (password.length < 8) {
+      return addError('Please enter a password at least 8 characters long');
     }
 
-    if (password !== confirmPass) {
-      return addError(`Passwords don't match`);
-    }
-
-    startSignupUser({ username, password })
-      .then(done => {
-        if (done) history.push('/');
-      })
+    const done = await startSignupUser({ username, password });
+    if (done) history.push('/');
   };
 
   const handleChange = (e) => {

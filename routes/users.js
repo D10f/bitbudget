@@ -28,7 +28,12 @@ router.post('/user/signup', signupCheck, async (req, res) => {
       if (exists) return res.status(400).json('That email already exists.');
     }
 
-    const newUser = new User({ username, password, email });
+    const newUser = new User({
+      username,
+      password,
+      email: email || ''
+    });
+
     const token = newUser.generateAuthToken();
     await newUser.save();
 
@@ -56,6 +61,7 @@ router.post('/user/login', loginCheck, async (req, res) => {
     const user = await User.loginWithUsernameAndPassword(username, password);
     const token = user.generateAuthToken();
     await user.save();
+    delete user.settings;
     res.send({ user, token });
   } catch (err) {
     res.status(400).json(err.message);
@@ -64,7 +70,7 @@ router.post('/user/login', loginCheck, async (req, res) => {
 
 /**
 * @route  PUT /user
-* @desc   Updates an existing user
+* @desc   Updates an existing user's profile information
 * @access private
 */
 router.put('/user/update', auth, async (req, res) => {
@@ -84,7 +90,7 @@ router.put('/user/update', auth, async (req, res) => {
   // Protects against updating emails to an already existing address
   const needCheckEmail = req.body['email'] && req.body['email'] !== '';
   if (needCheckEmail) {
-    const exists = await User.findOne({email: req.body['email'] });
+    const exists = await User.findOne({ email: req.body['email'] });
     if (exists) return res.status(400).json('That address is already in use');
   }
 
@@ -95,6 +101,35 @@ router.put('/user/update', auth, async (req, res) => {
     await user.save();
     res.send(user);
 
+  } catch(err) {
+    res.status(400).json(err.message);
+  }
+});
+
+/**
+* @route  POST /user/settings
+* @desc   Updates (overwrites) the user's settings which is encrypted
+* @access private
+*/
+router.post('/user/settings', auth, async (req, res) => {
+  try {
+    req.user.settings = req.body;
+    await req.user.save();
+    res.status(202).send();
+  } catch(err) {
+    res.status(400).json(err.message);
+  }
+});
+
+/**
+* @route  GET /user/settings
+* @desc   Returns the specified user encrypted settings
+* @access private
+*/
+router.get('/user/settings', auth, async (req, res) => {
+  try {
+    console.log(req.user.toObject().settings);
+    res.status(200).send(req.user.settings);
   } catch(err) {
     res.status(400).json(err.message);
   }

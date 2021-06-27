@@ -6,8 +6,9 @@ require('../db/mongoose');
 
 beforeEach(setupDatabaseForUserTest);
 
-// Test for signup success
-test('Should signup a new user without email', async () => {
+// It works here but not in the front-end due to error:
+// E11000 duplicate key error collection: gadgetbudget.users index: email_1 dup key: { : null }
+test.skip('Should signup a new user without email', async () => {
   const response = await request(app)
     .post('/user/signup')
     .send({
@@ -22,8 +23,10 @@ test('Should signup a new user without email', async () => {
     expect(response.body).toHaveProperty('wallet', expect.any(String));
 
     // Assert that the database contains the new user
-    const user = await User.findById(userOne._id);
+    // const user = await User.findById(userOne._id);
+    const user = await User.findOne({ username: 'Miguel Lopez' });
     expect(user).not.toBeNull();
+    expect(user.email).toBeUndefined();
 
     // Assert that the password is being hashed using argon2
     expect(user.password).not.toBe('olopezo123!');
