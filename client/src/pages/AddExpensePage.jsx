@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
 import { startAddExpense } from '../redux/actions/expenses';
-import { selectCurrentWallet } from '../redux/selectors/expenses';
-import { v4 as uuidv4 } from 'uuid';
+import { selectCurrentWallet } from '../redux/selectors/wallets';
+import moment from 'moment';
+// import { v4 as uuidv4 } from 'uuid';
+// _id: uuidv4(),
 
 import ExpenseForm from '../components/ExpenseForm';
 
@@ -9,13 +11,14 @@ const AddExpensePage = ({ startAddExpense, wallet, history }) => {
 
   const onSubmit = (expenseData) => {
     const expense = {
-      _id: uuidv4(),
       ...expenseData,
       wallet: wallet.id
     };
 
     startAddExpense(expense)
-      .then(() => history.push('/expenses'));
+      .then(done => {
+        if (done) history.push('/expenses');
+      });
   };
 
   return (

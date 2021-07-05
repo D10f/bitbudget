@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { connect } from 'react-redux';
-import { startLoginUser, startRestoreUserSettings } from '../redux/actions/user';
+import { startLoginUser, startRestoreUserData } from '../redux/actions/user';
 
-const Login = ({ startLoginUser, startRestoreUserSettings, history }) => {
+const Login = ({ startLoginUser, startRestoreUserData, history }) => {
 
-  const [userSettings, setUserSettings] = useState(undefined);
+  const [encryptionPrompt, setEncryptionPrompt] = useState(false);
   const [credentials, setCredentials] = useState({
     username: '',
     password: '',
@@ -14,17 +14,13 @@ const Login = ({ startLoginUser, startRestoreUserSettings, history }) => {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    if (!userSettings) {
-      // First confirm username/password and receive encrypted user data
-      const encryptedSettings = await startLoginUser(credentials);
-      if (encryptedSettings) {
-        setUserSettings(encryptedSettings);
-      }
+
+    if (encryptionPrompt) {
+      const ok = await startRestoreUserData(credentials.encryptionPassword);
+      if (ok) history.push('/');
     } else {
-      // Try to decrypt user data using encryptionPassword
-      const done = await startRestoreUserSettings(userSettings, credentials.encryptionPassword);
-      console.log('are you done?', done);
-      if (done) history.push('/');
+      const loggedIn = await startLoginUser(credentials);
+      setEncryptionPrompt(loggedIn);
     }
   };
 
@@ -43,49 +39,49 @@ const Login = ({ startLoginUser, startRestoreUserSettings, history }) => {
       <div className="form__control-group">
         <label className="form__label" htmlFor="username">Username</label>
         <input
-          className={userSettings ? "form__input settings__text-input--readonly" : "form__input"}
+          className={encryptionPrompt ? "form__input settings__text-input--readonly" : "form__input"}
           value={credentials.username}
           onChange={handleChange}
           name="username"
           id="username"
           placeholder="username"
-          readOnly={Boolean(userSettings)}
+          readOnly={Boolean(encryptionPrompt)}
         />
       </div>
       <div className="form__control-group">
         <label className="form__label" htmlFor="password">Password</label>
         <input
-          className={userSettings ? "form__input settings__text-input--readonly" : "form__input"}
+          className={encryptionPrompt ? "form__input settings__text-input--readonly" : "form__input"}
           value={credentials.password}
           onChange={handleChange}
           type="password"
           name="password"
           id="password"
           placeholder="password"
-          readOnly={Boolean(userSettings)}
+          readOnly={Boolean(encryptionPrompt)}
         />
       </div>
       <div className="form__control-group">
         <label className="form__label" htmlFor="Encryption Password">Encryption Password</label>
         <input
-          className={userSettings ? "form__input" : "form__input settings__text-input--readonly"}
+          className={encryptionPrompt ? "form__input" : "form__input settings__text-input--readonly"}
           value={credentials.encryptionPassword}
           onChange={handleChange}
           type="password"
           name="encryptionPassword"
           id="Encryption Password"
           placeholder="Encryption Password"
-          readOnly={!Boolean(userSettings)}
+          readOnly={!Boolean(encryptionPrompt)}
         />
       </div>
-      <button className="btn">{userSettings ? 'Decrypt' : 'Login'}</button>
+      <button className="btn">{encryptionPrompt ? 'Decrypt' : 'Login'}</button>
     </form>
   );
 };
 
 const mapDispatchToProps = (dispatch) => ({
   startLoginUser: (userCredentials) => dispatch(startLoginUser(userCredentials)),
-  startRestoreUserSettings: (data, password) => dispatch(startRestoreUserSettings(data, password))
+  startRestoreUserData: (data, password) => dispatch(startRestoreUserData(data, password))
 });
 
 export default connect(undefined, mapDispatchToProps)(Login);

@@ -2,7 +2,6 @@ import { SET_USER, LOGOUT_USER, UPDATE_USER } from '../actionTypes';
 
 const initialState = {
   isAuthenticated: false,
-  encryptionPassword: '',
   user: null
 };
 

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectCurrentWallet } from '../redux/selectors/expenses';
+import { selectCurrentWallet } from '../redux/selectors/wallets';
 import ExpenseItem from './ExpenseItem';
 
 const ExpenseList = ({
@@ -8,7 +8,7 @@ const ExpenseList = ({
   sortBy = '',
   sortDesc = true,
   handleSort = () => {}
-  }) => {
+}) => {
 
   const activeClass = sortDesc
     ? 'expense__header expense__header--active-desc'
@@ -45,14 +45,13 @@ const ExpenseList = ({
           </p>
         </article>
       </li>
-      {
-        expenses && (
+      { expenses && (
         expenses.map(expense => (
           <li className="expense__item" key={expense._id} tabIndex="-1">
-            <ExpenseItem currency={wallet.currency} {...expense} />
+            <ExpenseItem currency={wallet.currency} _id={expense._id} {...expense.data} />
           </li>
-        )))
-      }
+        ))
+      )}
     </ul>
   );
 };

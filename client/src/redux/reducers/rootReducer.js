@@ -4,6 +4,7 @@ import { persistReducer } from 'redux-persist';
 
 import userReducer from '../reducers/userReducer';
 import expenseReducer from '../reducers/expenseReducer';
+import queriesReducer from '../reducers/queriesReducer';
 import filtersReducer from '../reducers/filtersReducer';
 import walletReducer from '../reducers/walletReducer';
 import themeReducer from '../reducers/themeReducer';
@@ -26,6 +27,7 @@ const persistConfig = {
 const rootReducer = combineReducers({
   user: userReducer,
   expenses: expenseReducer,
+  queries: queriesReducer,
   filters: filtersReducer,
   wallets: walletReducer,
   theme: themeReducer,

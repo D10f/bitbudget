@@ -1,5 +1,11 @@
-import { SET_WALLETS, ADD_WALLET, REMOVE_WALLET, UPDATE_WALLET, SET_CURRENT } from '../actionTypes';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  SET_WALLETS,
+  ADD_WALLET,
+  REMOVE_WALLET,
+  UPDATE_WALLET,
+  SET_CURRENT
+} from '../actionTypes';
 
 const initialState = [{
   id: uuidv4(),

@@ -12,7 +12,7 @@ import ExpenseImage from './ExpenseImage';
 
 const ExpenseForm = ({ onSubmit, onDelete, expense, addError }) => {
 
-  const [imageUrl, setImageUrl] = useState(expense ? expense.imageUrl : '');
+  const [image, setImage] = useState(expense ? expense.image : '');
   const [text, setText] = useState({
     title: expense ? expense.title : '',
     description: expense ? expense.description : '',
@@ -60,14 +60,14 @@ const ExpenseForm = ({ onSubmit, onDelete, expense, addError }) => {
         amount: parseFloat(amount, 10) * 100,
         createdAt: createdAt.valueOf(), // to return time in ms
         notes: text.title,
-        imageUrl: imageUrl
+        image: image
       });
     }
   };
 
   return (
     <>
-      <ExpenseImage url={imageUrl} />
+      <ExpenseImage url={image} />
       <form
         onSubmit={onFormSubmit}
         className="form form--spaced"
@@ -144,8 +144,8 @@ const ExpenseForm = ({ onSubmit, onDelete, expense, addError }) => {
             {expense ? 'Update Expense' : 'Create New Expense'}
           </button>
           <FilePicker
-            imageUrl={imageUrl}
-            setImageUrl={setImageUrl}
+            image={image}
+            setImage={setImage}
             expenseId={expense ? expense._id : ''}
             disabled={expense ? false : true}
           />

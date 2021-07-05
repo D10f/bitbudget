@@ -1,11 +1,8 @@
 import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { formatAsCurrency } from '../utils/expenses';
-import {
-  selectCurrentWallet,
-  selectIncomeAmount,
-  selectExpensesAmount
-} from '../redux/selectors/expenses';
+import { selectIncomeAmount, selectExpensesAmount } from '../redux/selectors/expenses';
+import { selectCurrentWallet } from '../redux/selectors/wallets';
 
 const Balance = ({ wallet: { budget, currency }, incomeAmount, expenseAmount }) => {
 

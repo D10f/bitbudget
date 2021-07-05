@@ -17,6 +17,7 @@ const Profile = ({
   addError
 }) => {
 
+  const [email, setEmail] = useState(user.email);
   const [passwords, setPasswords] = useState({
     password: '',
     confirm: ''
@@ -35,6 +36,11 @@ const Profile = ({
     setPasswords({ ...passwords, [name]: value });
   };
 
+  const handleEmailChange = (e) => {
+    const { value } = e.target;
+    setEmail(value);
+  };
+
   const handleSave = () => {
     const {password, confirm} = passwords;
 
@@ -46,7 +52,12 @@ const Profile = ({
       return addError('Passwords must be at least 8 characters long.');
     }
 
-    const updates = password ? { password } : {};
+    const updates = { email };
+    if (password) {
+      updates['password'] = password;
+    }
+
+    // TODO: include field to update encryption password
 
     startUpdateUser(updates)
       .then(() => addMessage('User profile updated.'))
@@ -72,9 +83,17 @@ const Profile = ({
           <label htmlFor="">Username</label>
           <input
             className="settings__text-input settings__text-input--readonly"
-            placeholder="Username"
             value={user.username}
             readOnly
+          />
+        </li>
+        <li className="settings__setting">
+          <label htmlFor="">Email</label>
+          <input
+            className="settings__text-input"
+            placeholder="text@example.com"
+            value={email}
+            onChange={handleEmailChange}
           />
         </li>
         <li className="settings__setting">

@@ -1,3 +1,6 @@
+import moment from 'moment';
+import { addMessage, addError } from './notifications';
+import { createSnapshot, restoreSnapshot } from '../../utils/snapshot';
 import {
   SET_WALLETS,
   ADD_WALLET,
@@ -5,8 +8,6 @@ import {
   UPDATE_WALLET,
   SET_CURRENT
 } from '../actionTypes';
-import { addMessage, addError } from './notifications';
-import { createSnapshot } from '../../utils/snapshot';
 
 export const setWallets = (wallets = []) => ({
   type: SET_WALLETS,

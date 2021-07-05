@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
 import numeral from 'numeral';
-import { selectCurrentWallet } from '../redux/selectors/expenses';
+import { selectCurrentWallet } from '../redux/selectors/wallets';
 
 const WalletForm = ({ wallet, handleSubmit }) => {
 
