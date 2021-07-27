@@ -7,13 +7,14 @@
   background-color: var(--primary);
   color: variables.$color-light;
   padding: 1rem 2rem;
-  // margin: 0 1rem;
   font-size: 1.5rem;
+  min-height: 4.8rem; // totally arbitrary to make it align with react-dates picker
 
   &:hover,
   &:focus {
     cursor: pointer;
     background-color: var(--primary-dark);
+    color: variables.$color-light; // reduntant because of links styled as buttons
   }
 
   &--warning {
@@ -23,6 +24,27 @@
 
     &:hover {
       background-color: variables.$color-danger;
+      color: variables.$color-light;
+    }
+  }
+
+  &--hollow {
+    background-color: #fff;
+    color: variables.$color-dark;
+    border: 1px solid variables.$color-gray-dark;
+    border-bottom: 2px solid variables.$color-gray-dark;
+    margin: 0; // overwrites select-input default;
+
+    &:hover,
+    &:focus {
+      cursor: pointer;
+      background-color: #fff;
+      border-bottom: 2px solid variables.$color-primary;
+      color: variables.$color-dark;
+    }
+
+    &:active {
+      background-color: variables.$color-primary;
       color: variables.$color-light;
     }
   }

@@ -40,7 +40,7 @@ router.post('/user/signup', signupCheck, async (req, res) => {
     const newWallet = new Wallet();
     await newWallet.save();
 
-    res.status(201).send({ user: newUser, token, wallet: newWallet._id });
+    res.status(201).send({ user: newUser, token, walletId: newWallet._id });
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);
@@ -61,7 +61,6 @@ router.post('/user/login', loginCheck, async (req, res) => {
     const user = await User.loginWithUsernameAndPassword(username, password);
     const token = user.generateAuthToken();
     await user.save();
-    delete user.settings;
     res.send({ user, token });
   } catch (err) {
     res.status(400).json(err.message);
@@ -75,7 +74,7 @@ router.post('/user/login', loginCheck, async (req, res) => {
 */
 router.put('/user/update', auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['email', 'password'];
+  const allowedUpdates = ['email', 'password', 'data'];
   const isValidRequest = updates.every(field => allowedUpdates.includes(field));
 
   if (!isValidRequest) {
@@ -97,41 +96,10 @@ router.put('/user/update', auth, async (req, res) => {
   try {
     const user = req.user;
     updates.forEach(update => user[update] = req.body[update]);
-
     await user.save();
-    res.send(user);
-
+    res.send();
   } catch(err) {
-    res.status(400).json(err.message);
-  }
-});
-
-/**
-* @route  POST /user/settings
-* @desc   Updates (overwrites) the user's settings which is encrypted
-* @access private
-*/
-router.post('/user/settings', auth, async (req, res) => {
-  try {
-    req.user.settings = req.body;
-    await req.user.save();
-    res.status(202).send();
-  } catch(err) {
-    res.status(400).json(err.message);
-  }
-});
-
-/**
-* @route  GET /user/settings
-* @desc   Returns the specified user encrypted settings
-* @access private
-*/
-router.get('/user/settings', auth, async (req, res) => {
-  try {
-    console.log(req.user.toObject().settings);
-    res.status(200).send(req.user.settings);
-  } catch(err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 

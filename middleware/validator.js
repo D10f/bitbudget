@@ -1,4 +1,4 @@
-const { body, check, validationResult } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 
 exports.signupCheck = [
   body('username', 'Please enter a username').not().isEmpty(),

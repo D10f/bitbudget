@@ -23,8 +23,8 @@ const userSchema = mongoose.Schema({
       required: true
     }
   }],
-  settings: {
-    type: Buffer
+  data: {
+    type: String
   }
 });
 

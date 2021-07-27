@@ -1,4 +1,3 @@
-import api from './api';
 import { encryptData, decryptData } from './crypto';
 
 /**
@@ -13,31 +12,14 @@ export const objectToBuffer = async obj => {
 };
 
 /**
-* Encrypts data and uploads it to the corresponding endpoint
+* Encrypts data and returns it as a base64 string representation
 * @param  {object} data The data to encrypt, REST API endpoint and auth token.
-* @return {void}
+* @return {string}      Base64 encoded version of the encrypted data
 */
-export const createSnapshot = async data => {
-  const dataBuffer = await objectToBuffer(data.payload);
+export const createEncryptedSnapshot = async data => {
+  const dataBuffer = await objectToBuffer(data);
   const encryptedData = await encryptData(dataBuffer);
-
-  // const config = {
-  //   headers: {
-  //     'Content-type': 'application/json',
-  //     'Authorization': `Bearer ${data.token}`
-  //   }
-  // };
-
-  const payload = {
-    data: btoa(encryptedData),
-    ...data.options
-  };
-
-  // endpoint should contain both HTTP verb and url e.g.:
-  // 'POST /user/123'
-  const [ method, url ] = endpoint.toLowerCase().split(' ');
-
-  return await api[method](url, payload);
+  return btoa(encryptedData);
 };
 
 /**
@@ -50,7 +32,7 @@ export const restoreSnapshot = async (encryptedData) => {
   const encryptedBuffer = atob(encryptedData).split(',');
   const decryptedBuffer = await decryptData(encryptedBuffer);
   const decodedData = new TextDecoder().decode(decryptedBuffer);
-  const userSettings = JSON.parse(decodedData);
-  if (!userSettings) throw new Error('Unable to decrypt user data!');
-  return userSettings;
+  const decryptedData = JSON.parse(decodedData);
+  if (!decryptedData) throw new Error('Unable to decrypt user data!');
+  return decryptedData;
 };

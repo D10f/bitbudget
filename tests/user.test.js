@@ -45,8 +45,7 @@ test('Should fail to signup due to username not provided', async () => {
     .expect(400);
 
   // Assert that response comes from validator middleware
-  expect(response.body[0].msg).toBe('Please enter a username');
-  expect(response.body[1].msg).toBe('Please enter a password at least 8 characters long');
+  expect(response.body).toBe('Please enter a username');
 });
 
 test('Should fail to signup due to username being in use', async () => {
@@ -109,8 +108,7 @@ test('Should fail to login existing user for empty fields', async () => {
     .expect(400);
 
   // Assert that response comes from validator middleware
-  expect(response.body[0].msg).toBe('Please enter a username');
-  expect(response.body[1].msg).toBe('Please enter a password');
+  expect(response.body).toBe('Please enter a username');
 });
 
 test('Should fail to login existing user for incorrect fields', async () => {
@@ -137,7 +135,8 @@ test('Should update email address for user with an email', async () => {
     .expect(200);
 
   // Assert that email was updated
-  expect(response.body).toHaveProperty('email', 'somethingnew@example.com');
+  const user = await User.findOne({ email: 'somethingnew@example.com' });
+  expect(user).toHaveProperty('email', 'somethingnew@example.com');
 });
 
 test('Should update email address for user without an email', async () => {
@@ -149,8 +148,9 @@ test('Should update email address for user without an email', async () => {
     })
     .expect(200);
 
-  // Assert that email was updated and created
-  expect(response.body).toHaveProperty('email', 'somethingnew@example.com');
+    // Assert that email was updated
+    const user = await User.findOne({ email: 'somethingnew@example.com' });
+    expect(user).toHaveProperty('email', 'somethingnew@example.com');
 });
 
 test('Should fail to update email to already existing address', async () => {
@@ -193,7 +193,7 @@ test('Should fail to update password shorter than 8 characters', async () => {
     .send({
       password: '123',
     })
-    .expect(400);
+    .expect(500);
 
   expect(response.body).toBe('Please enter a password at least 8 characters long');
 });

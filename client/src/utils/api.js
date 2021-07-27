@@ -9,12 +9,14 @@ const api = axios.create({
 });
 
 const publicAccessRoutes = [
-  '/users/login',
-  '/users/signup',
+  '/user/login',
+  '/user/signup',
 ];
 
 api.interceptors.request.use(req => {
-  if (publicAccessRoutes.includes(req.url)) return req;
+  if (publicAccessRoutes.includes(req.url)) {
+    return req;
+  }
 
   const { user } = store.getState();
   req.headers['Authorization'] = `Bearer ${user.token}`

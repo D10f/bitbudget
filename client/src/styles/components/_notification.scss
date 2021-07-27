@@ -26,8 +26,8 @@
 
     &--message {
       border: 1px solid darkgreen;
-      background-color: rgba(limegreen, 0.5);
-      color: whitesmoke;
+      background-color: #cdfcf1;
+      color: darkgreen;
     }
   }
 
@@ -66,9 +66,11 @@
     &--message {
       &[value]::-moz-progress-bar {
         background-color: limegreen;
+        // background-color: #cdfcf1;
       }
       &[value]::-webkit-progress-value {
         background-color: limegreen;
+        // background-color: #cdfcf1;
       }
     }
   }
