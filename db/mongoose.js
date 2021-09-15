@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 
-module.exports = mongoose.connect(process.env.MONGODB_URI, {
+const MONGODB_URI = process.env.MONGODB_URI;
+const options = {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
   useUnifiedTopology: true
-}).then(() => {
-  console.log('Connection to DB established');
-}).catch(err => {
-  console.error(`There is an error! ${err.message}`);
-  process.exit(1);
-});
+};
+
+module.exports = mongoose.connect(MONGODB_URI, options)
+  .then(() => console.log('Connection to DB established'))
+  .catch(err => {
+    console.error(`There is an error! ${err.message}`);
+    process.exit(1);
+  });
