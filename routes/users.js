@@ -28,14 +28,19 @@ router.post('/user/signup', signupCheck, async (req, res) => {
       if (exists) return res.status(400).json('That email already exists.');
     }
 
-    const newUser = new User({ username, password, email });
+    const newUser = new User({
+      username,
+      password,
+      email: email || ''
+    });
+
     const token = newUser.generateAuthToken();
     await newUser.save();
 
     const newWallet = new Wallet();
     await newWallet.save();
 
-    res.status(201).send({ user: newUser, token, wallet: newWallet._id });
+    res.status(201).send({ user: newUser, token, walletId: newWallet._id });
   } catch (err) {
     console.error(err);
     res.status(500).send(err.message);
@@ -64,12 +69,12 @@ router.post('/user/login', loginCheck, async (req, res) => {
 
 /**
 * @route  PUT /user
-* @desc   Updates an existing user
+* @desc   Updates an existing user's profile information
 * @access private
 */
 router.put('/user/update', auth, async (req, res) => {
   const updates = Object.keys(req.body);
-  const allowedUpdates = ['email', 'password'];
+  const allowedUpdates = ['email', 'password', 'data'];
   const isValidRequest = updates.every(field => allowedUpdates.includes(field));
 
   if (!isValidRequest) {
@@ -84,19 +89,17 @@ router.put('/user/update', auth, async (req, res) => {
   // Protects against updating emails to an already existing address
   const needCheckEmail = req.body['email'] && req.body['email'] !== '';
   if (needCheckEmail) {
-    const exists = await User.findOne({email: req.body['email'] });
+    const exists = await User.findOne({ email: req.body['email'] });
     if (exists) return res.status(400).json('That address is already in use');
   }
 
   try {
     const user = req.user;
     updates.forEach(update => user[update] = req.body[update]);
-
     await user.save();
-    res.send(user);
-
+    res.send();
   } catch(err) {
-    res.status(400).json(err.message);
+    res.status(500).json(err.message);
   }
 });
 

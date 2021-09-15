@@ -1,59 +1,38 @@
-import { encryptData, decryptData, generateCryptoKey } from './crypto';
-import axios from 'axios';
+import { encryptData, decryptData } from './crypto';
 
-export const createSnapshot = async (data, password = '') => {
-  // This only needed for when a new user signs up
-  if (password) await generateCryptoKey(password);
-
-  const snapshotData = {
-    categories: data.categories,
-    expenses: data.expenses,
-    theme: data.theme,
-    user: data.user,
-    wallets: data.wallets
-  };
-
-  const dataJSON = JSON.stringify(snapshotData);
+/**
+* Transforms a regular JavaScript object into an ArrayBuffer
+* @param  {object}      object An expense, wallet or some other JS object.
+* @return {arrayBuffer}        ArrayBuffer representing the object
+*/
+export const objectToBuffer = async obj => {
+  const dataJSON = JSON.stringify(obj);
   const dataBlob = new Blob([dataJSON], { type: 'application/json' });
-  const dataBuffer = await dataBlob.arrayBuffer();
-  const encryptedData = await encryptData(dataBuffer);
-  return axios.post('http://localhost:5000/snapshot',
-    encryptedData,
-    {
-      headers: {
-      'Content-type': 'application/octet-stream',
-      'Authorization': `Bearer ${data.user.token}`
-      }
-    }
-  )
-  // return await axios.post(
-  //   'http://localhost:5000/snapshot',
-  //   { data: encryptedData },
-  //   {
-  //     headers: {
-  //       'Content-type': 'application/octet-stream',
-  //       'Authorization': `Bearer ${data.user.token}`
-  //     }
-  //   }
-  // );
+  return await dataBlob.arrayBuffer();
 };
 
-export const restoreSnapshot = async (user, password) => {
+/**
+* Encrypts data and returns it as a base64 string representation
+* @param  {object} data The data to encrypt, REST API endpoint and auth token.
+* @return {string}      Base64 encoded version of the encrypted data
+*/
+export const createEncryptedSnapshot = async data => {
+  const dataBuffer = await objectToBuffer(data);
+  const encryptedData = await encryptData(dataBuffer);
+  return btoa(encryptedData);
+};
 
-  const config = {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${user.token}`
-    }
-  };
-
-  await generateCryptoKey(password);
-  const response = await axios.get('http://localhost:5000/snapshot', config);
-  const decryptedBuffer = await decryptData(response.data.snapshot.data.data);
+/**
+* Decrypts a piece of state's encrypted data
+* @param  {string} encryptedData The encrypted data in base64 encoded format
+* @return {object}               The decrypted data as a plain JavaScript object
+*/
+export const restoreSnapshot = async (encryptedData) => {
+  // atob turns into a string, it needs to be converted into an array
+  const encryptedBuffer = atob(encryptedData).split(',');
+  const decryptedBuffer = await decryptData(encryptedBuffer);
   const decodedData = new TextDecoder().decode(decryptedBuffer);
-  const store = JSON.parse(decodedData);
-
-  if (!store) throw new Error('Unable to decrypt user data!');
-
-  return store;
+  const decryptedData = JSON.parse(decodedData);
+  if (!decryptedData) throw new Error('Unable to decrypt user data!');
+  return decryptedData;
 };

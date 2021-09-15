@@ -39,6 +39,7 @@ router.get('/wallet/s/:id', auth, async (req, res) => {
     }
 
     const expenses = await wallet.getExpenses(req.query);
+
     res.status(200).send(expenses);
   } catch (err) {
     console.error(err)
@@ -52,33 +53,21 @@ router.get('/wallet/s/:id', auth, async (req, res) => {
 * @access private
 */
 router.post('/wallet', auth, async (req, res) => {
-
-  if (!req.body.data) {
-    return res.status(400).json('No data provided for this wallet');
-  }
-
   try {
-    const data = Buffer.from(req.body.data);
-    const wallet = new Wallet(data);
-    await wallet.save();
-    res.status(201).send(wallet);
+    const walletId = await new Wallet(req.body['data']).save();
+    res.status(201).send(walletId);
   } catch (err) {
-
-    // If Buffer.from() fails here is because data is of invalid type
-    if (err.message.startsWith('The first argument must be of type string')) {
-      return res.status(400).json('Invalid data type provided');
-    }
-
+    console.log(err.message)
     res.status(500).json(err.message);
   }
 });
 
 /**
-* @route  PUT /wallets/:id
-* @desc   Updates an existing wallet's data (not the expense list)
+* @route  PUT /wallets/:walletId/:expenseId
+* @desc   Updates an existing wallet's expense data (used for date updates)
 * @access private
 */
-router.put('/wallet/:id', auth, async (req, res) => {
+router.put('/wallet/:walletId/:expenseId', auth, async (req, res) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ['data'];
   const isValidRequest = updates.every(field => allowedUpdates.includes(field));

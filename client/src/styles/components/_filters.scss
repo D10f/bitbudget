@@ -30,6 +30,7 @@
       @extend %select-input;
       border-bottom: 2px solid var(--primary);
       display: inline-block;
+      margin: 0; // overwrites select-input default;
 
       &:hover {
         background-color: unset;
@@ -37,12 +38,13 @@
     }
 
     &--month {
-      min-width: 10rem;
+      min-width: 13rem;
     }
 
     &--btn {
       @extend %select-input;
       border-bottom: 2px solid variables.$color-gray-dark;
+      margin: 0; // overwrites select-input default;
 
       &:hover {
         cursor: pointer;

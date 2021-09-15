@@ -9,6 +9,7 @@
   border-bottom: 2px solid variables.$color-gray-dark;
   border-radius: variables.$border-radius;
   font-size: 1.6rem;
+  min-height: 4.8rem; // totally arbitrary to align it with react-dates picker
 
   &--hidden {
     pointer-events: none;
@@ -22,17 +23,45 @@
   &:not(:placeholder-shown) {
     border-bottom: 2px solid var(--primary);
   }
+
+  &[readonly] {
+    color: variables.$color-gray-dark;
+
+    &:hover {
+      cursor: default;
+    }
+  }
 }
+
+%input-error,
+%input-warning,
+%input-info,
+%input-success {
+  @extend %text-input;
+  text-decoration: underline;
+  text-decoration-style: wavy;
+}
+%input-error { text-decoration-color: orangered !important; }
+%input-warning { text-decoration-color: #ffaa3e !important; }
+%input-info { text-decoration-color: #a9bf0e !important; }
+%input-success { text-decoration-color: #8dc648 !important; }
+
 
 %select-input {
   position: relative;
   appearance: none;
   background: #fff;
   padding: 1rem;
+  margin: 1rem 0;
+  padding-right: 3rem;
   border: 1px solid variables.$color-gray-dark;
+  border-bottom: 2px solid variables.$color-gray-dark;
+  min-height: 4.8rem; // totally arbitrary to make it align with react-dates picker
+  line-height: 2.4rem;
+  font-size: 1.5rem;
 
   &:hover {
-    cursor: default;
+    cursor: pointer;
     background-color: variables.$color-light;
   }
 }

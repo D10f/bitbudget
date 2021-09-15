@@ -3,6 +3,7 @@
 /* BASE */
 @use './styles/base/base';
 @use './styles/base/utilities';
+@use './styles/base/typography';
 
 /* COMPONENTS */
 @use './styles/components/react-dates-override';
@@ -14,15 +15,18 @@
 @use './styles/components/expenses';
 @use './styles/components/settings';
 @use './styles/components/category';
+@use './styles/components/spinner';
 @use './styles/components/form';
 @use './styles/components/btn';
+@use './styles/components/tag';
 
 /* LAYOUT */
-@use './styles/layout/sidebar';
 @use './styles/layout/main';
+@use './styles/layout/sidebar';
 
 /* PAGES */
-@use './styles/pages/expense-page';
+@use './styles/pages/dashboard';
+@use './styles/pages/profile';
 
 /* THEMES */
 

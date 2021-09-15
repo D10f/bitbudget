@@ -1,0 +1,42 @@
+@use '../abstract/variables';
+
+%tag {
+  border: 2px solid variables.$color-gray-dark;
+  border-radius: variables.$border-radius;
+  padding: 0.5rem 1rem;
+  display: inline-block;
+  width: max-content;
+}
+
+.tag {
+  @extend %tag;
+
+  // Reserve this styles for active or selected tag in expense page ???
+  // &:hover {
+  //   background-color: variables.$color-primary;
+  //   color: variables.$color-light;
+  //   border: 2px solid transparent;
+  // }
+
+  &--small {
+    padding: 0;
+    border: 1px solid variables.$color-gray-dark;
+  }
+
+  &__close {
+    color: variables.$color-dark;
+    margin-left: 1rem;
+    padding: 0 .5rem;
+    border-radius: 50%;
+    border: 2px solid transparent;
+
+    &:hover {
+      cursor: pointer;
+      // color: variables.$color-dark;
+      // border: 2px solid variables.$color-dark;
+      background-color: variables.$color-primary;
+      color: variables.$color-light;
+      border: 2px solid transparent;
+    }
+  }
+}

@@ -1,41 +1,6 @@
 .main {
-  margin-left: 5%;
+  margin-left: 5vw; // Small margin to accommodate the sidebar
   max-width: 100%;
   min-height: 100vh;
-  padding: 1rem 3rem;
-
   background-color: var(--background-color);
-
-  &__nav {
-    display: flex;
-    width: 100%;
-  }
-
-  &__menu {
-    display: flex;
-    width: 100%;
-  }
-
-  &__tab {
-    margin: 1rem;
-
-    &--right {
-      margin-left: auto;
-    }
-  }
-
-  &__link {
-    margin-left: 1rem;
-    color: var(--text-color);
-
-    &:hover,
-    &:focus {
-      color: var(--primary);
-      text-decoration: underline;
-    }
-
-    &--active {
-      color: var(--primary);
-    }
-  }
 }

@@ -1,9 +1,13 @@
 import { get, set } from 'idb-keyval';
 
+/**
+* Generates an encryption key using a low-entropy secret (password provided by user)
+* @param  {string} password A password provided by the user
+* @return {void}
+*/
 export const generateCryptoKey = async (password) => {
 
-  const encoder = new TextEncoder();
-  const encodedPassword = encoder.encode(password);
+  const encodedPassword = new TextEncoder().encode(password);
 
   try {
     const keyMaterial = await crypto.subtle.importKey(
@@ -16,13 +20,17 @@ export const generateCryptoKey = async (password) => {
 
     // Store key material in indexedDB
     await set('cryptoKey', keyMaterial);
-    console.log('key saved');
 
   } catch (e) {
     console.error(e.message)
   }
 };
 
+/**
+* Derives a de/encryption key. If no salt is provided it will be generated.
+* @param  {Uint8Array?} salt An optional value of random bytes
+* @return {object}           Contains the key, and salt used to derive it
+*/
 export const deriveKey = async (salt = crypto.getRandomValues(new Uint8Array(32))) => {
 
   // Retrieve key material from store
@@ -44,6 +52,11 @@ export const deriveKey = async (salt = crypto.getRandomValues(new Uint8Array(32)
   return { key, salt };
 };
 
+/**
+* Encrypts some data
+* @param  {ArrayBuffer} data The data to be encrypted in an ArrayBuffer form
+* @return {Uint8Array}       Array of bytes with the salt, iv and encrypted data
+*/
 export const encryptData = async (data) => {
 
   // Initialization vector is different everytime
@@ -63,6 +76,11 @@ export const encryptData = async (data) => {
   ]);
 };
 
+/**
+* Decrypts some data
+* @param  {ArrayBuffer} encryptedBuffer The data to be decrypted
+* @return {ArrayBuffer}                 Decrypted data as an ArrayBuffer
+*/
 export const decryptData = async (encryptedBuffer) => {
 
   const encryptedBytes = new Uint8Array(encryptedBuffer);

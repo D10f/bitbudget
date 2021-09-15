@@ -24,13 +24,13 @@ test('Should create a new expense and add an Id to the wallet', async () => {
     .post(`/expense/${walletOne._id}`)
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
-      data: Buffer.from('123'),
+      data: JSON.stringify(Buffer.from('123')),
       range: '0621'
     })
     .expect(201);
 
   // Assert the expense has been created
-  expect(response.body).toHaveProperty('_id', expect.any(String));
+  expect(response.body).toEqual(expect.any(String));
 
   // Assert the wallet has been updated
   const wallet = await Wallet.findById(walletOne._id).lean();
@@ -42,7 +42,7 @@ test('Should add multiple expenses to same wallet and range', async () => {
     .post(`/expense/${walletOne._id}`)
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
-      data: Buffer.from('123'),
+      data: JSON.stringify(Buffer.from('123')),
       range: '0621'
     })
     .expect(201);
@@ -51,7 +51,7 @@ test('Should add multiple expenses to same wallet and range', async () => {
     .post(`/expense/${walletOne._id}`)
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
-      data: Buffer.from('456'),
+      data: JSON.stringify(Buffer.from('456')),
       range: '0621'
     })
     .expect(201);
@@ -62,7 +62,21 @@ test('Should add multiple expenses to same wallet and range', async () => {
 
   // Assert wallet contains correct ids
   // formatting due to jest error "serializes to same string" otherwise
-  expect(wallet['0621'].toString()).toBe(`${exp1.body._id},${exp2.body._id}`)
+  expect(wallet['0621'].toString()).toBe(`${exp1.body},${exp2.body}`)
+});
+
+test('Should fail to add expense sending missing data', async () => {
+  const response = await request(app)
+    .post(`/expense/${walletOne._id}`)
+    .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
+    .send({
+      say: 'hello',
+      what: 'world'
+    })
+    .expect(400);
+
+  // Assert the server response is correct
+  expect(response.body).toBe('Missing fields: "range" and/or "data"');
 });
 
 test('Should fail to add expense to non-existing wallet', async () => {
@@ -79,16 +93,16 @@ test('Should fail to add expense to non-existing wallet', async () => {
 });
 
 test('Should update existing expense', async () => {
-  const response = await request(app)
+  await request(app)
     .put(`/expense/${expOneId}`)
     .set('Authorization', `Bearer ${userOne.tokens[0].token}`)
     .send({
-      data: Buffer.from(`${Math.random()}`),
+      data: JSON.stringify(Buffer.from(`${Math.random()}`)),
     })
     .expect(202);
 
   // Assert expense exists
-  const expense = await Expense.findById(response.body._id);
+  const expense = await Expense.findById(expOneId);
   expect(expense).not.toBeNull();
 });
 
