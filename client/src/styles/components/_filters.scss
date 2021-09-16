@@ -43,8 +43,14 @@
 
     &--btn {
       @extend %select-input;
+      color: variables.$color-dark;
       border-bottom: 2px solid variables.$color-gray-dark;
       margin: 0; // overwrites select-input default;
+
+      // TESTING - trying to align inner arrows, this seems better but still untested in edge cases
+      width: 5rem;
+      padding: 0;
+      text-align: center;
 
       &:hover {
         cursor: pointer;

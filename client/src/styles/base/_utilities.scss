@@ -6,6 +6,18 @@
 .mr-2 {
   margin-right: 2rem;
 }
+.my-1 {
+  margin: 1rem 0;
+}
+.my-2 {
+  margin: 2rem 0;
+}
+.py-1 {
+  padding: 1rem 0;
+}
+.py-2 {
+  padding: 2rem 0;
+}
 .mb-1 {
   margin-bottom: 1rem;
 }
@@ -55,6 +67,9 @@
 }
 .has-text-center {
   text-align: center;
+}
+.has-text-right {
+  text-align: right;
 }
 .centered {
   position: absolute !important;

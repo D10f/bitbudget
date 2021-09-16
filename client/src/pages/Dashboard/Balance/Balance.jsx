@@ -42,7 +42,7 @@ const Balance = ({ wallet, currency, expenseAmount, daysInMonth, dailyBudgetAvai
 
   return (
     <section className="dashboard__balance">
-    <header className="balance__title">{wallet.name}</header>
+    <h2 className="balance__title">{wallet.name}</h2>
     <p className="balance__budget">Budget: {currency}{wallet.budget}</p>
     <p className="balance__expenses">Total Expenses: {getExpenseAmount()}</p>
       <LineChart

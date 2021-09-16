@@ -5,7 +5,7 @@
   border: none;
   border-radius: variables.$border-radius;
   background-color: var(--primary);
-  color: variables.$color-light;
+  // color: variables.$color-light;
   padding: 1rem 2rem;
   font-size: 1.5rem;
   min-height: 4.8rem; // totally arbitrary to make it align with react-dates picker

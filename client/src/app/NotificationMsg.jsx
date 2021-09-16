@@ -1,6 +1,16 @@
 import { useState, useEffect, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import { connect } from 'react-redux';
 import { removeError, removeMessage } from '../redux/notifications/actions';
+
+const enterAnimation = {
+  initial: { rotateX: 90 },
+  visible: { rotateX: 0 },
+  initial: { rotateX: 90 },
+  transition: {
+    duration: 1
+  }
+};
 
 const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }) => {
 
@@ -38,10 +48,14 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
   }, [countDown]);
 
   return (
-    <article
+    <motion.article
       className={`notification__message notification__message--${type}`}
       onMouseEnter={() => {}}
       onMouseLeave={() => {}}
+      variants={enterAnimation}
+      initial='initial'
+      animate='visible'
+      exit='exit'
     >
       <p>{msg}</p>
       <progress
@@ -49,7 +63,7 @@ const NotificationMsg = ({ msg, id, duration, type, removeError, removeMessage }
         value={progress}
         max="100">
       </progress>
-    </article>
+    </motion.article>
   )
 };
 

@@ -86,8 +86,10 @@ const Profile = ({
 
   return (
     <section className="profile">
-      <Form onSubmit={validateSchema(credentials, handleSaveProfile)} >
 
+      <h2 className="has-text-center py-2">Your Profile</h2>
+
+      <Form onSubmit={validateSchema(credentials, handleSaveProfile)} >
         <FormControl>
           <TextInput
             label="Username"

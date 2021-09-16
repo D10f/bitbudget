@@ -1,16 +1,19 @@
-import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { startAddWallet } from '../../redux/wallets/actions';
 import WalletForm from './WalletForm';
 
 const AddWallet = ({ addWallet, history }) => {
 
-  const handleSubmit = useCallback(({ name, budget, currency }) => {
+  const handleSubmit = ({ name, budget, currency }) => {
     // During validation budget gets coerced into a Number
     addWallet({ name, budget: budget.toString(), currency });
-  });
+  };
 
-  return <WalletForm handleSubmit={handleSubmit} />
+  return (
+    <>
+      <h2 className="has-text-center py-2">Create A New Wallet</h2>
+      <WalletForm handleSubmit={handleSubmit} />
+    </>)
 };
 
 const mapDispatchToProps = (dispatch) => ({

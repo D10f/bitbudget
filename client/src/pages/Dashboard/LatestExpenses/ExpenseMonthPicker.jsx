@@ -59,7 +59,7 @@ export const ExpenseMonthPicker = ({ currentMonth, currentYear, setCurrentMonth 
         &larr;
       </button>
       <button
-        className="filters__picker--btn"
+        className="filters__picker--btn has-text-right"
         onClick={increaseMonth}
       >
         &rarr;

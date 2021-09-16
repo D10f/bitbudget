@@ -140,6 +140,7 @@
       opacity: 0;
       pointer-events: none;
       font-size: 1.6rem;
+      font-family: "Space Grotesk";
 
       @include mixins.responsive(narrow) {
         left: 5rem;

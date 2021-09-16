@@ -74,7 +74,7 @@ export const startUpdateWallet = wallet => {
       .then(encryptedData => api.put('/user/update', { data: encryptedData }))
       .then(() => {
         dispatch({ type: actions.STOP_WALLET_LOADING });
-        dispatch(addMessage('Wallet updated successfully.'));
+        dispatch(addMessage('Wallet deleted successfully.'));
       })
       .catch(error => {
         const message = (error.response.data || {}).message;

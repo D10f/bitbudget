@@ -7,9 +7,15 @@ import useColorScheme from '../../../hooks/useColorScheme';
 import Button from '../../../components/Button';
 import DoughnutChart from './DoughnutChart';
 
+// TODO: Recalculate position on window resize event
 const chartLegend = {
   display: true,
-  position: 'left'
+  position: window.innerWidth > 600 ? 'left' : 'top',
+  labels: {
+    font: {
+      family: 'Space Grotesk'
+    }
+  }
 };
 
 const CategoriesBalance = ({ amountByCategory, percentageByCategory, currency, updateFilterList }) => {

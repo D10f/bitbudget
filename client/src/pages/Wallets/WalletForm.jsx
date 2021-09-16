@@ -31,7 +31,7 @@ const WalletForm = ({
     setName(wallet ? wallet.name : '');;
     setBudget(wallet ? wallet.budget : '');;
     setCurrency(wallet ? wallet.currency : '€');;
-  }, [wallet]);
+  }, [ setCurrentWallet, wallet ]);
 
   const onAmountChange = e => {
     const amount = e.target.value;

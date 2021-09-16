@@ -1,24 +1,29 @@
-import { useCallback } from 'react';
 import { connect } from 'react-redux';
 import { startUpdateWallet, startRemoveWallet } from '../../redux/wallets/actions';
 
 import WalletForm from './WalletForm';
 
-const EditWallet = ({ wallet, updateWallet, removeWallet }) => {
+const EditWallet = ({ wallet, updateWallet, removeWallet, history }) => {
 
-  const handleSubmit = useCallback(({ name, budget, currency }) => {
+  const handleSubmit = ({ name, budget, currency }) => {
     // During validation budget gets coerced into a Number
     updateWallet({ id: wallet.id, name, budget: budget.toString(), currency });
-  });
+  };
 
-  const handleRemove = useCallback(id => removeWallet(id));
+  const handleRemove = id => {
+    history.push('/');
+    removeWallet(id);
+  };
 
   return (
-    <WalletForm
-      wallet={wallet}
-      handleSubmit={handleSubmit}
-      handleRemove={handleRemove}
-    />
+    <>
+      <h2 className="has-text-center py-2">Editing Wallet "{wallet.name}"</h2>
+      <WalletForm
+        wallet={wallet}
+        handleSubmit={handleSubmit}
+        handleRemove={handleRemove}
+      />
+    </>
   );
 };
 
