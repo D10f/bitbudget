@@ -56,7 +56,7 @@
       1fr      1fr;
     padding: 1.5rem;
 
-    @include mixins.responsive(portrait) {
+    @include mixins.responsive(landscape) {
       grid-template:
         "balance"
         "categories"

@@ -10,6 +10,8 @@ import TextInput from '../../components/TextInput';
 import Dropdown from '../../components/Dropdown';
 import Button from '../../components/Button';
 
+const allowedCurrencies = [ '€', '£', '$', '¥', '₹', '元' ];
+
 const WalletForm = ({
   wallet,
   handleSubmit,
@@ -31,6 +33,20 @@ const WalletForm = ({
     setCurrency(wallet ? wallet.currency : '€');;
   }, [wallet]);
 
+  const onAmountChange = e => {
+    const amount = e.target.value;
+    if (!amount || amount.match(/^\d+(\.\d{0,2})?$/)) {
+      setBudget(amount);
+    }
+  };
+
+  const onCurrencyChange = e => {
+    const currency = e.target.value;
+    if (currency && allowedCurrencies.includes(currency)) {
+      setCurrency(currency);
+    }
+  };
+
   return (
     <Form onSubmit={validateSchema({ name, budget, currency }, handleSubmit)} >
 
@@ -51,7 +67,7 @@ const WalletForm = ({
           value={budget}
           name="budget"
           placeholder="e.g., 750"
-          onChange={e => setBudget(e.target.value)}
+          onChange={onAmountChange}
         />
       </FormControl>
 
@@ -60,14 +76,14 @@ const WalletForm = ({
           label="Wallet Currency"
           name="currency"
           value={currency}
-          onChange={e => setCurrency(e.target.value)}
-          options={[ '€', '£', '$', '¥', '₹', '元']}
+          onChange={onCurrencyChange}
+          options={allowedCurrencies}
         />
       </FormControl>
 
     <FormControl modifiers="form__control-group--center mt-2">
       <Button
-        text={wallet ? "Save Changes" : "Add New WAllet"}
+        text={wallet ? "Save Changes" : "Add New Wallet"}
         type="submit"
         loading={isLoading}
       />

@@ -29,6 +29,8 @@
   // /* end of scrollbar styling*/
 
   @include mixins.responsive(narrow) {
+    overflow: visible;
+
     &--close {
       transform: translateX(-8rem);
     }
@@ -50,10 +52,6 @@
       cursor: pointer;
     }
 
-    // &:hover::before {
-    //   transform: scaleY(0.5);
-    // }
-
     &::before {
       content: '';
       position: absolute;
@@ -70,6 +68,10 @@
     &--active::before {
       transform: scaleY(0.5);
     }
+
+    // &--active .sidebar__link {
+    //   background: var(--primary);
+    // }
 
     &--profile {
       position: fixed;
@@ -138,6 +140,28 @@
       opacity: 0;
       pointer-events: none;
       font-size: 1.6rem;
+
+      @include mixins.responsive(narrow) {
+        left: 5rem;
+      }
+    }
+
+    &--wallet {
+      &::after {
+        content: attr(currency);
+        position: absolute;
+        bottom: -.5rem;
+        right: -.5rem;
+        width: 2rem;
+        height: 2rem;
+        padding-left: 0.6rem;
+        padding-top: 0.4rem;
+        border-radius: 50%;
+        background-color: variables.$color-dark;
+        color: variables.$color-light;
+        font-weight: normal;
+        font-size: 1.6rem;
+      }
     }
   }
 }

@@ -7,6 +7,20 @@
   height: 5rem;
   background: variables.$color-dark;
 
+  button {
+    background: none;
+    border: none;
+
+    &:hover {
+      cursor: pointer;
+    }
+
+    &:active svg path,
+    &:focus svg path {
+      fill: var(--primary);
+    }
+  }
+
   @include mixins.responsive(narrow) {
     display: flex;
     justify-content: flex-end;
