@@ -11,6 +11,7 @@ import DoughnutChart from './DoughnutChart';
 const chartLegend = {
   display: true,
   position: window.innerWidth > 600 ? 'left' : 'top',
+  align: 'end',
   labels: {
     font: {
       family: 'Space Grotesk'

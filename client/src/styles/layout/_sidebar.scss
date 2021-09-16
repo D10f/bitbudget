@@ -153,11 +153,12 @@
         position: absolute;
         bottom: -.5rem;
         right: -.5rem;
-        width: 2rem;
+        min-width: 2rem;
+        width: min-content;
         height: 2rem;
         padding-left: 0.6rem;
         padding-top: 0.4rem;
-        border-radius: 50%;
+        border-radius: 1rem;
         background-color: variables.$color-dark;
         color: variables.$color-light;
         font-weight: normal;

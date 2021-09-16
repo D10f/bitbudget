@@ -1,70 +1,92 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { formatAsCurrency } from '../../../utils/expenses';
-import { selectExpensesAmount, selectBudgetAvailable } from '../../../redux/expenses/selectors';
-import { selectLabeledDaysInMonth } from '../../../redux/filters/selectors';
-import { selectCurrentWallet, selectCurrentWalletCurrency } from '../../../redux/wallets/selectors';
 
-import LineChart from './LineChart';
+import {
+  selectCurrentWallet,
+  selectCurrentWalletCurrency,
+  selectCurrentWalletBudget
+} from '../../../redux/wallets/selectors';
 
-const Balance = ({ wallet, currency, expenseAmount, daysInMonth, dailyBudgetAvailable }) => {
+import {
+  selectExpensesAmount,
+  selectIncomeAmount,
+  selectBudgetPercentage
+} from '../../../redux/expenses/selectors';
 
-  const getExpenseAmount = () => `${currency}${formatAsCurrency(expenseAmount)}`;
+import DoughnutChart from '../CategoriesBalance/DoughnutChart';
 
-  const budgetDataset = {
-    data: dailyBudgetAvailable,
-    backgroundColor: '#ffc58c',
-    borderColor: '#ffc58c',
-    borderWidth: 1,
-    fill: true,
-    tension: 0.4
-  };
+const Balance = ({
+  wallet,
+  currency,
+  expenseAmount,
+  incomeAmount,
+  totalExpenses,
+  budgetAmount,
+  budgetPercentage
+}) => {
 
-  const scaleX = {
-    grid: {
-      drawTicks: false,
-      display: false,
-    },
-    ticks: {
-      callback: () => ''
-    }
-  };
+  const getExpenseAmount = `${currency}${formatAsCurrency(expenseAmount)}`;
+  const getIncomeAmount = `${currency}${formatAsCurrency(incomeAmount)}`;
 
-  const scaleY = {
-    beginAtZero: false,
-    grid: {
-      display: false
-    },
-    ticks: {
-      callback: () => ''
-    }
-  };
 
   return (
     <section className="dashboard__balance">
-    <h2 className="balance__title">{wallet.name}</h2>
-    <p className="balance__budget">Budget: {currency}{wallet.budget}</p>
-    <p className="balance__expenses">Total Expenses: {getExpenseAmount()}</p>
-      <LineChart
-        labels={daysInMonth}
-        base="50"
-        datasets={[budgetDataset]}
-        scaleX={scaleX}
-        scaleY={scaleY}
-        legend={{ display: false }}
-      />
+      <h2 className="balance__title">{wallet.name}</h2>
+
+      {/*<div className="balance__summary">
+        <p>Budget: {currency}{wallet.budget}</p>
+        <p>Total Expense: {getExpenseAmount}</p>
+        <p>Total Income: {getIncomeAmount}</p>
+      </div>*/}
+
+      <div className="balance__chart">
+        <DoughnutChart
+          labels={[
+            `Budget: ${currency}${wallet.budget}`,
+            `Expenses: ${getExpenseAmount}`,
+            `Income: ${getIncomeAmount}`,
+          ]}
+          data={[
+            budgetAmount / 2,
+            formatAsCurrency(expenseAmount),
+            formatAsCurrency(incomeAmount),
+          ]}
+          backgroundColor={[ '#ff9231', '#363933', 'lightgray' ]}
+          legend={{
+            position: 'top',
+            align: 'start',
+            labels: {
+              font: {
+                family: 'Space Grotesk'
+              }
+            }
+          }}
+        />
+      </div>
+
+      {/*<div className="balance__chart">
+        <progress
+          className="balance__progress"
+          max="100"
+          value={budgetPercentage}
+        >
+          {budgetPercentage}%
+        </progress>
+        <p className="balance__gauge" value={budgetPercentage} />
+      </div>*/}
+
     </section>
   );
 };
-
-// const getIncomeAmount = () => `${currency}${formatAsCurrency(incomeAmount)}`;
 
 const mapStateToProps = state => ({
   wallet: selectCurrentWallet(state),
   currency: selectCurrentWalletCurrency(state),
   expenseAmount: selectExpensesAmount(state),
-  daysInMonth: selectLabeledDaysInMonth(state),
-  dailyBudgetAvailable: selectBudgetAvailable(state)
+  incomeAmount: selectIncomeAmount(state),
+  budgetAmount: selectCurrentWalletBudget(state),
+  budgetPercentage: selectBudgetPercentage(state)
 });
 
 export default connect(mapStateToProps)(React.memo(Balance));

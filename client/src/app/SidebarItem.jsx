@@ -8,8 +8,6 @@ const SidebarItem = ({ to, name, text, currency, active = false }) => {
     ? 'sidebar__item sidebar__item--active'
     : `sidebar__item sidebar__item--${name.toLowerCase().replace(' ', '-')}`;
 
-  console.log(text);
-
   return (
     <li className={classString}>
       <Link

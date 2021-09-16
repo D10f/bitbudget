@@ -24,7 +24,6 @@ export const selectCurrentExpenses = createSelector(
   }
 );
 
-
 /**
  * Selects the total spent amount, sorted by expense category.
  * @return {object} Object containing categories of the current dataset and their combined amounts
@@ -133,13 +132,20 @@ export const selectPercentageByDay = createSelector(
   }
 );
 
-
+export const selectBudgetPercentage = createSelector(
+  [selectCurrentWalletBudget, selectIncomeAmount, selectExpensesAmount],
+  (budget, income, expense) => {
+    const balance = income + expense;
+    const percent = ((balance * 100) / budget) / 100; // convert from cents
+    return percent.toFixed(2);
+  }
+);
 
 /**
  * Select available amount in percentages over a period of time for the current month
- * @return {number[]} Array containng the percentage amount of remaining budget for the month
+ * @return {number[]} Array containing the percentage amount of remaining budget for the month
  */
-export const selectBudgetAvailable = createSelector(
+export const selectBudgetAvailableOverTime = createSelector(
   [selectAmountByDay, selectCurrentWalletBudget],
   (dailyAmounts, budget) => {
     let sum = 0;
