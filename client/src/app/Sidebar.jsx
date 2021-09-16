@@ -2,8 +2,8 @@ import { connect } from 'react-redux';
 
 import SidebarItem from './SidebarItem';
 
-const Sidebar = ({ wallets, isAuthenticated }) => (
-  <nav className="sidebar">
+const Sidebar = ({ isOpen, handleOpenDrawer, wallets, isAuthenticated }) => (
+  <nav className={isOpen ? "sidebar sidebar--open" : "sidebar sidebar--close" }>
     <ul className="sidebar__menu">
       <SidebarItem to="/" name="Home" />
 

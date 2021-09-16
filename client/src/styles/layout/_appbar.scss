@@ -1,0 +1,16 @@
+@use '../abstract/variables';
+@use '../abstract/mixins';
+
+.appbar {
+  display: none;
+  width: 100vw;
+  height: 5rem;
+  background: variables.$color-dark;
+
+  @include mixins.responsive(narrow) {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding-right: 2rem;
+  }
+}

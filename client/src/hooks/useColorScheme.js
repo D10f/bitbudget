@@ -36,7 +36,7 @@ const useColorScheme = () => {
     }
   })();
 
-  // UseCallback here prevents unwanted re-renders in the component
+  // useCallback here prevents unwanted re-renders in the component
   const getNext = useCallback(() => schemeGenerator.next().value, []);
 
   // Returns an initial value, and function to return new ones on demand.

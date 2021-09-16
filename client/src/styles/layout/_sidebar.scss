@@ -6,11 +6,17 @@
   display: flex;
   flex-direction: column;
   height: 100vh;
-  width: 5vw;
+  top: 0;
+  // width: 5vw;
+  width: min-content;
+  min-width: 6.8rem;
   border-right: 1px solid black;
   z-index: 1;
   background: variables.$color-dark;
   color: variables.$color-light;
+
+  transition: transform 0.3s ease;
+
   @include mixins.hide-scroll-bar;
   // /* Styles to allow the sidebar to scroll without showing any overflow orbars */
   // overflow-y: auto;
@@ -21,6 +27,17 @@
   //   display: none
   // }
   // /* end of scrollbar styling*/
+
+  @include mixins.responsive(narrow) {
+    &--close {
+      transform: translateX(-8rem);
+    }
+
+    &--open {
+      transform: translateX(0);
+    }
+  }
+
 
   &__menu {}
 

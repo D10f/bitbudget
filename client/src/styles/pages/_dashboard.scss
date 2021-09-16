@@ -9,11 +9,32 @@
   align-items: flex-start;
   max-height: 100vh;
 
+  @include mixins.responsive(portrait) {
+    grid-template-columns: minmax(min-content, 1fr) 2fr;
+  }
+
+  @include mixins.responsive(tablet) {
+    grid-template-columns: 1fr;
+  }
+
   &__expenses {
     position: relative;
     padding: 0 1rem;
     height: 100vh;
     border-right: 3px solid variables.$color-gray;
+
+    @include mixins.responsive(tablet) {
+      height: auto;
+      max-height: 60vh;
+      overflow: scroll;
+      border-right: none;
+      border-bottom: 3px solid variables.$color-gray;
+      padding-bottom: 1rem;
+    }
+
+    @include mixins.responsive(phone) {
+      padding: 0;
+    }
   }
 
   &__expenses-footer {
@@ -34,6 +55,19 @@
       "daily   daily     " auto /
       1fr      1fr;
     padding: 1.5rem;
+
+    @include mixins.responsive(portrait) {
+      grid-template:
+        "balance"
+        "categories"
+        "daily"      auto /
+        1fr;
+    }
+
+    @include mixins.responsive(phone) {
+      margin-top: 1rem;
+      padding: 0;
+    }
   }
 
   &__balance,

@@ -12,7 +12,7 @@ import MonthSummary from './MonthSummary/MonthSummary';
 
 const Dashboard = ({ expenses, isLoading, getExpenses, currentMMYY }) => {
 
-  // Note this is used only to update <LatestExpenses /> from other components in this same tree
+  // This is used to update <LatestExpenses /> from other components in the same component tree
   const [ filterText, setFilterText ] = useState('');
 
   // Shared with <CategoriesBalance />

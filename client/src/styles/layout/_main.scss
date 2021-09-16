@@ -1,6 +1,16 @@
+@use '../abstract/mixins';
+
 .main {
-  margin-left: 5vw; // Small margin to accommodate the sidebar
+  // margin-left: 5vw; // Small margin to accommodate the sidebar
+
+  // Small margin to accommodate the sidebar calculated based on sidebar
+  // items' width (4.8) and padding (1 left and 1 right)
+  margin-left: 6.8rem;
   max-width: 100%;
   min-height: 100vh;
   background-color: var(--background-color);
+
+  @include mixins.responsive(narrow) {
+    margin-left: 0;
+  }
 }

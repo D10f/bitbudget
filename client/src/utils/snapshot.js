@@ -2,8 +2,8 @@ import { encryptData, decryptData } from './crypto';
 
 /**
 * Transforms a regular JavaScript object into an ArrayBuffer
-* @param  {object}      object An expense, wallet or some other JS object.
-* @return {arrayBuffer}        ArrayBuffer representing the object
+* @param  {object}      obj An expense, wallet or some other JS object.
+* @return {arrayBuffer}     ArrayBuffer representing the object
 */
 export const objectToBuffer = async obj => {
   const dataJSON = JSON.stringify(obj);
