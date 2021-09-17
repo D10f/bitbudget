@@ -26,9 +26,11 @@ const Balance = ({
   budgetPercentage
 }) => {
 
-  const getExpenseAmount = `${currency}${formatAsCurrency(expenseAmount)}`;
-  const getIncomeAmount = `${currency}${formatAsCurrency(incomeAmount)}`;
-
+  // const getExpenseAmount = `${currency}${formatAsCurrency(expenseAmount)}`;
+  // const getIncomeAmount = `${currency}${formatAsCurrency(incomeAmount)}`;
+  const expenseAmountFormat = parseFloat(expenseAmount) / 100;
+  const incomeAmountFormat = parseFloat(incomeAmount) / 100;
+  const currentBudget = budgetAmount - expenseAmountFormat;
 
   return (
     <section className="dashboard__balance">
@@ -52,9 +54,9 @@ const Balance = ({
         <DoughnutChart
           labels={[ 'Budget', 'Expense', 'Income' ]}
           data={[
-            budgetAmount / 2,
-            parseFloat(expenseAmount) / 100,
-            parseFloat(incomeAmount) / 100,
+            Math.max(currentBudget, 0),
+            expenseAmountFormat,
+            incomeAmountFormat,
           ]}
           backgroundColor={[ '#ff9231', '#363933', '#F9B058' ]}
           legend={{
