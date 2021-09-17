@@ -2,6 +2,8 @@
 
 A web application to manage your expenses securely and privately.
 
+![Image](assets/screenshot.webp)
+
 ## Features (in progress...)
 
 + [X] Support for multiple wallets and currencies.
