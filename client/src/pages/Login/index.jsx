@@ -46,68 +46,71 @@ const Login = ({ isLoading, startLoginUser, startRestoreUserData, history }) => 
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <section>
+      <h2 className="has-text-center py-2">Login</h2>
+      <Form onSubmit={handleSubmit}>
 
-      <FormControl>
-        <TextInput
-          label="Username"
-          value={credentials.username}
-          name="username"
-          placeholder="Userame"
-          autoFocus={true}
-          onChange={handleChange}
-          readOnly={encryptionKeyExists}
-        />
-      </FormControl>
-
-      <FormControl>
-        <PasswordInput
-          label="Password"
-          name="password"
-          placeholder="password"
-          value={credentials.password}
-          showSuggestions={false}
-          onChange={handleChange}
-          readOnly={encryptionKeyExists}
-        />
-      </FormControl>
-
-      {
-        encryptionKeyExists &&
         <FormControl>
-          <PasswordInput
-            label="Encryption Password"
-            name="encryptionPassword"
-            placeholder="Your decryption password"
-            value={credentials.encryptionPassword}
+          <TextInput
+            label="Username"
+            value={credentials.username}
+            name="username"
+            placeholder="Userame"
             autoFocus={true}
-            showSuggestions={false}
             onChange={handleChange}
+            readOnly={encryptionKeyExists}
           />
         </FormControl>
-      }
 
-      <FormControl
-        modifiers="form__control-group--center mt-2"
-      >
-        <Button
-          text={encryptionKeyExists ? "Decrypt" : "Login"}
-          type="submit"
-          loading={isLoading}
-        />
-        {encryptionKeyExists ? (
-          <Button
-            text="Back"
-            type="button"
-            loading={isLoading}
-            onClick={() => setEncryptionKeyExists(false)}
+        <FormControl>
+          <PasswordInput
+            label="Password"
+            name="password"
+            placeholder="password"
+            value={credentials.password}
+            showSuggestions={false}
+            onChange={handleChange}
+            readOnly={encryptionKeyExists}
           />
-        ) : (
-          <Link className="is-small" to="/signup">I don't have an account</Link>
-        )}
-      </FormControl>
+        </FormControl>
 
-    </Form>
+        {
+          encryptionKeyExists &&
+          <FormControl>
+            <PasswordInput
+              label="Encryption Password"
+              name="encryptionPassword"
+              placeholder="Your decryption password"
+              value={credentials.encryptionPassword}
+              autoFocus={true}
+              showSuggestions={false}
+              onChange={handleChange}
+            />
+          </FormControl>
+        }
+
+        <FormControl
+          modifiers="form__control-group--center mt-2"
+        >
+          <Button
+            text={encryptionKeyExists ? "Decrypt" : "Login"}
+            type="submit"
+            loading={isLoading}
+          />
+          {encryptionKeyExists ? (
+            <Button
+              text="Back"
+              type="button"
+              loading={isLoading}
+              onClick={() => setEncryptionKeyExists(false)}
+            />
+          ) : (
+            <Link className="is-small" to="/signup">I don't have an account</Link>
+          )}
+        </FormControl>
+
+      </Form>
+    </section>
   );
 };
 

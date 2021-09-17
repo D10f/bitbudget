@@ -45,24 +45,29 @@ export const selectAmountByCategory = createSelector(
 
 /**
  * Selects the total spent amount, sorted by expense day of month.
- * @return {array}  Array  where each item is the total expenses for that day
+ * @return {tuple} A tuple containing two arrays of numbers, with the amounts distributed by day for all expenses
  */
 export const selectAmountByDay = createSelector(
   [selectCurrentExpenses, selectDaysInCurrentMonth],
   (expenses, daysInMonth) => {
     // Chart.js expects an array of values, in this case each item represents an amount per day of
     // the month. Amount defaults to 0.
-    const result = new Array(daysInMonth).fill(0);
+    const expenseResult = new Array(daysInMonth).fill(0);
+    const incomeResult  = new Array(daysInMonth).fill(0);
 
-    expenses.forEach(({ createdAt, amount }) => {
+    expenses.forEach(({ createdAt, amount, category }) => {
       // Get the numeric day when expense was created, substracting 1 because arrays are 0-indexed.
       const expenseDay = moment(createdAt).format('D') - 1;
 
       // Increase total amount for that day by the amount of current expense
-      result[expenseDay] += parseFloat((amount / 100).toFixed(2));
+      if (category.toLowerCase() === 'income') {
+        incomeResult[expenseDay] += parseFloat((amount / 100).toFixed(2));
+      } else {
+        expenseResult[expenseDay] += parseFloat((amount / 100).toFixed(2));
+      }
     });
 
-    return result;
+    return [ expenseResult, incomeResult ];
   }
 );
 
@@ -74,7 +79,7 @@ export const selectIncomeAmount = createSelector(
   [selectCurrentExpenses],
   expenses => expenses.reduce((total, expense) => {
     // Income is represented by negative amounts
-    return expense.amount < 0 ? total + expense.amount : total;
+    return expense.category.toLowerCase() === 'income' ? total + expense.amount : total;
   }, 0)
 );
 
@@ -86,7 +91,7 @@ export const selectExpensesAmount = createSelector(
   [selectCurrentExpenses],
   expenses => expenses.reduce((total, expense) => {
     // Expenses are represented by positive amounts
-    return expense.amount > 0 ? total + expense.amount : total;
+    return expense.category.toLowerCase() !== 'income' ? total + expense.amount : total;
   }, 0)
 );
 
@@ -116,7 +121,7 @@ export const selectPercentageByCategory = createSelector(
  */
 export const selectPercentageByDay = createSelector(
   [selectExpensesAmount, selectAmountByDay, selectLabeledDaysInMonth],
-  (total, dailyAmounts, labeledDaysInMonth) => {
+  (total, [dailyAmounts], labeledDaysInMonth) => {
     const expensesTotal = total / 100;
     const result = {};
 
@@ -147,7 +152,7 @@ export const selectBudgetPercentage = createSelector(
  */
 export const selectBudgetAvailableOverTime = createSelector(
   [selectAmountByDay, selectCurrentWalletBudget],
-  (dailyAmounts, budget) => {
+  ([dailyAmounts], budget) => {
     let sum = 0;
 
     // Sum amounts every day, and calculate corresponding % for that day

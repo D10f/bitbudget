@@ -25,7 +25,7 @@ const AddExpense = ({ wallet, addExpense, history }) => {
 
   return (
     <section className="expense-page">
-      <h3>Create New Expense</h3>
+      <h2 className="has-text-center py-2">Create New Expense</h2>
       <ExpenseForm onSubmit={onSubmit} />
     </section>
   );

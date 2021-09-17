@@ -11,11 +11,12 @@ import DoughnutChart from './DoughnutChart';
 const chartLegend = {
   display: true,
   position: window.innerWidth > 600 ? 'left' : 'top',
-  align: 'end',
+  // align: 'center',
   labels: {
     font: {
       family: 'Space Grotesk'
-    }
+    },
+    padding: 20
   }
 };
 

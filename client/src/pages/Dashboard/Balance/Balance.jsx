@@ -52,7 +52,7 @@ const Balance = ({
             formatAsCurrency(expenseAmount),
             formatAsCurrency(incomeAmount),
           ]}
-          backgroundColor={[ '#ff9231', '#363933', 'lightgray' ]}
+          backgroundColor={[ '#ff9231', '#363933', '#F9B058' ]}
           legend={{
             position: 'top',
             align: 'start',

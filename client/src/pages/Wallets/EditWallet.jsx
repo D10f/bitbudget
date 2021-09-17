@@ -7,7 +7,13 @@ const EditWallet = ({ wallet, updateWallet, removeWallet, history }) => {
 
   const handleSubmit = ({ name, budget, currency }) => {
     // During validation budget gets coerced into a Number
-    updateWallet({ id: wallet.id, name, budget: budget.toString(), currency });
+    updateWallet({
+      id: wallet.id,
+      name,
+      budget: budget.toString(),
+      currency,
+      isCurrent: true
+    });
   };
 
   const handleRemove = id => {

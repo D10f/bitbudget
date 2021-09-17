@@ -30,7 +30,7 @@ const EditExpense = ({ expense, updateExpense, removeExpense, history }) => {
 
   return (
     <section className="expense-page">
-      <h3>Edit expense</h3>
+      <h2 className="has-text-center py-2">{`Edit Expense "${expense.title}"`}</h2>
       <ExpenseForm
         handleRemove={handleRemove}
         onSubmit={onSubmit}

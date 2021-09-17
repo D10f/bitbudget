@@ -35,65 +35,68 @@ const Signup = ({ history, signupUser, isLoading }) => {
   };
 
   return (
-    <Form onSubmit={validateSchema(credentials, handleSubmit)} >
+    <section>
+    <h2 className="has-text-center py-2">Register</h2>
+      <Form onSubmit={validateSchema(credentials, handleSubmit)} >
 
-      <FormControl>
-        <TextInput
-          label="Username"
-          value={credentials.username}
-          name="username"
-          placeholder="Userame"
-          autoFocus={true}
-          onChange={handleChange}
-        />
-      </FormControl>
+        <FormControl>
+          <TextInput
+            label="Username"
+            value={credentials.username}
+            name="username"
+            placeholder="Userame"
+            autoFocus={true}
+            onChange={handleChange}
+          />
+        </FormControl>
 
-      <FormControl>
-        <PasswordInput
-          label="Password"
-          value={credentials.password}
-          name="password"
-          placeholder="Choose a strong password"
-          onChange={handleChange}
-          showSuggestions={true}
-          hidden={false}
-        />
-      </FormControl>
+        <FormControl>
+          <PasswordInput
+            label="Password"
+            value={credentials.password}
+            name="password"
+            placeholder="Choose a strong password"
+            onChange={handleChange}
+            showSuggestions={true}
+            hidden={false}
+          />
+        </FormControl>
 
-      <FormControl>
-        <PasswordInput
-          label="Confirm Password"
-          value={credentials.password2}
-          name="password2"
-          placeholder="Confirm Password"
-          onChange={handleChange}
-          showSuggestions={false}
-          hidden={false}
-        />
-      </FormControl>
+        <FormControl>
+          <PasswordInput
+            label="Confirm Password"
+            value={credentials.password2}
+            name="password2"
+            placeholder="Confirm Password"
+            onChange={handleChange}
+            showSuggestions={false}
+            hidden={false}
+          />
+        </FormControl>
 
-      <FormControl modifiers="form__control-group--hidden">
-        <PasswordInput
-          label="Confirm"
-          value={credentials.confirm}
-          name="confirm"
-          placeholder="Confirm"
-          onChange={handleChange}
-          showSuggestions={false}
-          hidden={true}
-        />
-      </FormControl>
+        <FormControl modifiers="form__control-group--hidden">
+          <PasswordInput
+            label="Confirm"
+            value={credentials.confirm}
+            name="confirm"
+            placeholder="Confirm"
+            onChange={handleChange}
+            showSuggestions={false}
+            hidden={true}
+          />
+        </FormControl>
 
-      <FormControl modifiers="form__control-group--center mt-2">
-        <Button
-          text="Sign Up"
-          type="submit"
-          loading={isLoading}
-        />
+        <FormControl modifiers="form__control-group--center mt-2">
+          <Button
+            text="Sign Up"
+            type="submit"
+            loading={isLoading}
+          />
 
-        <Link className="is-small" to="/login">Already have an account</Link>
-      </FormControl>
-    </Form>
+          <Link className="is-small" to="/login">Already have an account</Link>
+        </FormControl>
+      </Form>
+    </section>
   );
 };
 

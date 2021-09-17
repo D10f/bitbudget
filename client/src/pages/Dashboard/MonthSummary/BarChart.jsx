@@ -1,16 +1,28 @@
 import React, { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
 
+// const BarChart = ({
+//   labels,
+//   data,
+//   onClick,
+//   usePointStyle,
+//   tooltipLabel,
+//   tooltipTitle,
+//   backgroundColor,
+//   borderColor,
+//   borderWidth,
+//   base,
+//   legend,
+//   scaleX,
+//   scaleY
+// }) => {
 const BarChart = ({
   labels,
-  data,
+  datasets,
   onClick,
   usePointStyle,
   tooltipLabel,
   tooltipTitle,
-  backgroundColor,
-  borderColor,
-  borderWidth,
   base,
   legend,
   scaleX,
@@ -19,18 +31,20 @@ const BarChart = ({
 
   let canvasRef = useRef(null);
 
+
   useEffect(() => {
 
+    // datasets: [{
+      //   data: data,
+      //   backgroundColor: backgroundColor,
+      //   borderColor: borderColor,
+      //   borderWidth: borderWidth
+      // }]
     const config = {
       type: 'bar',
       data: {
         labels: labels,
-        datasets: [{
-          data: data,
-          backgroundColor: backgroundColor,
-          borderColor: borderColor,
-          borderWidth: borderWidth
-        }]
+        datasets: datasets
       },
       options: {
         onClick: onClick,
@@ -61,14 +75,11 @@ const BarChart = ({
 
   }, [
     labels,
-    data,
+    datasets,
     onClick,
     usePointStyle,
     tooltipLabel,
     tooltipTitle,
-    backgroundColor,
-    borderColor,
-    borderWidth,
     base,
     legend,
     scaleX,
@@ -79,6 +90,24 @@ const BarChart = ({
     <canvas ref={canvasRef}></canvas>
   );
 };
+
+/*
+[
+  labels,
+  data,
+  onClick,
+  usePointStyle,
+  tooltipLabel,
+  tooltipTitle,
+  backgroundColor,
+  borderColor,
+  borderWidth,
+  base,
+  legend,
+  scaleX,
+  scaleY
+])
+*/
 
 // const areEqual = (prevProps, nextProps) => {
 //   console.log(prevProps.legend === nextProps.legend);

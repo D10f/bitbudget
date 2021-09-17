@@ -27,7 +27,7 @@ export const logoutUser = () => ({
 /**
  * Most actions return "true" on success and "false" on error cases.
  * This serves to signal back to the component who invoked the redux-thunk func
- * whether to redirect, re-render or perform soms other action.
+ * whether to redirect, re-render or perform some other action.
  */
 
 export const startSignupUser = (credentials = {}) => {
