@@ -15,8 +15,7 @@
       cursor: pointer;
     }
 
-    &:active svg path,
-    &:focus svg path {
+    &:active svg path {
       fill: var(--primary);
     }
   }

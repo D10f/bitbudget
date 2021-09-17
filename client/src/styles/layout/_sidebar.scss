@@ -14,9 +14,7 @@
   z-index: 1;
   background: variables.$color-dark;
   color: variables.$color-light;
-
   transition: transform 0.3s ease;
-
   @include mixins.hide-scroll-bar;
   // /* Styles to allow the sidebar to scroll without showing any overflow orbars */
   // overflow-y: auto;
@@ -78,7 +76,7 @@
       bottom: 0;
     }
 
-    &--home,
+    &--dashboard,
     &--add-wallet,
     &--profile {
       // overwrite the ::before pseudo-element

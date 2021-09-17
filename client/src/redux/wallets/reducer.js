@@ -64,7 +64,8 @@ const walletReducer = (state = initialState, action) => {
       };
 
     case actions.SET_WALLETS:
-      return action.payload;
+      const { wallets } = action.payload;
+      return { wallets, isLoading: false };
 
     default:
       return state;

@@ -35,11 +35,11 @@ const BarChart = ({
   useEffect(() => {
 
     // datasets: [{
-      //   data: data,
-      //   backgroundColor: backgroundColor,
-      //   borderColor: borderColor,
-      //   borderWidth: borderWidth
-      // }]
+    //   data: data,
+    //   backgroundColor: backgroundColor,
+    //   borderColor: borderColor,
+    //   borderWidth: borderWidth
+    // }]
     const config = {
       type: 'bar',
       data: {

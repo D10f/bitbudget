@@ -40,22 +40,26 @@ const Balance = ({
         <p>Total Income: {getIncomeAmount}</p>
       </div>*/}
 
+      {/*
+        [
+          `Budget: ${currency}${wallet.budget}`,
+          `Expenses: ${getExpenseAmount}`,
+          `Income: ${getIncomeAmount}`,
+        ]
+      */}
+
       <div className="balance__chart">
         <DoughnutChart
-          labels={[
-            `Budget: ${currency}${wallet.budget}`,
-            `Expenses: ${getExpenseAmount}`,
-            `Income: ${getIncomeAmount}`,
-          ]}
+          labels={[ 'Budget', 'Expense', 'Income' ]}
           data={[
             budgetAmount / 2,
-            formatAsCurrency(expenseAmount),
-            formatAsCurrency(incomeAmount),
+            parseFloat(expenseAmount) / 100,
+            parseFloat(incomeAmount) / 100,
           ]}
           backgroundColor={[ '#ff9231', '#363933', '#F9B058' ]}
           legend={{
             position: 'top',
-            align: 'start',
+            align: 'center',
             labels: {
               font: {
                 family: 'Space Grotesk'

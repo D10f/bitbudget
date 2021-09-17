@@ -2,13 +2,16 @@
 
 A web application to manage your expenses securely and privately.
 
-## Features
+## Features (in progress...)
 
-+ Support for multiple wallets to manage short trips, events, separate currencies, etc.
-+ Support for budget alerts will help to keep unnecessary expenses under control
-+ Overview important details at a glance in the dashboard
-+ Dark theme, light theme, orange theme, unicorn theme...
-+ Client-side encryption means your expenses are safe.
++ [X] Support for multiple wallets and currencies.
++ [X] Dashboard overview.
++ [X] Client-side encryption to keep your data safe and private.
++ [ ] Synchronize past expenses when encryption password is updated.
++ [ ] Budget alerts to keep expenses under control.
++ [ ] Welcome tour to explain features after signup.
++ [ ] Dark theme, light theme, orange theme, unicorn theme...
++ [ ] Arrange wallets using drag and drop from sidebar
 
 ## Two-Password System
 

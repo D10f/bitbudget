@@ -141,6 +141,7 @@ const Profile = ({
             placeholder="New Encryption Password"
             onChange={handleInputChange}
             showSuggestions={true}
+            readOnly={true}
           />
         </FormControl>
 
@@ -152,6 +153,7 @@ const Profile = ({
             placeholder="Confirm New Encryption Password"
             onChange={handleInputChange}
             showSuggestions={false}
+            readOnly={true}
           />
         </FormControl>
 

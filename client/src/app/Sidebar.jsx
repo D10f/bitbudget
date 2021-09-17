@@ -20,33 +20,32 @@ const ProfileIcon = () => (
   </svg>
 );
 
-const Sidebar = ({ isOpen, handleOpenDrawer, wallets, isAuthenticated }) => (
+const Sidebar = ({ isOpen, handleOpenDrawer, wallets, user }) => (
   <nav className={isOpen ? "sidebar sidebar--open" : "sidebar sidebar--close" }>
-    <ul className="sidebar__menu">
-      <SidebarItem to="/" name="Dashboard" text={<DashboardIcon />} />
+    {user.isAuthenticated && !user.data && (
+      <ul className="sidebar__menu">
+        <SidebarItem to="/" name="Dashboard" text={<DashboardIcon />} />
+        
+        {wallets.map(wallet => (
+          <SidebarItem
+            key={wallet.id}
+            to={`/edit-wallet/${wallet.id}`}
+            name={wallet.name}
+            currency={wallet.currency}
+            active={wallet.isCurrent}
+            text={<WalletIcon />}
+          />
+        ))}
 
-      {isAuthenticated && (
-        <>
-          {wallets.map(wallet => (
-            <SidebarItem
-              key={wallet.id}
-              to={`/edit-wallet/${wallet.id}`}
-              name={wallet.name}
-              currency={wallet.currency}
-              active={wallet.isCurrent}
-              text={<WalletIcon />}
-            />
-          ))}
-          <SidebarItem to="/add-wallet" name="Add Wallet" text="+" />
-          <SidebarItem to="/profile" name="Profile" text={<ProfileIcon/>} />
-        </>
-      )}
-    </ul>
+        <SidebarItem to="/add-wallet" name="Add Wallet" text="+" />
+        <SidebarItem to="/profile" name="Profile" text={<ProfileIcon/>} />
+      </ul>
+    )}
   </nav>
 );
 
 const mapStateToProps = (state) => ({
-  isAuthenticated: state.user.isAuthenticated,
+  user: state.user,
   wallets: state.wallets.wallets
 });
 

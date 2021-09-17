@@ -37,7 +37,7 @@ export const selectAmountByCategory = createSelector(
       const { category, amount } = expense;
 
       return acc[category]
-        ? { ...acc, [category]: parseFloat(((acc[category] + amount) / 100).toFixed(2)) }
+        ? { ...acc, [category]: acc[category] + parseFloat((amount / 100).toFixed(2)) }
         : { ...acc, [category]: parseFloat((amount / 100).toFixed(2)) }
     }, {});
   }
