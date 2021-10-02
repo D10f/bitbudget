@@ -55,7 +55,7 @@ const Login = ({ isLoading, startLoginUser, startRestoreUserData, history }) => 
             label="Username"
             value={credentials.username}
             name="username"
-            placeholder="Userame"
+            placeholder="try: tester"
             autoFocus={true}
             onChange={handleChange}
             readOnly={encryptionKeyExists}
@@ -66,7 +66,7 @@ const Login = ({ isLoading, startLoginUser, startRestoreUserData, history }) => 
           <PasswordInput
             label="Password"
             name="password"
-            placeholder="password"
+            placeholder="try: adminpass"
             value={credentials.password}
             showSuggestions={false}
             onChange={handleChange}
@@ -80,7 +80,7 @@ const Login = ({ isLoading, startLoginUser, startRestoreUserData, history }) => 
             <PasswordInput
               label="Encryption Password"
               name="encryptionPassword"
-              placeholder="Your decryption password"
+              placeholder="try: adminpass"
               value={credentials.encryptionPassword}
               autoFocus={true}
               showSuggestions={false}
