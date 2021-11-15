@@ -1,8 +1,0 @@
-node_modules/
-client/
-assets/
-config/
-.git/
-
-.gitignore
-npm-debug.log

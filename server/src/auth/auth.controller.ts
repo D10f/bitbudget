@@ -1,0 +1,19 @@
+import { Body, Controller, Post } from '@nestjs/common';
+import { AuthService } from './auth.service';
+import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { AuthResponseDto } from './dto/auth-response.dto';
+
+@Controller('auth')
+export class AuthController {
+  constructor(private readonly authService: AuthService) {}
+
+  @Post('/signup')
+  signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<AuthResponseDto> {
+    return this.authService.signUp(authCredentialsDto);
+  }
+  
+  @Post('/signin')
+  signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<AuthResponseDto> {
+    return this.authService.signIn(authCredentialsDto);
+  }
+}
