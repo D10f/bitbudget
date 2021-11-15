@@ -29,12 +29,6 @@ export class UsersService {
     return this.usersRepository.findOne(filter);
   }
 
-  /** TEST ONLY */
-  findAll(filter: FilterQuery<UserDocument>): Promise<LeanDocument<User>[]> {
-    return this.usersRepository.find(filter);
-  }
-  /**TESTONLY */
-
   async update(
     id: string,
     updateUserDto: UpdateUserDto,

@@ -19,12 +19,6 @@ import { DeleteMongooseDocProps } from './decorators/DeleteMongooseDocProps.deco
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @Get()
-  @DeleteMongooseDocProps('__v', 'password')
-  getAll(): Promise<User[]> {
-    return this.usersService.findAll({});
-  }
-
   @Patch(':id')
   @UseGuards(SameUserGuard)
   @DeleteMongooseDocProps('_id', '__v', 'password')

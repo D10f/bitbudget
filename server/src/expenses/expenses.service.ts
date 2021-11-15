@@ -39,10 +39,6 @@ export class ExpensesService {
     }
   }
 
-  findAll(): Promise<ExpenseDocument[]> {
-    return this.expensesRepository.findAll();
-  }
-
   async findOne(id: string, options?: QueryOptions): Promise<ExpenseDocument> {
     const expense = await this.expensesRepository.findOne(id, options);
     if (!expense) {

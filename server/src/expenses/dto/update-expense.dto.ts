@@ -8,5 +8,5 @@ export class UpdateExpenseDto extends PartialType(
 ) {
   @IsMMYY()
   @IsOptional()
-  newExpenseDate: string;
+  newExpenseDate?: string;
 }

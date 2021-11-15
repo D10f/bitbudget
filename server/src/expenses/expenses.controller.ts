@@ -20,11 +20,6 @@ export class ExpensesController {
     return this.expensesService.create(createExpenseDto);
   }
 
-  @Get()
-  findAll() {
-    return this.expensesService.findAll();
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.expensesService.findOne(id);

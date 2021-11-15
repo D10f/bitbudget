@@ -15,10 +15,6 @@ export class ExpensesRepository {
     return await this.expenseModel.create(expense);
   }
 
-  async findAll(): Promise<ExpenseDocument[]> {
-    return await this.expenseModel.find({});
-  }
-
   async findOne(id: string, options?: QueryOptions): Promise<ExpenseDocument> {
     return await this.expenseModel.findById(id, null, options);
   }

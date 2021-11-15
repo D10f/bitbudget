@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 
-describe('UserService', () => {
+describe.only('UserService', () => {
   const mockUsersRepository = () => ({
     createUser: jest.fn(),
     findOne: jest.fn(),
