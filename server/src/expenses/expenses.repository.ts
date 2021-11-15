@@ -31,9 +31,8 @@ export class ExpensesRepository {
     return await this.expenseModel.findByIdAndDelete(id);
   }
 
-  async removeExpenses(expenseIds: string[]): Promise<void> {
-    console.log(expenseIds);
+  async removeExpenses(expenseIds: string[]): Promise<{ deletedCount: number }> {
     const result = await this.expenseModel.deleteMany({ _id: { $in: expenseIds }});
-    console.log(result);
+    return result;
   }
 }

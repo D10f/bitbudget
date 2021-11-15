@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
@@ -14,8 +14,9 @@ export class WalletsController {
   }
 
   @Get()
-  findAll(): Promise<WalletDocument[]> {
-    return this.walletsService.findAll();
+  findMany(@Query('q') ids: string): Promise<WalletDocument[]> {
+    const walletIds: string[] = ids.split(',');
+    return this.walletsService.findMany(walletIds);
   }
 
   @Get(':id')

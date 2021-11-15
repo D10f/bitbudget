@@ -6,7 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { LeanDocument, QueryOptions } from 'mongoose';
-import { ExpensesService } from 'src/expenses/expenses.service';
+import { ExpensesService } from '../expenses/expenses.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { IExpenseDateUpdate } from './interfaces/expense-date-update.interface';
@@ -32,8 +32,8 @@ export class WalletsService {
     }
   }
 
-  findAll(): Promise<WalletDocument[]> {
-    return this.walletsRepository.findAll();
+  findMany(walletIds: string[]): Promise<WalletDocument[]> {
+    return this.walletsRepository.findMany(walletIds);
   }
 
   async findOne(id: string, options?: QueryOptions): Promise<WalletDocument> {

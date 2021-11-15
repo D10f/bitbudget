@@ -20,8 +20,8 @@ export class WalletsRepository {
     }
   }
 
-  async findAll(): Promise<WalletDocument[]> {
-    return await this.walletModel.find({});
+  async findMany(walletIds: string[]): Promise<WalletDocument[]> {
+    return await this.walletModel.find({ _id: { $in: walletIds }}).lean();
   }
 
   async findOne(id: string, options?: QueryOptions): Promise<WalletDocument> {

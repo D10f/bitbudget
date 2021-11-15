@@ -7,7 +7,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { QueryOptions } from 'mongoose';
-import { WalletsService } from 'src/wallets/wallets.service';
+import { WalletsService } from '../wallets/wallets.service';
 import { CreateExpenseDto } from './dto/create-expense.dto';
 import { UpdateExpenseDto } from './dto/update-expense.dto';
 import { ExpensesRepository } from './expenses.repository';
@@ -91,7 +91,7 @@ export class ExpensesService {
     return this.expensesRepository.remove(id);
   }
 
-  removeExpenses(expenseIds: string[]): Promise<void> {
+  removeExpenses(expenseIds: string[]): Promise<{ deletedCount: number }> {
     return this.expensesRepository.removeExpenses(expenseIds);
   }
 }
