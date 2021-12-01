@@ -24,6 +24,11 @@ export const theme = {
   layout: {
     borderRadius: "5px",
   },
+  depth: {
+    popup: 40,
+    modal: 50,
+    notifications: 60
+  },
   effects: {
     shadow: '0.5rem 1rem 2rem rgba(0, 0, 0, 0.25)',
   },

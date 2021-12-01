@@ -60,6 +60,7 @@ const Container = styled(motion.aside)`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
+  z-index: ${({ theme }) => theme.depth.modal};
 `;
 
 const ModalHeader = styled.header`
@@ -75,7 +76,6 @@ const ModalContent = styled.section`
 `;
 
 const Modal = ({ requestClose, title, children }: IModalProps) => {
-  console.log('modal');
   useKeyPress("Escape", requestClose);
 
   return createPortal(

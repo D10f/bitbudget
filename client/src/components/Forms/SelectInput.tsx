@@ -5,6 +5,7 @@ interface ISelectInputProps {
   label: string;
   name: string;
   value: string;
+  error?: boolean;
   readOnly?: boolean;
   hideLabel?: boolean;
   options: string[];
@@ -15,7 +16,11 @@ interface IStyledLabelProps {
   hide?: boolean;
 }
 
-const StyledSelectInput = styled.select`
+interface IStyledSelectProps {
+  error?: boolean;
+}
+
+const StyledSelectInput = styled.select<IStyledSelectProps>`
   position: relative;
   appearance: none;
   margin: 1rem 0;
@@ -23,7 +28,7 @@ const StyledSelectInput = styled.select`
   font-size: 1.6rem;
   min-height: 4rem;
   min-width: 25rem;
-  border: 1px solid ${({ theme }) => theme.colors.dark.dark};
+  border: 1px solid ${({ theme, error }) => error ? 'red' : theme.colors.dark.dark};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light};
@@ -56,14 +61,15 @@ const StyledLabel = styled.label<IStyledLabelProps>`
   height: ${({ hide }) => (hide ? "0px" : "auto")};
 `;
 
-const SelectInput = ({
+const SelectInput = React.forwardRef(({
   label,
   value,
   name,
-  hideLabel = false,
   options,
+  error = false,
+  hideLabel = false,
   onChange,
-}: ISelectInputProps) => {
+}: ISelectInputProps, ref) => {
   return (
     <>
       <StyledLabel htmlFor={name} hide={hideLabel}>
@@ -73,6 +79,7 @@ const SelectInput = ({
         value={value || options[0]}
         name={name}
         onChange={onChange}
+        error={error}
       >
         {options.map((option) => (
           <option key={option} value={option}>
@@ -83,6 +90,6 @@ const SelectInput = ({
       <SelectInputToggleIcon>&lsaquo;</SelectInputToggleIcon>
     </>
   );
-};
+});
 
 export default SelectInput;

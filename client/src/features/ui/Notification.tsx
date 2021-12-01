@@ -17,7 +17,10 @@ const NotificationContainer = styled.aside`
   justify-content: flex-start;
   align-items: flex-end;
   gap: 2rem;
+  z-index: ${({ theme }) => theme.depth.notifications};
+  pointer-events: none;
 `;
+
 const Notifications = () => {
   const notifications = useAppSelector((state) => state.ui.notifications);
 
