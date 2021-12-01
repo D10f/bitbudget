@@ -5,6 +5,7 @@ import Icon from "../Icons/Icon";
 import Row from "../Row/Row";
 import Popup from "../Popup/Popup";
 import Modal from "../Modal/Modal";
+import { AnimatePresence } from "framer-motion";
 
 interface IProfileSubMenuProps {
   id: string;
@@ -34,6 +35,18 @@ const ProfileSubMenu = ({
     return null;
   }
 
+  const logoutPromptModal = () => (
+    <Modal requestClose={() => setLogoutPrompt(false)}>
+      <p>Are you sure you want to logout?</p>
+      <Row>
+        <Button variant="action">Logout</Button>
+        <Button variant="link" onClick={() => setLogoutPrompt(false)}>
+          Cancel
+        </Button>
+      </Row>
+    </Modal>
+  );
+
   return (
     <Popup ref={popupRef} align="bottom">
       <Button variant="link" icon={<Icon name="profile" />}>
@@ -47,30 +60,8 @@ const ProfileSubMenu = ({
       >
         Logout
       </Button>
-      <Button
-        variant="link"
-        icon={<Icon name="logout" />}
-        onClick={() => setLogoutPrompt(true)}
-      >
-        Logout
-      </Button>
-      <Button
-        variant="link"
-        icon={<Icon name="logout" />}
-        onClick={() => setLogoutPrompt(true)}
-      >
-        Logout
-      </Button>
 
-      <Modal isOpen={logoutPrompt} requestClose={() => setLogoutPrompt(false)}>
-        <p>Are you sure you want to logout?</p>
-        <Row>
-          <Button variant="action">Logout</Button>
-          <Button variant="link" onClick={() => setLogoutPrompt(false)}>
-            Cancel
-          </Button>
-        </Row>
-      </Modal>
+      <AnimatePresence>{logoutPrompt && logoutPromptModal()}</AnimatePresence>
     </Popup>
   );
 };

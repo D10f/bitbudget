@@ -56,7 +56,7 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
     } else {
       console.log(value);
       dispatch(updateWallet({ id: wallet.id, name, currency, budget, isCurrent: wallet.isCurrent }));
-      // submitCallback();
+      submitCallback();
       dispatch(addNotification({ msg: "Wallet Updated Successfully", type: 'success' }));
     }
   };
@@ -97,7 +97,7 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
       </FormControl>
 
       <Button type="submit" variant="action">
-        Update
+        { wallet ? "Update" : "Create" }
       </Button>
     </StyledForm>
   );

@@ -12,6 +12,12 @@ interface IWallet {
   isCurrent: boolean;
 }
 
+interface IExpense {
+  id: string;
+  name: string;
+  amount: string;
+}
+
 interface INotification {
   id: string;
   msg: string;

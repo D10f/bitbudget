@@ -8,7 +8,6 @@ import { useKeyPress } from "../../hooks/useKeyPress";
 interface IModalProps {
   title?: string;
   children: React.ReactChild[] | React.ReactChild;
-  isOpen: boolean;
   requestClose: () => void;
 }
 
@@ -25,6 +24,13 @@ const popupMotion = {
       duration: 0.3,
     },
   },
+  exit: {
+    scale: 0,
+    translateX: "-50%",
+    transition: {
+      duration: 0.1
+    }
+  }
 };
 
 const Background = styled.div`
@@ -68,21 +74,18 @@ const ModalContent = styled.section`
   flex: 1;
 `;
 
-const Modal = ({ isOpen, requestClose, title, children }: IModalProps) => {
-  
-  useKeyPress('Escape', requestClose);
-  
-  if (!isOpen) {
-    return null;
-  }
+const Modal = ({ requestClose, title, children }: IModalProps) => {
+  console.log('modal');
+  useKeyPress("Escape", requestClose);
 
   return createPortal(
     <Background>
       <Container
+        key={Math.random().toString()}
         variants={popupMotion}
         initial="initial"
         animate="visible"
-        exit="initial"
+        exit="exit"
         aria-hidden={true}
       >
         {title && (

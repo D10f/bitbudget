@@ -12,6 +12,9 @@ import Popup from "../Popup/Popup";
 import Modal from "../Modal/Modal";
 import styled from "styled-components";
 import WalletForm from "../Forms/WalletForm";
+import { addNotification } from "../../features/ui/ui.reducer";
+import ExpenseForm from "../Forms/ExpenseForm";
+import { AnimatePresence } from "framer-motion";
 
 interface IWalletSubMenuProps {
   wallet: IWallet;
@@ -30,13 +33,14 @@ const WalletSubMenu = ({
 }: IWalletSubMenuProps) => {
   const [deletePrompt, setDeletePrompt] = useState(false);
   const [editingModal, setEditingModal] = useState(false);
+  const [expenseModal, setExpenseModal] = useState(false);
   const dispatch = useAppDispatch();
 
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
   // Closes this submenu when clicked outside
   const closeOnClickOutside = () => {
-    if (deletePrompt || editingModal || !isSubMenuOpen) {
+    if (deletePrompt || editingModal || expenseModal || !isSubMenuOpen) {
       return;
     }
     closeSubMenu();
@@ -49,24 +53,39 @@ const WalletSubMenu = ({
   }
 
   const editWalletModal = () => (
-    <Modal
-      key="dsdfds"
-      title="Edit Wallet"
-      isOpen={editingModal}
-      requestClose={() => setEditingModal(false)}
-    >
+    <Modal title="Edit Wallet" requestClose={() => setEditingModal(false)}>
       <WalletForm
         wallet={wallet}
-        submitCallback={() => setEditingModal(false)}
+        submitCallback={() => {
+          console.log(editingModal);
+          setEditingModal(false);
+        }}
       />
     </Modal>
   );
 
+  const createExpenseModal = () => (
+    <Modal title="New Expense" requestClose={() => setExpenseModal(false)}>
+      <ExpenseForm submitCallback={() => setEditingModal(false)} />
+    </Modal>
+  );
+
   const confirmDeleteModal = () => (
-    <Modal isOpen={deletePrompt} requestClose={() => setDeletePrompt(false)}>
+    <Modal requestClose={() => setDeletePrompt(false)}>
       <p>Are you sure you want to delete this wallet?</p>
       <Row>
-        <Button variant="action" onClick={() => dispatch(deleteWallet(wallet))}>
+        <Button
+          variant="action"
+          onClick={() => {
+            dispatch(deleteWallet(wallet));
+            dispatch(
+              addNotification({
+                msg: "Wallet Deleted Successfully",
+                type: "success",
+              })
+            );
+          }}
+        >
           Confirm
         </Button>
         <Button variant="link" onClick={() => setDeletePrompt(false)}>
@@ -102,7 +121,11 @@ const WalletSubMenu = ({
         Edit Wallet
       </Button>
 
-      <Button variant="link" icon={<Icon name="add" />}>
+      <Button
+        variant="link"
+        icon={<Icon name="add" />}
+        onClick={() => setExpenseModal(true)}
+      >
         Add Expense
       </Button>
 
@@ -113,8 +136,12 @@ const WalletSubMenu = ({
       >
         Delete Wallet
       </Button>
-      {confirmDeleteModal()}
-      {editWalletModal()}
+
+      <AnimatePresence>{deletePrompt && confirmDeleteModal()}</AnimatePresence>
+
+      <AnimatePresence>{editingModal && editWalletModal()}</AnimatePresence>
+
+      <AnimatePresence>{expenseModal && createExpenseModal()}</AnimatePresence>
     </Popup>
   );
 };
