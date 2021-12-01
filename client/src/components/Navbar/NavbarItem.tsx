@@ -61,7 +61,8 @@ const NavBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
-  &:active {
+  &:active,
+  &:focus {
     background-color: ${({ theme }) => theme.colors.primary.default};
   }
 `;
@@ -80,7 +81,7 @@ const NavbarItem = ({
 
   return (
     <NavItem active={active}>
-      <NavBtn onClick={toggleMenu}>{icon}</NavBtn>
+      <NavBtn onClick={toggleMenu} tabIndex={0}>{icon}</NavBtn>
       {children}
     </NavItem>
   );

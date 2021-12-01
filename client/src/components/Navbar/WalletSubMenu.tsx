@@ -64,7 +64,6 @@ const WalletSubMenu = ({
   const confirmDeleteModal = () => (
     <Modal isOpen={deletePrompt} requestClose={() => setDeletePrompt(false)}>
       <p>Are you sure you want to delete this wallet?</p>
-      <p>This action cannot be undone.</p>
       <Row>
         <Button variant="action" onClick={() => dispatch(deleteWallet(wallet))}>
           Confirm
