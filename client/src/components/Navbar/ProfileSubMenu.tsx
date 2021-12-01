@@ -31,10 +31,6 @@ const ProfileSubMenu = ({
 
   useClickOutside(popupRef, closeOnClickOutside);
 
-  if (!isSubMenuOpen) {
-    return null;
-  }
-
   const logoutPromptModal = () => (
     <Modal requestClose={() => setLogoutPrompt(false)}>
       <p>Are you sure you want to logout?</p>

@@ -37,37 +37,42 @@ const Navbar = () => {
   return (
     <Nav>
       <NavbarMenu>
-        <AnimatePresence>
-          {wallets.map((wallet) => (
-            <NavbarItem
-              key={wallet.id}
-              id={wallet.id}
-              setNavbarSubMenu={setNavbarSubMenu}
-              active={wallet.isCurrent}
-              icon={<Icon name="wallet" />}
-            >
-              <WalletSubMenu
-                wallet={wallet}
-                isSubMenuOpen={navbarSubMenu === wallet.id}
+        {wallets.map((wallet) => (
+          <NavbarItem
+            key={wallet.id}
+            id={wallet.id}
+            setNavbarSubMenu={setNavbarSubMenu}
+            active={wallet.isCurrent}
+            icon={<Icon name="wallet" />}
+          >
+            <AnimatePresence>
+              {navbarSubMenu === wallet.id && (
+                <WalletSubMenu
+                  wallet={wallet}
+                  isSubMenuOpen={navbarSubMenu === wallet.id}
+                  closeSubMenu={() => setNavbarSubMenu(null)}
+                />
+              )}
+            </AnimatePresence>
+          </NavbarItem>
+        ))}
+
+        <NavbarItem
+          id={"1234"}
+          setNavbarSubMenu={setNavbarSubMenu}
+          active={false}
+          icon={<Icon name="cog" />}
+        >
+          <AnimatePresence>
+            {navbarSubMenu === "1234" && (
+              <ProfileSubMenu
+                id={"1234"}
+                isSubMenuOpen={navbarSubMenu === "1234"}
                 closeSubMenu={() => setNavbarSubMenu(null)}
               />
-            </NavbarItem>
-          ))}
-
-          <NavbarItem
-            id={"1234"}
-            setNavbarSubMenu={setNavbarSubMenu}
-            active={false}
-            icon={<Icon name="cog" />}
-          >
-            <ProfileSubMenu
-              id={"1234"}
-              key="1234"
-              isSubMenuOpen={navbarSubMenu === "1234"}
-              closeSubMenu={() => setNavbarSubMenu(null)}
-            />
-          </NavbarItem>
-        </AnimatePresence>
+            )}
+          </AnimatePresence>
+        </NavbarItem>
       </NavbarMenu>
     </Nav>
   );

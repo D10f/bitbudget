@@ -78,7 +78,11 @@ const NavbarItem = ({
 }: INavbarItemProps) => {
 
   const toggleMenu = () => {
-    setNavbarSubMenu((prev) => (prev === id ? null : id));
+    // This ensures that the current submenu is closed before a new one is opened,
+    // which causes a glitch in the UI when switching from one menu to another.
+    setImmediate(() => {
+      setNavbarSubMenu((prev) => (prev === id ? null : id));
+    })
   };
 
   return (

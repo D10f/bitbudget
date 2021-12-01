@@ -1,7 +1,7 @@
 import * as Joi from "joi";
 
 export const walletValidationSchema = Joi.object().keys({
-  name: Joi.string(),
+  name: Joi.string().required(),
   currency: Joi.string().valid(
     "EUR",
     "USD",
@@ -11,6 +11,6 @@ export const walletValidationSchema = Joi.object().keys({
     "JPY",
     "CNY",
     "INR"
-  ),
-  budget: Joi.string().pattern(/^\d+(\.\d{1,2})?$/),
+  ).required(),
+  budget: Joi.string().pattern(/^\d+(\.\d{0,2})?$/).required(),
 });

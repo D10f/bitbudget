@@ -25,6 +25,13 @@ const slideInMotion = {
       duration: 0.3,
     },
   },
+  exit: {
+    opacity: 0,
+    x: 200,
+    transition: {
+      duration: 0.1,
+    }
+  }
 };
 
 const StyledPopup = styled(motion.aside)<IPopupStyles>`
@@ -48,6 +55,8 @@ const Popup = React.forwardRef(({ children, align }: IPopupProps, ref) => {
       variants={slideInMotion}
       initial="initial"
       animate="visible"
+      exit="exit"
+      key="1"
       ref={ref}
       align={align}
     >

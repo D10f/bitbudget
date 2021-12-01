@@ -38,7 +38,7 @@ const WalletSubMenu = ({
 
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
-  // Closes this submenu when clicked outside
+  // Closes this submenu when clicked outside, but not when there's one of the modals open
   const closeOnClickOutside = () => {
     if (deletePrompt || editingModal || expenseModal || !isSubMenuOpen) {
       return;
@@ -47,10 +47,6 @@ const WalletSubMenu = ({
   };
 
   useClickOutside(popupRef, closeOnClickOutside);
-
-  if (!isSubMenuOpen) {
-    return null;
-  }
 
   const editWalletModal = () => (
     <Modal title="Edit Wallet" requestClose={() => setEditingModal(false)}>
