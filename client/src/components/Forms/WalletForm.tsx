@@ -91,7 +91,6 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
           name="budget"
           value={budget}
           placeholder="e.g., 278.32"
-          autoFocus={true}
           readOnly={false}
           onChange={handleInput}
         />

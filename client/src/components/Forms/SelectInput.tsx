@@ -17,6 +17,7 @@ interface IStyledLabelProps {
 
 const StyledSelectInput = styled.select`
   position: relative;
+  appearance: none;
   margin: 1rem 0;
   padding: 1rem;
   font-size: 1.6rem;
@@ -26,6 +27,28 @@ const StyledSelectInput = styled.select`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light};
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:focus {
+    outline: none;
+    border: 1px solid ${({ theme }) => theme.colors.primary.default};
+  }
+`;
+
+const SelectInputToggleIcon = styled.span`
+  position: relative;
+  left: 90%;
+  bottom: 4.8rem;
+  font-size: 2rem;
+  height: 0;
+  
+  &:hover {
+    cursor: pointer;
+    color: ${({ theme }) => theme.colors.primary.default};
+  }
 `;
 
 const StyledLabel = styled.label<IStyledLabelProps>`
@@ -57,6 +80,7 @@ const SelectInput = ({
           </option>
         ))}
       </StyledSelectInput>
+      <SelectInputToggleIcon>&lsaquo;</SelectInputToggleIcon>
     </>
   );
 };

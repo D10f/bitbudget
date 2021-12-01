@@ -1,13 +1,15 @@
 import React from "react";
 import { motion } from "framer-motion";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 interface IPopupProps {
   children: React.ReactChild[];
+  align?: string;
 }
 
 interface IPopupStyles {
   ref?: any
+  align?: string;
 }
 
 const slideInMotion = {
@@ -33,15 +35,21 @@ const StyledPopup = styled(motion.aside)<IPopupStyles>`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
+
+  ${({ align }) => align === 'bottom' && css`
+    top: unset;
+    bottom: 0;
+  `}
 `;
 
-const Popup = React.forwardRef(({ children }: IPopupProps, ref) => {
+const Popup = React.forwardRef(({ children, align }: IPopupProps, ref) => {
   return (
     <StyledPopup
       variants={slideInMotion}
       initial="initial"
       animate="visible"
       ref={ref}
+      align={align}
     >
       {children}
     </StyledPopup>

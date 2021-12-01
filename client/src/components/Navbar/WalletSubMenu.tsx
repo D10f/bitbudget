@@ -32,8 +32,9 @@ const WalletSubMenu = ({
   const [editingModal, setEditingModal] = useState(false);
   const dispatch = useAppDispatch();
 
-  // Closes this submenu when clicked outside
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
+
+  // Closes this submenu when clicked outside
   const closeOnClickOutside = () => {
     if (deletePrompt || editingModal || !isSubMenuOpen) {
       return;
@@ -85,7 +86,6 @@ const WalletSubMenu = ({
   return (
     <Popup ref={popupRef}>
       <WalletTitle>{wallet.name}</WalletTitle>
-
       <Button
         variant="link"
         icon={<Icon name="view" />}
@@ -113,7 +113,6 @@ const WalletSubMenu = ({
       >
         Delete Wallet
       </Button>
-
       {confirmDeleteModal()}
       {editWalletModal()}
     </Popup>

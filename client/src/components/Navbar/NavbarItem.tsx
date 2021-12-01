@@ -61,9 +61,10 @@ const NavBtn = styled.button`
   &:hover {
     cursor: pointer;
   }
-  &:active,
-  &:focus {
-    background-color: ${({ theme }) => theme.colors.primary.default};
+  &:active svg,
+  &:focus svg {
+    /* background-color: ${({ theme }) => theme.colors.primary.default}; */
+    fill: ${({ theme }) => theme.colors.primary.default};
   }
 `;
 

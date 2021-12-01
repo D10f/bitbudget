@@ -12,8 +12,12 @@ interface IProfileSubMenuProps {
   closeSubMenu: () => void;
 }
 
-const ProfileSubMenu = ({ id, isSubMenuOpen, closeSubMenu }: IProfileSubMenuProps) => {
-  const [ logoutPrompt, setLogoutPrompt ] = useState(false);
+const ProfileSubMenu = ({
+  id,
+  isSubMenuOpen,
+  closeSubMenu,
+}: IProfileSubMenuProps) => {
+  const [logoutPrompt, setLogoutPrompt] = useState(false);
 
   // Closes this submenu when clicked outside
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
@@ -31,11 +35,25 @@ const ProfileSubMenu = ({ id, isSubMenuOpen, closeSubMenu }: IProfileSubMenuProp
   }
 
   return (
-    <Popup>
+    <Popup ref={popupRef} align="bottom">
       <Button variant="link" icon={<Icon name="profile" />}>
         Profile
       </Button>
 
+      <Button
+        variant="link"
+        icon={<Icon name="logout" />}
+        onClick={() => setLogoutPrompt(true)}
+      >
+        Logout
+      </Button>
+      <Button
+        variant="link"
+        icon={<Icon name="logout" />}
+        onClick={() => setLogoutPrompt(true)}
+      >
+        Logout
+      </Button>
       <Button
         variant="link"
         icon={<Icon name="logout" />}

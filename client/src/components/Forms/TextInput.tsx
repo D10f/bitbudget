@@ -27,6 +27,10 @@ const StyledInput = styled.input`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light};
+
+  &:focus {
+    border: 1px solid ${({ theme }) => theme.colors.primary.default};
+  }
 `;
 
 const StyledLabel = styled.label<IStyledLabelProps>`
