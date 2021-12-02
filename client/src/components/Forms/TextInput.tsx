@@ -1,10 +1,12 @@
 import React from "react";
 import styled from "styled-components";
+import Icon from "../Icons/Icon";
 
 interface ITextInputProps {
   label: string;
   name: string;
   value: string;
+  type?: string;
   error?: boolean;
   placeholder: string;
   hideLabel?: boolean;
@@ -28,14 +30,26 @@ const StyledInput = styled.input<IStyledInputProps>`
   font-size: 1.6rem;
   min-height: 4rem;
   min-width: 25rem;
-  border: 1px solid ${({ theme, error }) => error ? 'red' : theme.colors.dark.dark};
+  outline: none;
+  border: none;
+  border: 1px solid
+    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light)};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light};
 
   &:focus {
-    border: 1px solid ${({ theme }) => theme.colors.primary.default};
+    /* border: 1px solid ${({ theme }) => theme.colors.primary.default}; */
   }
+`;
+
+const StyledIcon = styled(Icon)`
+  position: absolute;
+  top: 4.7rem;
+  right: 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: ${({ theme }) => theme.colors.error};
 `;
 
 const StyledLabel = styled.label<IStyledLabelProps>`
@@ -43,35 +57,42 @@ const StyledLabel = styled.label<IStyledLabelProps>`
   height: ${({ hide }) => (hide ? "0px" : "auto")};
 `;
 
-const TextInput = React.forwardRef(({
-  label,
-  value,
-  name,
-  placeholder,
-  error = false,
-  hideLabel = false,
-  autoFocus = false,
-  readOnly = false,
-  onChange,
-}: ITextInputProps, ref) => {
-  return (
-    <>
-      <StyledLabel htmlFor={name} hide={hideLabel}>
-        {label}
-      </StyledLabel>
-      <StyledInput
-        type="text"
-        value={value}
-        id={name}
-        name={name}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        readOnly={readOnly}
-        error={error}
-        onChange={onChange}
-      />
-    </>
-  );
-});
+const TextInput = React.forwardRef(
+  (
+    {
+      label,
+      value,
+      name,
+      placeholder,
+      type = "text",
+      error = false,
+      hideLabel = false,
+      autoFocus = false,
+      readOnly = false,
+      onChange,
+    }: ITextInputProps,
+    ref
+  ) => {
+    return (
+      <>
+        <StyledLabel htmlFor={name} hide={hideLabel}>
+          {label}
+        </StyledLabel>
+        <StyledInput
+          type={type}
+          value={value}
+          id={name}
+          name={name}
+          placeholder={placeholder}
+          autoFocus={autoFocus}
+          readOnly={readOnly}
+          error={error}
+          onChange={onChange}
+        />
+        {error && <StyledIcon name="warning" />}
+      </>
+    );
+  }
+);
 
 export default TextInput;

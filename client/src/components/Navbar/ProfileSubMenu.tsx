@@ -6,6 +6,7 @@ import Row from "../Row/Row";
 import Popup from "../Popup/Popup";
 import Modal from "../Modal/Modal";
 import { AnimatePresence } from "framer-motion";
+import SignupForm from "../Forms/SignupForm";
 
 interface IProfileSubMenuProps {
   id: string;
@@ -19,11 +20,12 @@ const ProfileSubMenu = ({
   closeSubMenu,
 }: IProfileSubMenuProps) => {
   const [logoutPrompt, setLogoutPrompt] = useState(false);
+  const [signupPrompt, setSignupPrompt] = useState(false);
 
   // Closes this submenu when clicked outside
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
   const closeOnClickOutside = () => {
-    if (logoutPrompt || !isSubMenuOpen) {
+    if (logoutPrompt || signupPrompt || !isSubMenuOpen) {
       return;
     }
     closeSubMenu();
@@ -43,9 +45,15 @@ const ProfileSubMenu = ({
     </Modal>
   );
 
+  const signupPromptModal = () => (
+    <Modal title="Signup" requestClose={() => setSignupPrompt(false)}>
+      <SignupForm />
+    </Modal>
+  );
+
   return (
     <Popup ref={popupRef} align="bottom">
-      <Button variant="link" icon={<Icon name="profile" />}>
+      <Button variant="link" icon={<Icon name="profile" />} onClick={() => setSignupPrompt(true)}>
         Profile
       </Button>
 
@@ -58,6 +66,7 @@ const ProfileSubMenu = ({
       </Button>
 
       <AnimatePresence>{logoutPrompt && logoutPromptModal()}</AnimatePresence>
+      <AnimatePresence>{signupPrompt && signupPromptModal()}</AnimatePresence>
     </Popup>
   );
 };

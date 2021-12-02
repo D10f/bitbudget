@@ -43,9 +43,9 @@ const NotificationCard = styled(motion.article)<INotificationCardStyle>`
     fill: ${({ theme, type }) => {
       switch (type) {
         case "success":
-          return "green";
+          return theme.colors.success;
         case "warning":
-          return "orange";
+          return theme.colors.error;
         case "info":
           return theme.colors.secondary.default;
         default:

@@ -9,6 +9,7 @@ const StyledControl = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0;
+  position: relative;
 `;
 
 const FormControl = ({ children }: IFormControlProps) => {

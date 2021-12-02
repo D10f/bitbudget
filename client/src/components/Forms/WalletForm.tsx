@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { useForm, Controller } from "react-hook-form";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useAppDispatch } from "../../app/hooks";
 import { updateWallet } from "../../features/wallets/wallets.reducer";
@@ -12,7 +12,7 @@ import SelectInput from "./SelectInput";
 import TextInput from "./TextInput";
 
 interface IWalletFormProps {
-  wallet: IWallet;
+  wallet?: IWallet;
   submitCallback: () => void;
 }
 
@@ -36,8 +36,8 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
     resolver: joiResolver(walletValidationSchema)
   });
 
-  const onSubmit = (data: any) => {
-    console.log(data);
+  const onSubmit: SubmitHandler<FormTypes> = (data) => {
+    dispatch(addNotification({ msg: 'Wallet Updated Successfully', type: 'success' }))
   };
 
   return (
@@ -46,7 +46,7 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
         <Controller
           name="name"
           control={control}
-          defaultValue={wallet.name || ""}
+          defaultValue={wallet?.name || ""}
           render={({ field }) => (
             <TextInput
               {...field}
@@ -63,14 +63,16 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
         <Controller
           name="currency"
           control={control}
-          defaultValue={wallet.currency || "EUR"}
+          defaultValue={wallet?.currency || "EUR"}
           render={({ field }) => (
-            <SelectInput
-              {...field}
-              label="Currency"
-              options={["EUR", "USD", "GBP", "AUD", "SGP", "JPY", "CNY", "INR"]}
-              error={Boolean(errors.currency)}
-            />
+            <>
+              <SelectInput
+                {...field}
+                label="Currency"
+                options={["EUR", "USD", "GBP", "AUD", "SGP", "JPY", "CNY", "INR"]}
+                error={Boolean(errors.currency)}
+              />
+            </>
           )}
         />
       </FormControl>
@@ -79,9 +81,11 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
         <Controller
           name="budget"
           control={control}
-          defaultValue={wallet.budget || "0"}
+          defaultValue={wallet?.budget || "0"}
           render={({ field }) => (
-            <TextInput {...field} label="Budget" placeholder="e.g., 278.32" error={Boolean(errors.budget)} />
+            <>
+              <TextInput {...field} label="Budget" placeholder="e.g., 278.32" error={Boolean(errors.budget)} />
+            </>
           )}
         />
       </FormControl>

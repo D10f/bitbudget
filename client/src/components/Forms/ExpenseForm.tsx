@@ -1,13 +1,29 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
+import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { expenseValidationSchema } from "../../common/validators/expenseSchema";
+import { addNotification } from "../../features/ui/ui.reducer";
+import { useAppDispatch } from "../../app/hooks";
 import Button from "../Buttons/Button";
 import FormControl from "./FormControl";
 import TextInput from "./TextInput";
+import SelectInput from "./SelectInput";
+import TextArea from "./TextArea";
+
+const DEFAULT_CATEGORIES = ["Travel", "Groceries", "Electronics", "Food"];
 
 interface IExpenseFormProps {
   expense?: IExpense;
   submitCallback: () => void;
 }
+
+type FormTypes = {
+  name: string;
+  amount: string;
+  description: string;
+  category: string;
+};
 
 const StyledForm = styled.form`
   display: flex;
@@ -18,46 +34,87 @@ const StyledForm = styled.form`
 `;
 
 const ExpenseForm = ({ expense }: IExpenseFormProps) => {
-  const [name, setName] = useState(expense?.name || "");
-  const [description, setDescription] = useState(expense?.name || "");
-  const [amount, setAmount] = useState(expense?.amount || "0");
+  const dispatch = useAppDispatch();
 
-  const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    switch (e.target.name) {
-      case "name":
-        return setName(e.target.value);
-      case "amount":
-        return setAmount(e.target.value);
-      case "description":
-        return setDescription(e.target.value);
-    }
-  };
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormTypes>({
+    resolver: joiResolver(expenseValidationSchema),
+  });
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    console.log(name, amount, description);
+  const onSubmit: SubmitHandler<FormTypes> = (data) => {
+    dispatch(
+      addNotification({ msg: "Expense Created Successfully", type: "success" })
+    );
+    console.log(data);
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit}>
+    <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
-        <TextInput
-          label="Name"
+        <Controller
           name="name"
-          value={name}
-          placeholder="e.g., New phone charger"
-          autoFocus={true}
-          onChange={handleInput}
+          control={control}
+          defaultValue={expense?.name || ""}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label="Name"
+              placeholder="e.g., New phone charger"
+              autoFocus={true}
+              error={Boolean(errors.name)}
+            />
+          )}
         />
       </FormControl>
 
       <FormControl>
-        <TextInput
-          label="Amount"
+        <Controller
           name="amount"
-          value={amount}
-          placeholder="e.g., 12.25"
-          onChange={handleInput}
+          control={control}
+          defaultValue={expense?.amount || ""}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label="Amount"
+              placeholder="e.g., 9.95"
+              error={Boolean(errors.amount)}
+            />
+          )}
+        />
+      </FormControl>
+
+      <FormControl>
+        <Controller
+          name="category"
+          control={control}
+          defaultValue={expense?.category || "Travel"}
+          render={({ field }) => (
+            <SelectInput
+              {...field}
+              label="Category"
+              options={DEFAULT_CATEGORIES}
+              error={Boolean(errors.category)}
+            />
+          )}
+        />
+      </FormControl>
+
+      <FormControl>
+        <Controller
+          name="description"
+          control={control}
+          defaultValue={expense?.description || ""}
+          render={({ field }) => (
+            <TextArea
+              {...field}
+              label="Description"
+              placeholder="e.g., Stop on the way Waterfall"
+              error={Boolean(errors.description)}
+            />
+          )}
         />
       </FormControl>
 

@@ -2,12 +2,12 @@ import React from "react";
 import svgSprite from '../../assets/sprite.svg';
 
 interface IconProps {
-  color?: string;
   name: string;
+  className?: string;
 }
 
-const Icon = ({ color = "#2f3136", name }: IconProps) => (
-  <svg aria-hidden="true" fill={color}>
+const Icon = ({ name, className }: IconProps) => (
+  <svg aria-hidden="true" className={className}>
     <use xlinkHref={`${svgSprite}#icon-${name}`}></use>
   </svg>
 );

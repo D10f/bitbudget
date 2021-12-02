@@ -41,7 +41,12 @@ const NavItem = styled.li<INavItemStyles>`
     border-radius: ${({ theme }) => theme.layout.borderRadius};
     transform: translateY(-50%);
     transition: height 0.2s;
-    background-color: ${({ theme }) => theme.colors.primary.default};
+    /* background-color: ${({ theme }) => theme.colors.primary.default}; */
+    background-image: linear-gradient(
+      to right bottom,
+      ${({ theme }) => theme.colors.primary.light},
+      ${({ theme }) => theme.colors.primary.dark}
+    );
     overflow: hidden;
   }
 `;
@@ -54,6 +59,7 @@ const NavBtn = styled.button`
   background: none;
 
   svg {
+    fill: ${({ theme }) => theme.colors.dark.default};
     width: 3.2rem;
     height: 3.2rem;
   }
@@ -64,7 +70,6 @@ const NavBtn = styled.button`
   &:hover svg,
   &:active svg,
   &:focus svg {
-    /* background-color: ${({ theme }) => theme.colors.primary.default}; */
     fill: ${({ theme }) => theme.colors.primary.default};
   }
 `;
@@ -76,18 +81,19 @@ const NavbarItem = ({
   children,
   setNavbarSubMenu,
 }: INavbarItemProps) => {
-
   const toggleMenu = () => {
     // This ensures that the current submenu is closed before a new one is opened,
     // which causes a glitch in the UI when switching from one menu to another.
     setImmediate(() => {
       setNavbarSubMenu((prev) => (prev === id ? null : id));
-    })
+    });
   };
 
   return (
     <NavItem active={active}>
-      <NavBtn onClick={toggleMenu} tabIndex={0}>{icon}</NavBtn>
+      <NavBtn onClick={toggleMenu} tabIndex={0}>
+        {icon}
+      </NavBtn>
       {children}
     </NavItem>
   );

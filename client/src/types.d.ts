@@ -16,6 +16,8 @@ interface IExpense {
   id: string;
   name: string;
   amount: string;
+  category: string;
+  description: string;
 }
 
 interface INotification {

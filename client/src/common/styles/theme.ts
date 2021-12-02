@@ -1,17 +1,22 @@
 export const theme = {
   colors: {
+    // primary: {
+    //   default: "#FF8C00",
+    //   dark: "#D97700",
+    //   light: "#FFA014",
+    // },
     primary: {
       default: "#FF8C00",
-      dark: "#D97700",
-      light: "#FFA014",
+      dark: "#eb904a",
+      light: "#ecbc37",
     },
     secondary: {
       default: "#1E90FF",
       Dark: "#1E76CC",
       Light: "#32A4FF",
     },
-    error: {},
-    success: {},
+    error: "#ff5c5c",
+    success: "#39d98a",
     info: {},
     dark: {
       default: '#333',
