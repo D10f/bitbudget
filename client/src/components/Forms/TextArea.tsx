@@ -74,15 +74,14 @@ const TextArea = React.forwardRef(
         <StyledTextArea
           id={name}
           name={name}
+          value={value}
           placeholder={placeholder}
           readOnly={readOnly}
           onChange={onChange}
           maxLength={maxLength}
           autocomplete="off"
           rows={5}
-        >
-          {value}
-        </StyledTextArea>
+        />
         <StyledSpan>{charactersLeft} characters left</StyledSpan>
       </>
     );

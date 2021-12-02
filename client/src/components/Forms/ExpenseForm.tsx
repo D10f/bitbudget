@@ -2,14 +2,17 @@ import React from "react";
 import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
+
 import { expenseValidationSchema } from "../../common/validators/expenseSchema";
 import { addNotification } from "../../features/ui/ui.reducer";
 import { useAppDispatch } from "../../app/hooks";
+
 import Button from "../Buttons/Button";
 import FormControl from "./FormControl";
 import TextInput from "./TextInput";
 import SelectInput from "./SelectInput";
 import TextArea from "./TextArea";
+import DatePicker from './DatePicker';
 
 const DEFAULT_CATEGORIES = ["Travel", "Groceries", "Electronics", "Food"];
 
@@ -23,6 +26,7 @@ type FormTypes = {
   amount: string;
   description: string;
   category: string;
+  createdAt: string;
 };
 
 const StyledForm = styled.form`
@@ -81,6 +85,21 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
               label="Amount"
               placeholder="e.g., 9.95"
               error={Boolean(errors.amount)}
+            />
+          )}
+        />
+      </FormControl>
+
+      <FormControl>
+        <Controller
+          name="createdAt"
+          control={control}
+          defaultValue={expense?.createdAt || ''}
+          render={({ field }) => (
+            <DatePicker
+              {...field}
+              label="Date"
+              error={Boolean(errors.createdAt)}
             />
           )}
         />

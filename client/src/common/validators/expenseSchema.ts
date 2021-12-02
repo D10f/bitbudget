@@ -5,4 +5,5 @@ export const expenseValidationSchema = Joi.object().keys({
   amount: Joi.string().pattern(/^-?\d+(\.\d{0,2})?$/).required(),
   description: Joi.string().max(250),
   category: Joi.string().required(),
+  createdAt: Joi.string().required()
 });

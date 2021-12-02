@@ -5,6 +5,7 @@ import { store } from './app/store';
 import App from './app/App';
 import "react-dates/initialize";
 import 'react-dates/lib/css/_datepicker.css';
+import './common/styles/react-dates-override.css';
 
 ReactDOM.render(
   <React.StrictMode>

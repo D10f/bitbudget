@@ -18,6 +18,7 @@ interface IExpense {
   amount: string;
   category: string;
   description: string;
+  createdAt: string;
 }
 
 interface INotification {
