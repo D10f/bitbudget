@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import expensesReducer from "../features/expenses/expenses.reducer";
-import uiReducer from "../features/ui/ui.reducer";
+import notificationsReducer from "../features/notifications/notifications.reducer";
 import walletsReducer from "../features/wallets/wallets.reducer";
 
 // const composeEnhancers =
@@ -10,8 +10,8 @@ export const store = configureStore({
   reducer: {
     expenses: expensesReducer,
     wallets: walletsReducer,
-    ui: uiReducer,
-  },
+    notifications: notificationsReducer,
+  }
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

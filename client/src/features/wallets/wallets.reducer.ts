@@ -17,36 +17,51 @@ const mockWallets = [
   },
 ];
 
-const initialState: IWallet[] = mockWallets;
+enum WalletLoadingStates {
+  IDLE,
+  LOADING,
+}
+
+interface IWalletState {
+  wallets: IWallet[];
+  loading: WalletLoadingStates;
+}
+
+const initialState: IWalletState = {
+  wallets: mockWallets,
+  loading: WalletLoadingStates.IDLE,
+};
 
 export const walletsReducer = createSlice({
   name: "wallets",
   initialState,
   reducers: {
     addWallet: (state, action: PayloadAction<IWallet>) => {
-      return [...state, action.payload];
+      state.wallets.push(action.payload);
     },
     removeWallet: (state, action: PayloadAction<string>) => {
-      return state.filter((wallet) => wallet.id !== action.payload);
+      state.wallets = state.wallets.filter(
+        (wallet) => wallet.id !== action.payload
+      );
     },
     updateWallet: (state, action: PayloadAction<IWallet>) => {
-      return state.map((wallet) =>
+      state.wallets = state.wallets.map((wallet) =>
         wallet.id === action.payload.id ? action.payload : wallet
       );
     },
     deleteWallet: (state, action: PayloadAction<IWallet>) => {
-      const updatedWalletList = state.filter(
+      const updatedWalletList = state.wallets.filter(
         (wallet) => wallet.id !== action.payload.id
       );
+
       if (action.payload.isCurrent) {
-        return updatedWalletList.map((wallet, idx) =>
-          idx === 0 ? { ...wallet, isCurrent: true } : wallet
-        );
+        updatedWalletList[0].isCurrent = true;
       }
-      return updatedWalletList;
+
+      state.wallets = updatedWalletList;
     },
     selectWallet: (state, action: PayloadAction<string>) => {
-      return state.map((wallet) =>
+      state.wallets = state.wallets.map((wallet) =>
         wallet.id === action.payload
           ? { ...wallet, isCurrent: true }
           : { ...wallet, isCurrent: false }

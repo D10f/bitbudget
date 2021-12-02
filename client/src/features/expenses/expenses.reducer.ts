@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+
+enum expenseLoadingState {
+  IDLE,
+  LOADING,
+}
 
 interface IExpense {
   id: string;
@@ -10,20 +15,22 @@ interface IExpense {
 
 interface ExpensesState {
   expenses: IExpense[];
+  loading: expenseLoadingState;
 }
 
 const initialState: ExpensesState = {
-  expenses: []
+  expenses: [],
+  loading: expenseLoadingState.IDLE,
 };
 
 export const expensesReducer = createSlice({
-  name: 'expenses',
+  name: "expenses",
   initialState,
   reducers: {
     addExpense: (state, action: PayloadAction<IExpense>) => {
-      state.expenses.push(action.payload);
-    }
-  }
+      state.expenses = [...state.expenses, action.payload];
+    },
+  },
 });
 
 export const { addExpense } = expensesReducer.actions;

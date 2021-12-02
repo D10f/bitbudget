@@ -2,9 +2,9 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { theme } from "../common/styles/theme";
 import GlobalStyles from "../common/styles/GlobalStyles";
-import Navbar from "../components/Navbar/Navbar";
-import Welcome from "../components/Welcome/Welcome";
-import Notification from "../features/ui/Notification";
+import Navbar from "../layout/Navbar/Navbar";
+import Welcome from "../layout/Welcome/Welcome";
+import Notification from "../features/notifications/Notification";
 
 const App = () => {  
   return (
