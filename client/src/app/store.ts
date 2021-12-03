@@ -3,9 +3,6 @@ import expensesReducer from "../features/expenses/expenses.reducer";
 import notificationsReducer from "../features/notifications/notifications.reducer";
 import walletsReducer from "../features/wallets/wallets.reducer";
 
-// const composeEnhancers =
-//   (window as any).__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-
 export const store = configureStore({
   reducer: {
     expenses: expensesReducer,
