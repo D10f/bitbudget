@@ -39,11 +39,6 @@ export const walletsReducer = createSlice({
     addWallet: (state, action: PayloadAction<IWallet>) => {
       state.wallets.push(action.payload);
     },
-    removeWallet: (state, action: PayloadAction<string>) => {
-      state.wallets = state.wallets.filter(
-        (wallet) => wallet.id !== action.payload
-      );
-    },
     updateWallet: (state, action: PayloadAction<IWallet>) => {
       state.wallets = state.wallets.map((wallet) =>
         wallet.id === action.payload.id ? action.payload : wallet
@@ -54,7 +49,7 @@ export const walletsReducer = createSlice({
         (wallet) => wallet.id !== action.payload.id
       );
 
-      if (action.payload.isCurrent) {
+      if (updatedWalletList.length && action.payload.isCurrent) {
         updatedWalletList[0].isCurrent = true;
       }
 
@@ -72,7 +67,6 @@ export const walletsReducer = createSlice({
 
 export const {
   addWallet,
-  removeWallet,
   updateWallet,
   selectWallet,
   deleteWallet,

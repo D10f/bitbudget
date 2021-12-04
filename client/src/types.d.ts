@@ -14,7 +14,7 @@ interface IWallet {
 
 interface IExpense {
   id: string;
-  name: string;
+  title: string;
   amount: string;
   category: string;
   description: string;

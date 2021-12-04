@@ -22,7 +22,7 @@ interface IExpenseFormProps {
 }
 
 type FormTypes = {
-  name: string;
+  title: string;
   amount: string;
   description: string;
   category: string;
@@ -59,9 +59,9 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
     <StyledForm onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
-          name="name"
+          name="title"
           control={control}
-          defaultValue={expense?.name || ""}
+          defaultValue={expense?.title || ""}
           render={({ field }) => {
             console.log('render')
             return (
@@ -70,7 +70,7 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
                 label="Name"
                 placeholder="e.g., New phone charger"
                 autoFocus={true}
-                error={Boolean(errors.name)}
+                error={Boolean(errors.title)}
               />
             )
           }}

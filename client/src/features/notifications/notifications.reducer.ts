@@ -12,11 +12,11 @@ interface AddNotificationType {
 const initialState: INotification[] = [];
 
 export const notificationReducer = createSlice({
-  name: "ui",
+  name: "notifications",
   initialState,
   reducers: {
     addNotification: (state, action: PayloadAction<AddNotificationType>) => {
-      state = [
+      return [
         ...state,
         {
           id: Math.random().toString(),
@@ -27,7 +27,7 @@ export const notificationReducer = createSlice({
       ];
     },
     removeNotification: (state, action: PayloadAction<string>) => {
-      state = state.filter(
+      return state.filter(
         (notification) => notification.id !== action.payload
       );
     },

@@ -29,10 +29,10 @@ const StyledLabel = styled.label<IStyledLabelProps>`
 
 const StyledInputWrapper = styled.div<IStyledWrapperProps>`
   border: 1px solid
-    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light)};
+    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light.default)};
   border-radius: 5px;
   background-color: ${({ theme }) => theme.colors.dark.default};
-  width: 25rem;
+  min-width: 30rem;
   margin-bottom: 1rem;
 `;
 
@@ -75,6 +75,8 @@ const DatePicker = React.forwardRef(
             displayFormat="DD/MM/YYYY"
             date={createdAt}
             onDateChange={(selectedDate) => {
+              // let d = selectedDate?.format('YYYY-MM-DD');
+              // let f = moment(d).format('dddd, MMMM Do');
               onChange(selectedDate?.toString());
               setCreatedAt(selectedDate);
             }}

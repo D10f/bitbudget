@@ -25,14 +25,15 @@ const GlobalStyles = createGlobalStyle`
   }
 
   main {
-    display: flex;
-    gap: 4rem;
-    /* display: grid; */
-    /* grid-template:
-      "navbar expenses stats" auto /
-      auto    1fr      3fr; */
     position: relative;
+    height: 100vh;
     padding: 2rem;
+    display: flex;
+    gap: 2rem;
+    /* display: grid;
+    grid-template:
+      "navbar expenses stats" 94vh /
+      auto    35rem    1fr; */
   }
 
   ul {

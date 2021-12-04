@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import styled from "styled-components";
-import { AnimatePresence } from "framer-motion";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
 import {
@@ -16,6 +15,7 @@ import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
 import WalletForm from "../../../common/components/WalletForm/WalletForm";
 import ExpenseForm from "../../../common/components/ExpenseForm/ExpenseForm";
+import { AnimatePresence } from "framer-motion";
 
 interface IWalletSubMenuProps {
   wallet: IWallet;
@@ -104,6 +104,7 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="view" />}
+        disabled={wallet.isCurrent}
         onClick={() => selectCurrentWallet(wallet)}
       >
         View Wallet

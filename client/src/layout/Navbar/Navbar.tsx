@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { AnimatePresence } from "framer-motion";
 import styled from "styled-components";
+import { AnimatePresence } from "framer-motion";
 import { useAppSelector } from "../../common/hooks/useAppSelector";
 import Icon from "../../common/components/Icon/Icon";
 import NavbarItem from "./NavbarItem/NavbarItem";
@@ -8,14 +8,12 @@ import WalletSubMenu from "./WalletSubMenu/WalletSubMenu";
 import ProfileSubMenu from "./ProfileSubMenu/ProfileSubMenu";
 
 const Nav = styled.nav`
+  grid-area: navbar;
   width: 10rem;
-  height: 94vh;
   border: 1px solid rgba(10, 10, 10, 0.1);
-  /* margin: calc(100vh - 98vh) 4vh; */
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
-  /* grid-area: navbar; */
 `;
 
 const NavbarMenu = styled.ul`
@@ -48,6 +46,7 @@ const Navbar = () => {
             <AnimatePresence>
               {navbarSubMenu === wallet.id && (
                 <WalletSubMenu
+                  key={wallet.id}
                   wallet={wallet}
                   isSubMenuOpen={navbarSubMenu === wallet.id}
                   closeSubMenu={() => setNavbarSubMenu(null)}

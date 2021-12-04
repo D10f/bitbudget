@@ -17,7 +17,7 @@ const NavItem = styled.li<INavItemStyles>`
   border-radius: 50%;
   width: 6rem;
   height: 6rem;
-  background-color: ${({ theme }) => theme.colors.light};
+  background-color: ${({ theme }) => theme.colors.light.default};
   position: relative;
 
   &:last-child {

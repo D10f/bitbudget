@@ -26,13 +26,12 @@ const StyledSelectInput = styled.select<IStyledSelectProps>`
   margin: 1rem 0;
   padding: 1rem;
   font-size: 1.6rem;
-  min-height: 4rem;
-  min-width: 25rem;
+  min-width: 30rem;
   border: 1px solid
     ${({ theme, error }) => (error ? "red" : theme.colors.dark.dark)};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.light.default};
 
   &:hover {
     cursor: pointer;

@@ -3,6 +3,7 @@ import styled, { css } from "styled-components";
 
 interface IButtonProps {
   children: React.ReactChild;
+  disabled?: boolean;
   variant?: "action" | "link";
   type?: "submit" | "button";
   icon?: JSX.Element;
@@ -12,6 +13,7 @@ interface IButtonProps {
 
 interface StyledButtonProps {
   variant: string;
+  disabled?: boolean;
 }
 
 const StyledButton = styled.button<StyledButtonProps>`
@@ -26,33 +28,34 @@ const StyledButton = styled.button<StyledButtonProps>`
     ${({ theme }) => theme.colors.primary.light},
     ${({ theme }) => theme.colors.primary.dark}
   );
-  color: ${({ theme }) => theme.colors.dark};
+  color: ${({ theme }) => theme.colors.dark.default};
   padding: 1rem 2rem;
+  filter: ${({ disabled }) => disabled ? 'grayscale(1)' : 'unset'};
 
   &:hover,
   &:focus {
-    cursor: pointer;
-    color: ${({ theme }) => theme.colors.light};
+    cursor: ${({ disabled }) => disabled ? 'regular' : 'pointer'};
+    color: ${({ theme, disabled }) => disabled ? theme.colors.dark.default : theme.colors.light.default};
     background-color: ${({ theme }) => theme.colors.primary.default};
   }
 
   ${({ variant }) =>
     variant === "link" &&
-    css`
+    css<StyledButtonProps>`
       padding: 0.5rem 0;
       background: none;
-      color: ${({ theme }) => theme.colors.light};
+      color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.light.default};
 
       &:hover,
       &:focus {
-        color: ${({ theme }) => theme.colors.primary.default};
+        color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.primary.default};
         background: none;
       }
 
       svg {
         width: 1.6rem;
         height: 1.6rem;
-        fill: ${({ theme }) => theme.colors.light};
+        fill: ${({ theme }) => theme.colors.light.default};
       }
     `}
 `;
@@ -61,11 +64,12 @@ const Button = ({
   children,
   onClick,
   icon,
+  disabled = false,
   iconPosition = "start",
   variant = "action",
 }: IButtonProps) => {
   return (
-    <StyledButton variant={variant} onClick={onClick}>
+    <StyledButton disabled={disabled} variant={variant} onClick={onClick}>
       {iconPosition === "start" && icon}
       {children}
       {iconPosition === "end" && icon}

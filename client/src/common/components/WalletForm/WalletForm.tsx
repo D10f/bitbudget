@@ -29,6 +29,7 @@ const StyledForm = styled.form`
   justify-content: flex-start;
   align-items: flex-start;
   gap: 2rem;
+  margin: 0 2rem;
 `;
 
 const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
@@ -51,6 +52,7 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
     dispatch(
       addNotification({ msg: "Wallet Updated Successfully", type: "success" })
     );
+    submitCallback();
   };
 
   return (

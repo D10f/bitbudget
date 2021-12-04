@@ -27,17 +27,16 @@ const StyledTextArea = styled.textarea<ITextAreaStyleProps>`
   margin: 1rem 0;
   padding: 1rem;
   font-size: 1.6rem;
-  min-height: 4rem;
   max-height: 30rem;
-  min-width: 25rem;
+  min-width: 30rem;
   height: auto;
   outline: none;
   border: none;
   border: 1px solid
-    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light)};
+    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light.default)};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
-  color: ${({ theme }) => theme.colors.light};
+  color: ${({ theme }) => theme.colors.light.default};
   resize: vertical;
 `;
 

@@ -23,7 +23,10 @@ export const theme = {
       darker: '#2f3136',
       darkest: '#202225',
     },
-    light: "#f4f4f4",
+    light: {
+      default: "#f4f4f4",
+      darker: "#a6a6a6"
+    },
   },
   typography: {},
   layout: {

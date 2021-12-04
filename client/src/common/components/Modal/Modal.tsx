@@ -14,11 +14,9 @@ interface IModalProps {
 const popupMotion = {
   initial: {
     scale: 0,
-    translateX: "-50%",
   },
   visible: {
     scale: 1,
-    translateX: "-50%",
     transition: {
       type: "spring",
       duration: 0.3,
@@ -26,7 +24,6 @@ const popupMotion = {
   },
   exit: {
     scale: 0,
-    translateX: "-50%",
     transition: {
       duration: 0.1,
     },
@@ -39,24 +36,34 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  /* display: flex;
+  justify-content: center;
+  align-items: center; */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(0.2rem); // ignored on firefox
 `;
 
 const Container = styled(motion.aside)`
-  display: flex;
+  /* Currently the parent element uses flexbox for positioning */
+  /* display: flex;
   flex-direction: column;
   justify-content: space-between;
-  align-items: flex-start;
+  align-items: flex-start; */
+
+  /* In either case these two settings don't play well in Chromium browsers */
+  /* overflow-x: hidden;
+  overflow-y: auto; */
+
+  position: relative;
+  margin: 2rem auto;
+  width: max-content;
+
+  /* max-width: 80vw; */
   overflow-y: auto;
   overflow-x: hidden;
-  position: absolute;
-  top: 4rem;
-  left: 50%;
-  max-width: 80vw;
   max-height: 90vh;
-  padding: 4rem;
-  border: 1px solid ${({ theme }) => theme.colors.dark.darkest};
+  padding: 4rem 6rem;
+  border: 1px solid ${({ theme }) => theme.colors.light.default};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
@@ -71,17 +78,13 @@ const ModalHeader = styled.header`
   margin-bottom: 2rem;
 `;
 
-const ModalContent = styled.section`
-  flex: 1;
-`;
-
 const Modal = ({ requestClose, title, children }: IModalProps) => {
   useKeyPress("Escape", requestClose);
 
   return createPortal(
     <Background>
       <Container
-        key={Math.random().toString()}
+        key="modalPopup"
         variants={popupMotion}
         initial="initial"
         animate="visible"
@@ -97,7 +100,7 @@ const Modal = ({ requestClose, title, children }: IModalProps) => {
           </ModalHeader>
         )}
 
-        <ModalContent>{children}</ModalContent>
+        <section>{children}</section>
       </Container>
     </Background>,
     document.getElementById("root")!
