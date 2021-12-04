@@ -48,6 +48,8 @@ const StyledPopup = styled(motion.aside)<IPopupStyles>`
     top: unset;
     bottom: 0;
   `}
+
+  z-index: ${({ theme }) => theme.depth.popup};
 `;
 
 const Popup = React.forwardRef(({ children, align }: IPopupProps, ref) => {

@@ -2,12 +2,16 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../common/hooks/useAppSelector";
 import ExpenseItem from "./ExpenseItem/ExpenseItem";
+import SearchBar from "./SearchBar/SearchBar";
 
 const StyledContainer = styled.aside`
   grid-area: expenses;
-  /* height: 94vh; */
   overflow-y: auto;
-  overflow-x: hidden;
+  overflow-x: overlay;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const StyledList = styled.ul`
@@ -16,7 +20,9 @@ const StyledList = styled.ul`
   justify-content: center;
   align-items: center;
   gap: 2rem;
-  max-width: 40rem;
+  margin-right: 2rem;
+  padding-bottom: 2rem;
+  /* max-width: 35rem; */
 `;
 
 const ExpenseList = () => {
@@ -29,6 +35,7 @@ const ExpenseList = () => {
   return (
     <StyledContainer tabIndex={-1}>
       <StyledList>
+        <SearchBar />
         {expenses.map((expense) => (
           <ExpenseItem
             key={expense.id}

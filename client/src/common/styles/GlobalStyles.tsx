@@ -28,12 +28,12 @@ const GlobalStyles = createGlobalStyle`
     position: relative;
     height: 100vh;
     padding: 2rem;
-    display: flex;
     gap: 2rem;
-    /* display: grid;
+    display: grid;
     grid-template:
-      "navbar expenses stats" 94vh /
-      auto    35rem    1fr; */
+      "navbar expenses wallet" auto
+      "navbar expenses graphs" auto /
+      auto    3fr      4fr;
   }
 
   ul {

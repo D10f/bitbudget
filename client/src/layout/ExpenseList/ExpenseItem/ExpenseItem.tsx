@@ -1,11 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import moment from "moment";
-import { useAppSelector } from "../../../common/hooks/useAppSelector";
-import Modal from "../../../common/components/Modal/Modal";
-import ExpenseForm from "../../../common/components/ExpenseForm/ExpenseForm";
 import { AnimatePresence } from "framer-motion";
-import { BooleanSchema } from "joi";
 import ExpenseSubMenu from "../ExpenseSubMenu/ExpenseSubMenu";
 
 interface IExpenseItemProps {
@@ -21,9 +17,8 @@ interface IExpenseDateStyleProps {
 
 const ExpenseCard = styled.article`
   position: relative;
-  width: 35rem;
+  /* max-width: 35rem; */
   padding: 2rem;
-  margin-right: 2rem;
   align-self: stretch;
   box-shadow: ${({ theme }) => theme.effects.shadow};
   background-color: ${({ theme }) => theme.colors.dark.darkest};
@@ -82,7 +77,13 @@ const ExpenseItem = ({
     <ExpenseCard>
       <ExpenseHeader>
         <ExpenseTitle>
-          <ExpenseLink onClick={() => setSubMenuOpen(expense.id)}>
+          <ExpenseLink
+            onClick={() =>
+              setImmediate(() => {
+                setSubMenuOpen(subMenuOpen === expense.id ? null : expense.id);
+              })
+            }
+          >
             {expense.title}
           </ExpenseLink>
         </ExpenseTitle>
