@@ -1,8 +1,6 @@
-import { m } from 'framer-motion';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Col from '../../../common/components/Col/Col';
-import Row from '../../../common/components/Row/Row';
+import Row from '../../../../common/components/Row/Row';
 
 interface ITimeTag {
   datetime: string;
@@ -21,12 +19,6 @@ const StyledButton = styled.button`
   &:hover {
     cursor: pointer;
     color: ${({ theme }) => theme.colors.primary.default};
-  }
-  &:first-of-type {
-    transform: rotate(-90deg);
-  }
-  &:last-of-type {
-    transform: rotate(90deg);
   }
 `;
 
@@ -75,9 +67,9 @@ const MonthPicker = () => {
     <Row marginless>
       <StyledTimeTag datetime={`${month}-${year}`}>{translateMonth(month)}</StyledTimeTag>
       <StyledTimeTag datetime={`${month}-${year}`}>{year}</StyledTimeTag>
-      <Row marginless gap={0}>
-        <StyledButton onClick={decreaseMonth}>^</StyledButton>
-        <StyledButton onClick={increaseMonth}>^</StyledButton>
+      <Row marginless gap={2}>
+        <StyledButton onClick={decreaseMonth}>&larr;</StyledButton>
+        <StyledButton onClick={increaseMonth}>&rarr;</StyledButton>
       </Row>
     </Row>
   );

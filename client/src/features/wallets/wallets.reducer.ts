@@ -4,7 +4,7 @@ const mockWallets = [
   {
     id: "123",
     name: "Malta",
-    budget: "123",
+    budget: "500",
     currency: "EUR",
     isCurrent: true,
   },

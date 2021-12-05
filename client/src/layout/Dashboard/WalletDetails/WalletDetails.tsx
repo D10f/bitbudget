@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
-import SelectInput from "../../../common/components/Form/SelectInput";
-import TextInput from "../../../common/components/Form/TextInput";
-import MonthPicker from "./MonthPicker";
+import MonthPicker from './MonthPicker/MonthPicker';
+import WalletSummary from "./WalletSummary/WalletSummary";
 
 interface IWalletDetailsProps {
   wallet: IWallet | undefined;
@@ -20,11 +19,13 @@ const WalletHeader = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 2rem;
 `;
 
 const WalletTitle = styled.h2`
-  font-size: 2rem;
+  font-size: 3rem;
 `;
+
 
 const WalletDetails = ({ wallet }: IWalletDetailsProps) => {
   return (
@@ -33,6 +34,7 @@ const WalletDetails = ({ wallet }: IWalletDetailsProps) => {
         <WalletTitle>{wallet?.name}</WalletTitle>
         <MonthPicker />
       </WalletHeader>
+      <WalletSummary wallet={wallet} />
     </WalletCard>
   );
 };

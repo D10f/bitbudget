@@ -14,7 +14,7 @@ const NotificationContainer = styled.aside`
   padding: 2rem;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
+  justify-content: flex-end;
   align-items: flex-end;
   gap: 2rem;
   z-index: ${({ theme }) => theme.depth.notifications};
