@@ -1,4 +1,9 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import {
+  createSlice,
+  createDraftSafeSelector,
+  PayloadAction,
+} from "@reduxjs/toolkit";
+import { RootState } from "../../app/store";
 
 const mockWallets = [
   {
@@ -65,10 +70,20 @@ export const walletsReducer = createSlice({
   },
 });
 
-export const {
-  addWallet,
-  updateWallet,
-  selectWallet,
-  deleteWallet,
-} = walletsReducer.actions;
+export const { addWallet, updateWallet, selectWallet, deleteWallet } =
+  walletsReducer.actions;
 export default walletsReducer.reducer;
+
+// SELECTORS
+
+const selectSelf = (state: RootState) => state;
+
+const selectCurrentWallet = createDraftSafeSelector(
+  selectSelf,
+  (state: RootState) => state.wallets.wallets.find(wallet => wallet.isCurrent)
+);
+
+const selectTotalExpenseAmount = createDraftSafeSelector(
+  selectCurrentWallet,
+  (wallet: IWallet | undefined) => 0
+);

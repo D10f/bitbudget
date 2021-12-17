@@ -9,13 +9,11 @@ import Modal from "../../../common/components/Modal/Modal";
 import SignupForm from "../../../common/components/SignupForm/SignupForm";
 
 interface IProfileSubMenuProps {
-  id: string;
   isSubMenuOpen: boolean;
   closeSubMenu: () => void;
 }
 
 const ProfileSubMenu = ({
-  id,
   isSubMenuOpen,
   closeSubMenu,
 }: IProfileSubMenuProps) => {

@@ -8,7 +8,7 @@ interface IPopupProps {
 }
 
 interface IPopupStyles {
-  ref?: any
+  ref?: any;
   align?: string;
 }
 
@@ -30,13 +30,12 @@ const slideInMotion = {
     x: 200,
     transition: {
       duration: 0.1,
-    }
-  }
+    },
+  },
 };
 
 const StyledPopup = styled(motion.aside)<IPopupStyles>`
   position: absolute;
-  top: 0;
   min-width: max-content;
   padding: 1rem 2rem;
   border: 1px solid #999;
@@ -44,10 +43,26 @@ const StyledPopup = styled(motion.aside)<IPopupStyles>`
   background-color: ${({ theme }) => theme.colors.dark.darker};
   box-shadow: ${({ theme }) => theme.effects.shadow};
 
-  ${({ align }) => align === 'bottom' && css`
-    top: unset;
-    bottom: 0;
-  `}
+  ${({ align }) => {
+    switch (align) {
+      case "bottom":
+        return css`
+          bottom: 0;
+        `;
+      case "top":
+        return css`
+          top: 0;
+        `;
+      case "left":
+        return css`
+          left: 0;
+        `;
+      case "right":
+        return css`
+          right: 0;
+        `;
+    }
+  }}
 
   z-index: ${({ theme }) => theme.depth.popup};
 `;

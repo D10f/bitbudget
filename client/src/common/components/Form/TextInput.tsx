@@ -1,11 +1,12 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import Icon from "../Icon/Icon";
 
 interface ITextInputProps {
   label: string;
   name: string;
-  value: string;
+  value?: string;
+  required?: boolean;
   type?: string;
   error?: boolean;
   placeholder: string;
@@ -17,6 +18,7 @@ interface ITextInputProps {
 
 interface IStyledLabelProps {
   hide?: boolean;
+  required?: boolean;
 }
 
 interface IStyledInputProps {
@@ -50,16 +52,25 @@ const StyledIcon = styled(Icon)`
 const StyledLabel = styled.label<IStyledLabelProps>`
   visibility: ${({ hide }) => (hide ? "hidden" : "visible")};
   height: ${({ hide }) => (hide ? "0px" : "auto")};
+
+  ${({ required }) => !required && css`
+    &::after {
+      content: '(optional)';
+      margin-left: 0.25rem;
+      font-size: 1.2rem;
+    }
+  `}
 `;
 
 const TextInput = React.forwardRef(
   (
     {
       label,
-      value,
+      value = "",
       name,
       placeholder,
       type = "text",
+      required = true,
       error = false,
       hideLabel = false,
       autoFocus = false,
@@ -70,7 +81,7 @@ const TextInput = React.forwardRef(
   ) => {
     return (
       <>
-        <StyledLabel htmlFor={name} hide={hideLabel}>
+        <StyledLabel htmlFor={name} hide={hideLabel} required={required}>
           {label}
         </StyledLabel>
         <StyledInput
@@ -84,7 +95,7 @@ const TextInput = React.forwardRef(
           error={error}
           onChange={onChange}
         />
-        {error && <StyledIcon name="warning" />}
+        {error && <StyledIcon name="error" />}
       </>
     );
   }

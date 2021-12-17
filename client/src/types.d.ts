@@ -1,7 +1,6 @@
 interface IUser {
   username: string;
-  isAuthenticated: boolean;
-  data: any;
+  email?: string;
 }
 
 interface IWallet {
@@ -26,6 +25,11 @@ interface INotification {
   msg: string;
   type: string;
   duration: number;
+}
+
+interface AuthUserPDO {
+  username: string;
+  password: string;
 }
 
 enum Currencies {

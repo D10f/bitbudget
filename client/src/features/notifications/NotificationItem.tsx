@@ -43,7 +43,7 @@ const NotificationCard = styled(motion.article)<INotificationCardStyle>`
       switch (type) {
         case "success":
           return theme.colors.success;
-        case "warning":
+        case "error":
           return theme.colors.error;
         case "info":
           return theme.colors.secondary.default;

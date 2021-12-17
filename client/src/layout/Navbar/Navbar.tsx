@@ -28,10 +28,11 @@ const NavbarMenu = styled.ul`
 
 const Navbar = () => {
   const wallets = useAppSelector((state) => state.wallets.wallets);
+  const user = useAppSelector((state) => state.user.user);
 
   // Controls that only one menu is open at the same time
   const [navbarSubMenu, setNavbarSubMenu] = useState<string | null>(null);
-
+  console.log(wallets);
   return (
     <Nav>
       <NavbarMenu>
@@ -57,16 +58,15 @@ const Navbar = () => {
         ))}
 
         <NavbarItem
-          id="1234"
+          id="-1"
           setNavbarSubMenu={setNavbarSubMenu}
           active={false}
           icon={<Icon name="cog" />}
         >
           <AnimatePresence>
-            {navbarSubMenu === "1234" && (
+            {navbarSubMenu === "-1" && (
               <ProfileSubMenu
-                id={"1234"}
-                isSubMenuOpen={navbarSubMenu === "1234"}
+                isSubMenuOpen={navbarSubMenu === "-1"}
                 closeSubMenu={() => setNavbarSubMenu(null)}
               />
             )}
