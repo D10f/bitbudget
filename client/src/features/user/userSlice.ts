@@ -1,13 +1,7 @@
-import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { del } from "idb-keyval";
-import api from "../../services/api/apiService";
-import {
-  CRYPTO_INDEX_KEY,
-  decryptData,
-  generateCryptoKey,
-} from "../../services/crypto/crypto";
-import sessionStorageService from "../../services/sessionStorage/sessionStorageService";
-import { addNotification } from "../notifications/notifications.reducer";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import Api from "../../services/api/apiService";
+import SnapshotService from "../../services/snapshot/snapshotService";
+import SessionStorageService from "../../services/sessionStorage/sessionStorageService";
 
 interface IUserState {
   user: IUser | null;
@@ -26,11 +20,11 @@ const initialState: IUserState = {
 export const signupUser = createAsyncThunk(
   "user/signup",
   async (credentials: AuthUserPDO) => {
-    const response = await api.post("/auth/signup", credentials);
-    sessionStorageService.set("token", response.data.accessToken);
-    await generateCryptoKey(credentials.password);
+    const response = await Api.post("/auth/signup", credentials);
+    SessionStorageService.set("token", response.data.accessToken);
+    await SnapshotService.generateCryptoKey(credentials.password);
     return {
-      user: { username: credentials.username, email: "" },
+      user: { id: response.data.id, username: credentials.username, email: credentials.email || "" },
       token: response.data,
     };
   }
@@ -38,12 +32,13 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (credentials: AuthUserPDO, thunkAPI) => {
-    const response = await api.post("/auth/signin", credentials);
-    sessionStorageService.set("token", response.data.accessToken);
-    await generateCryptoKey(credentials.password);
+  async (credentials: AuthUserPDO, { dispatch}) => {
+    const response = await Api.post("/auth/signin", credentials);
+    SessionStorageService.set("token", response.data.accessToken);
+    await SnapshotService.generateCryptoKey(credentials.password);
     if (response.data.userData) {
-      await decryptData(response.data.userData);
+      const userData = await SnapshotService.decryptSnapshot(response.data.userData);
+      dispatch(setUserData(userData));
     }
     return response.data;
   }
@@ -53,9 +48,12 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    setUserData: (state, action) => {
+      state.data = action.payload;
+    },
     logout: (state) => {
-      sessionStorageService.clear();
-      del(CRYPTO_INDEX_KEY);
+      SessionStorageService.clear();
+      SnapshotService.deleteCryptoKey();
       state = initialState;
     },
   },
@@ -67,7 +65,7 @@ export const userSlice = createSlice({
       .addCase(signupUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.data = '';
+        state.data = "";
         state.loading = false;
       })
       .addCase(signupUser.rejected, (state, action) => {
@@ -78,14 +76,14 @@ export const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(loginUser.fulfilled, (state, action) => {
+      .addCase(loginUser.fulfilled, (state) => {
         state.loading = false;
       })
-      .addCase(loginUser.rejected, (state, action) => {
+      .addCase(loginUser.rejected, (state) => {
         state.loading = false;
       });
   },
 });
 
-export const { logout } = userSlice.actions;
+export const { setUserData, logout } = userSlice.actions;
 export default userSlice.reducer;

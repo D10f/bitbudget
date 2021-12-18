@@ -4,9 +4,9 @@ import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
 import {
   selectWallet,
-  deleteWallet,
-} from "../../../features/wallets/wallets.reducer";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
+  deleteWalletAsync,
+  updateWalletAsync,
+} from "../../../features/wallets/walletsSlice";
 
 import Button from "../../../common/components/Button/Button";
 import Icon from "../../../common/components/Icon/Icon";
@@ -32,16 +32,28 @@ const WalletSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IWalletSubMenuProps) => {
-  const [deletePrompt, setDeletePrompt] = useState(false);
-  const [editingModal, setEditingModal] = useState(false);
-  const [expenseModal, setExpenseModal] = useState(false);
+  // const [deletePrompt, setDeletePrompt] = useState(false);
+  // const [editingModal, setEditingModal] = useState(false);
+  // const [expenseModal, setExpenseModal] = useState(false);
+  const initialState = {
+    delete: false,
+    editing: false,
+    expense: false,
+  };
+
+  const [prompts, setPrompts] = useState(initialState);
   const dispatch = useAppDispatch();
 
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
   // Closes this submenu when clicked outside, but not when there's one of the modals open
   const closeOnClickOutside = () => {
-    if (deletePrompt || editingModal || expenseModal || !isSubMenuOpen) {
+    if (
+      prompts.delete ||
+      prompts.editing ||
+      prompts.expense ||
+      !isSubMenuOpen
+    ) {
       return;
     }
     closeSubMenu();
@@ -50,41 +62,37 @@ const WalletSubMenu = ({
   useClickOutside(popupRef, closeOnClickOutside);
 
   const editWalletModal = () => (
-    <Modal title="Edit Wallet" requestClose={() => setEditingModal(false)}>
+    <Modal title="Edit Wallet" requestClose={() => setPrompts(initialState)}>
       <WalletForm
         wallet={wallet}
         submitCallback={() => {
-          setEditingModal(false);
+          updateWalletAsync(wallet);
+          setPrompts(initialState);
         }}
       />
     </Modal>
   );
 
   const createExpenseModal = () => (
-    <Modal title="New Expense" requestClose={() => setExpenseModal(false)}>
-      <ExpenseForm submitCallback={() => setEditingModal(false)} />
+    <Modal title="New Expense" requestClose={() => setPrompts(initialState)}>
+      <ExpenseForm submitCallback={() => setPrompts(initialState)} />
     </Modal>
   );
 
   const confirmDeleteModal = () => (
-    <Modal requestClose={() => setDeletePrompt(false)}>
+    <Modal requestClose={() => setPrompts(initialState)}>
       <p>Are you sure you want to delete this wallet?</p>
       <Row>
         <Button
           variant="action"
           onClick={() => {
-            dispatch(deleteWallet(wallet));
-            dispatch(
-              addNotification({
-                msg: "Wallet Deleted Successfully",
-                type: "success",
-              })
-            );
+            dispatch(deleteWalletAsync(wallet));
+            setPrompts(initialState);
           }}
         >
           Confirm
         </Button>
-        <Button variant="link" onClick={() => setDeletePrompt(false)}>
+        <Button variant="link" onClick={() => setPrompts(initialState)}>
           Cancel
         </Button>
       </Row>
@@ -113,7 +121,7 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="edit" />}
-        onClick={() => setEditingModal(true)}
+        onClick={() => setPrompts({ delete: false, editing: true, expense: false })}
       >
         Edit Wallet
       </Button>
@@ -121,7 +129,7 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="add" />}
-        onClick={() => setExpenseModal(true)}
+        onClick={() => setPrompts({ delete: false, editing: false, expense: true })}
       >
         Add Expense
       </Button>
@@ -129,14 +137,14 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="trash" />}
-        onClick={() => setDeletePrompt(true)}
+        onClick={() => setPrompts({ delete: true, editing: false, expense: false })}
       >
         Delete Wallet
       </Button>
 
-      <AnimatePresence>{deletePrompt && confirmDeleteModal()}</AnimatePresence>
-      <AnimatePresence>{editingModal && editWalletModal()}</AnimatePresence>
-      <AnimatePresence>{expenseModal && createExpenseModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.delete && confirmDeleteModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.editing && editWalletModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.expense && createExpenseModal()}</AnimatePresence>
     </Popup>
   );
 };

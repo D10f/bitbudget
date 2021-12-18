@@ -1,10 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
+import { v4 as uuid} from 'uuid';
+
 import { joiResolver } from "@hookform/resolvers/joi";
 import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { updateWallet } from "../../../features/wallets/wallets.reducer";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
+import { addWalletAsync, updateWalletAsync } from "../../../features/wallets/walletsSlice";
 import { walletValidationSchema } from "../../validators/walletSchema";
 
 import Button from "../../components/Button/Button";
@@ -44,14 +45,11 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
     const walletObject = {
-      id: wallet?.id || "",
+      id: wallet?.id || uuid(),
       isCurrent: wallet?.isCurrent || false,
       ...data,
     };
-    dispatch(updateWallet(walletObject));
-    dispatch(
-      addNotification({ msg: "Wallet Updated Successfully", type: "success" })
-    );
+    dispatch(wallet ? updateWalletAsync(walletObject) : addWalletAsync(walletObject));
     submitCallback();
   };
 

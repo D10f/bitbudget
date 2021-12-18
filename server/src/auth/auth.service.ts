@@ -39,6 +39,7 @@ export class AuthService {
 
     return {
       accessToken: this.jwtService.sign(payload),
+      id: user._id
     };
   }
 
@@ -58,6 +59,7 @@ export class AuthService {
     };
 
     return {
+      userData: user.data,
       accessToken: this.jwtService.sign(payload),
     };
   }

@@ -28,11 +28,10 @@ const NavbarMenu = styled.ul`
 
 const Navbar = () => {
   const wallets = useAppSelector((state) => state.wallets.wallets);
-  const user = useAppSelector((state) => state.user.user);
+  // const user = useAppSelector((state) => state.user.user);
 
   // Controls that only one menu is open at the same time
   const [navbarSubMenu, setNavbarSubMenu] = useState<string | null>(null);
-  console.log(wallets);
   return (
     <Nav>
       <NavbarMenu>

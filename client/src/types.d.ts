@@ -1,4 +1,5 @@
 interface IUser {
+  id: string;
   username: string;
   email?: string;
 }
@@ -30,6 +31,14 @@ interface INotification {
 interface AuthUserPDO {
   username: string;
   password: string;
+  email?: string;
+}
+
+interface AddWalletPDO {
+  name: string;
+  budget: string;
+  currency: string;
+  isCurrent: boolean;
 }
 
 enum Currencies {

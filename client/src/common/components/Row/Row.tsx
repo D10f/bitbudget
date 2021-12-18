@@ -16,7 +16,7 @@ const StyledRow = styled.div<IRowProps>`
 `;
 
 const Row = ({ children, gap = 2, marginless = false }: IRowProps) => {
-  return <StyledRow gap={gap} marginless>{children}</StyledRow>;
+  return <StyledRow gap={gap} marginless={marginless}>{children}</StyledRow>;
 };
 
 export default Row;

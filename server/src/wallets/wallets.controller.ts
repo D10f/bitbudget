@@ -24,6 +24,11 @@ export class WalletsController {
     return this.walletsService.findOne(id);
   }
 
+  @Get('/expenses')
+  findExpenses(@Query('q') id: string, @Query('mmyy') mmyy: string): Promise<any> {
+    return this.walletsService.findExpenses(id, mmyy);
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto): Promise<WalletDocument> {
     return this.walletsService.update(id, updateWalletDto);

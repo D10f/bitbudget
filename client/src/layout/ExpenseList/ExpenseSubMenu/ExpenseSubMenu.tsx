@@ -16,16 +16,22 @@ interface IExpenseSubMenuProps {
   closeSubMenu: () => void;
 }
 
-const ExpenseSubMenu = ({ expense, wallet, closeSubMenu }: IExpenseSubMenuProps) => {
+const ExpenseSubMenu = ({
+  expense,
+  wallet,
+  closeSubMenu,
+}: IExpenseSubMenuProps) => {
   const [editing, setEditing] = useState(false);
   const [deletePrompt, setDeletePrompt] = useState(false);
   const dispatch = useAppDispatch();
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
-  const closeOnClickOutside = () => {
+  useClickOutside(popupRef, () => {
+    if (editing || deletePrompt) {
+      return;
+    }
     closeSubMenu();
-  };
-  useClickOutside(popupRef, closeOnClickOutside);
+  });
 
   const createExpenseModal = () => (
     <Modal title="Edit Expense" requestClose={() => setEditing(false)}>
@@ -69,7 +75,7 @@ const ExpenseSubMenu = ({ expense, wallet, closeSubMenu }: IExpenseSubMenuProps)
   );
 
   return (
-    <Popup ref={popupRef}>
+    <Popup ref={popupRef} align="top">
       <Button
         variant="link"
         icon={<Icon name="edit" />}

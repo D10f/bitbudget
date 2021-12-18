@@ -7,6 +7,7 @@ import Row from "../../../common/components/Row/Row";
 import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
 import SignupForm from "../../../common/components/SignupForm/SignupForm";
+import WalletForm from "../../../common/components/WalletForm/WalletForm";
 
 interface IProfileSubMenuProps {
   isSubMenuOpen: boolean;
@@ -17,13 +18,19 @@ const ProfileSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IProfileSubMenuProps) => {
-  const [logoutPrompt, setLogoutPrompt] = useState(false);
-  const [signupPrompt, setSignupPrompt] = useState(false);
+
+  const initialState = {
+    logout: false,
+    signup: false,
+    wallet: false,
+  };
+
+  const [prompts, setPrompts] = useState(initialState);
 
   // Closes this submenu when clicked outside
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
   const closeOnClickOutside = () => {
-    if (logoutPrompt || signupPrompt || !isSubMenuOpen) {
+    if (prompts.logout || prompts.signup || prompts.wallet || !isSubMenuOpen) {
       return;
     }
     closeSubMenu();
@@ -32,19 +39,29 @@ const ProfileSubMenu = ({
   useClickOutside(popupRef, closeOnClickOutside);
 
   const logoutPromptModal = () => (
-    <Modal requestClose={() => setLogoutPrompt(false)}>
+    <Modal requestClose={() => setPrompts(initialState)}>
       <p>Are you sure you want to logout?</p>
       <Row>
         <Button variant="action">Logout</Button>
-        <Button variant="link" onClick={() => setLogoutPrompt(false)}>
+        <Button variant="link" onClick={() => setPrompts(initialState)}>
           Cancel
         </Button>
       </Row>
     </Modal>
   );
 
+  const walletPromptModal = () => (
+    <Modal title="Add Wallet" requestClose={() => setPrompts(initialState)}>
+      <WalletForm
+        submitCallback={() => {
+          setPrompts(initialState);
+        }}
+      />
+    </Modal>
+  );
+
   const signupPromptModal = () => (
-    <Modal title="Signup" requestClose={() => setSignupPrompt(false)}>
+    <Modal title="Signup" requestClose={() => setPrompts(initialState)}>
       <SignupForm />
     </Modal>
   );
@@ -54,21 +71,30 @@ const ProfileSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="profile" />}
-        onClick={() => setSignupPrompt(true)}
+        onClick={() => setPrompts({ signup: true, logout: false, wallet: false })}
       >
         Profile
       </Button>
 
       <Button
         variant="link"
+        icon={<Icon name="add" />}
+        onClick={() => setPrompts({ signup: false, logout: false, wallet: true })}
+      >
+        New Wallet
+      </Button>
+
+      <Button
+        variant="link"
         icon={<Icon name="logout" />}
-        onClick={() => setLogoutPrompt(true)}
+        onClick={() => setPrompts({ signup: false, logout: true, wallet: false })}
       >
         Logout
       </Button>
 
-      <AnimatePresence>{logoutPrompt && logoutPromptModal()}</AnimatePresence>
-      <AnimatePresence>{signupPrompt && signupPromptModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.signup && signupPromptModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.wallet && walletPromptModal()}</AnimatePresence>
+      <AnimatePresence>{prompts.logout && logoutPromptModal()}</AnimatePresence>
     </Popup>
   );
 };

@@ -14,7 +14,7 @@ export class WalletsRepository {
 
   async create(createWalletDto: CreateWalletDto): Promise<WalletDocument> {
     try {
-      return await this.walletModel.create(createWalletDto);
+      return await this.walletModel.create({ ...createWalletDto, _id: createWalletDto.id });
     } catch (error) {
       console.log(error)
     }

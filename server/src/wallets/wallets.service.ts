@@ -6,6 +6,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { LeanDocument, QueryOptions } from 'mongoose';
+import { ExpenseDocument } from 'src/expenses/schema/expense.schema';
 import { ExpensesService } from '../expenses/expenses.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
@@ -55,6 +56,11 @@ export class WalletsService {
     const expensesInWallet: string[] = await this.getExpensesInWallet(id);
     await this.expensesService.removeExpenses(expensesInWallet);
     return this.walletsRepository.remove(id);
+  }
+
+  async findExpenses(walletId: string, mmyy: string): Promise<ExpenseDocument[]> {
+    const wallet = await this.findOne(walletId);
+    return wallet[mmyy];
   }
 
   getExpensesInWallet(walletId: string): Promise<string[]> {
