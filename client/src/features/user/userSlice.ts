@@ -24,8 +24,8 @@ export const signupUser = createAsyncThunk(
     SessionStorageService.set("token", response.data.accessToken);
     await SnapshotService.generateCryptoKey(credentials.password);
     return {
-      user: { id: response.data.id, username: credentials.username, email: credentials.email || "" },
-      token: response.data,
+      user: { id: response.data.id, username: response.data.username, email: response.data.email },
+      token: response.data.accessToken,
     };
   }
 );
@@ -38,9 +38,13 @@ export const loginUser = createAsyncThunk(
     await SnapshotService.generateCryptoKey(credentials.password);
     if (response.data.userData) {
       const userData = await SnapshotService.decryptSnapshot(response.data.userData);
-      dispatch(setUserData(userData));
+      console.log(userData);
+      // dispatch(setUserData(userData));
     }
-    return response.data;
+    return {
+      user: { id: response.data.id, username: response.data.username, email: response.data.email },
+      token: response.data.accessToken,
+    };
   }
 );
 
@@ -65,7 +69,6 @@ export const userSlice = createSlice({
       .addCase(signupUser.fulfilled, (state, action) => {
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.data = "";
         state.loading = false;
       })
       .addCase(signupUser.rejected, (state, action) => {
@@ -76,7 +79,9 @@ export const userSlice = createSlice({
       .addCase(loginUser.pending, (state) => {
         state.loading = true;
       })
-      .addCase(loginUser.fulfilled, (state) => {
+      .addCase(loginUser.fulfilled, (state, action) => {
+        state.user = action.payload.user;
+        state.token = action.payload.token;
         state.loading = false;
       })
       .addCase(loginUser.rejected, (state) => {

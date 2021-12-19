@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
@@ -27,21 +27,21 @@ const WalletTitle = styled.h3`
   padding: 1rem 0;
 `;
 
+// Prompts
+const initialState = {
+  delete: false,
+  editing: false,
+  expense: false,
+};
+
 const WalletSubMenu = ({
   wallet,
   isSubMenuOpen,
   closeSubMenu,
 }: IWalletSubMenuProps) => {
-  // const [deletePrompt, setDeletePrompt] = useState(false);
-  // const [editingModal, setEditingModal] = useState(false);
-  // const [expenseModal, setExpenseModal] = useState(false);
-  const initialState = {
-    delete: false,
-    editing: false,
-    expense: false,
-  };
 
   const [prompts, setPrompts] = useState(initialState);
+  const clearPrompts = useCallback(() => setPrompts(initialState), []);
   const dispatch = useAppDispatch();
 
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
@@ -62,7 +62,7 @@ const WalletSubMenu = ({
   useClickOutside(popupRef, closeOnClickOutside);
 
   const editWalletModal = () => (
-    <Modal title="Edit Wallet" requestClose={() => setPrompts(initialState)}>
+    <Modal title="Edit Wallet" requestClose={clearPrompts}>
       <WalletForm
         wallet={wallet}
         submitCallback={() => {
@@ -74,13 +74,13 @@ const WalletSubMenu = ({
   );
 
   const createExpenseModal = () => (
-    <Modal title="New Expense" requestClose={() => setPrompts(initialState)}>
-      <ExpenseForm submitCallback={() => setPrompts(initialState)} />
+    <Modal title="New Expense" requestClose={clearPrompts}>
+      <ExpenseForm submitCallback={clearPrompts} />
     </Modal>
   );
 
   const confirmDeleteModal = () => (
-    <Modal requestClose={() => setPrompts(initialState)}>
+    <Modal requestClose={clearPrompts}>
       <p>Are you sure you want to delete this wallet?</p>
       <Row>
         <Button
@@ -92,7 +92,7 @@ const WalletSubMenu = ({
         >
           Confirm
         </Button>
-        <Button variant="link" onClick={() => setPrompts(initialState)}>
+        <Button variant="link" onClick={clearPrompts}>
           Cancel
         </Button>
       </Row>

@@ -10,6 +10,7 @@ import { addNotification } from "../../../features/notifications/notifications.r
 import FormControl from "../../components/Form/FormControl";
 import TextInput from "../../components/Form/TextInput";
 import Button from "../../components/Button/Button";
+import { loginUser } from "../../../features/user/userSlice";
 
 type FormTypes = {
   username: string;
@@ -36,7 +37,7 @@ const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(addNotification({ msg: "Signup Successfully", type: "success" }));
+    dispatch(loginUser(data)).catch(console.error);
   };
 
   return (

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
@@ -16,25 +16,33 @@ interface IExpenseSubMenuProps {
   closeSubMenu: () => void;
 }
 
+// Prompts
+const initialState = {
+  editing: false,
+  delete: false,
+};
+
 const ExpenseSubMenu = ({
   expense,
   wallet,
   closeSubMenu,
 }: IExpenseSubMenuProps) => {
-  const [editing, setEditing] = useState(false);
-  const [deletePrompt, setDeletePrompt] = useState(false);
+  
+  const [prompts, setPrompts] = useState(initialState);
+  const clearPrompts = useCallback(() => setPrompts(initialState), []);
+
   const dispatch = useAppDispatch();
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
   useClickOutside(popupRef, () => {
-    if (editing || deletePrompt) {
+    if (prompts.editing || prompts.delete) {
       return;
     }
     closeSubMenu();
   });
 
   const createExpenseModal = () => (
-    <Modal title="Edit Expense" requestClose={() => setEditing(false)}>
+    <Modal title="Edit Expense" requestClose={clearPrompts}>
       <ExpenseForm
         expense={expense}
         submitCallback={() => {
@@ -44,14 +52,14 @@ const ExpenseSubMenu = ({
               type: "success",
             })
           );
-          setEditing(false);
+          setPrompts(initialState);
         }}
       />
     </Modal>
   );
 
   const confirmDeleteModal = () => (
-    <Modal requestClose={() => setDeletePrompt(false)}>
+    <Modal requestClose={clearPrompts}>
       <p>Are you sure you want to delete this expense?</p>
       <Row>
         <Button
@@ -67,7 +75,7 @@ const ExpenseSubMenu = ({
         >
           Confirm
         </Button>
-        <Button variant="link" onClick={() => setDeletePrompt(false)}>
+        <Button variant="link" onClick={clearPrompts}>
           Cancel
         </Button>
       </Row>
@@ -79,21 +87,23 @@ const ExpenseSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="edit" />}
-        onClick={() => setEditing(true)}
+        onClick={() => setPrompts({ editing: true, delete: false })}
       >
         Edit Expense
       </Button>
       <Button
         variant="link"
         icon={<Icon name="trash" />}
-        onClick={() => setDeletePrompt(true)}
+        onClick={() => setPrompts({ editing: false, delete: true })}
       >
         Delete Expense
       </Button>
 
       <AnimatePresence>
-        {editing && createExpenseModal()}
-        {deletePrompt && confirmDeleteModal()}
+        {prompts.editing && createExpenseModal()}
+      </AnimatePresence>
+      <AnimatePresence>
+        {prompts.delete && confirmDeleteModal()}
       </AnimatePresence>
     </Popup>
   );

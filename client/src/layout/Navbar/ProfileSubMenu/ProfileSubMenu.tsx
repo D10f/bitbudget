@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
 import Button from "../../../common/components/Button/Button";
@@ -14,18 +14,19 @@ interface IProfileSubMenuProps {
   closeSubMenu: () => void;
 }
 
+// Prompts
+const initialState = {
+  logout: false,
+  signup: false,
+  wallet: false,
+};
+
 const ProfileSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IProfileSubMenuProps) => {
-
-  const initialState = {
-    logout: false,
-    signup: false,
-    wallet: false,
-  };
-
   const [prompts, setPrompts] = useState(initialState);
+  const clearPrompts = useCallback(() => setPrompts(initialState), []);
 
   // Closes this submenu when clicked outside
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
@@ -39,11 +40,11 @@ const ProfileSubMenu = ({
   useClickOutside(popupRef, closeOnClickOutside);
 
   const logoutPromptModal = () => (
-    <Modal requestClose={() => setPrompts(initialState)}>
+    <Modal requestClose={clearPrompts}>
       <p>Are you sure you want to logout?</p>
       <Row>
         <Button variant="action">Logout</Button>
-        <Button variant="link" onClick={() => setPrompts(initialState)}>
+        <Button variant="link" onClick={clearPrompts}>
           Cancel
         </Button>
       </Row>
@@ -51,7 +52,7 @@ const ProfileSubMenu = ({
   );
 
   const walletPromptModal = () => (
-    <Modal title="Add Wallet" requestClose={() => setPrompts(initialState)}>
+    <Modal title="Add Wallet" requestClose={clearPrompts}>
       <WalletForm
         submitCallback={() => {
           setPrompts(initialState);
@@ -61,7 +62,7 @@ const ProfileSubMenu = ({
   );
 
   const signupPromptModal = () => (
-    <Modal title="Signup" requestClose={() => setPrompts(initialState)}>
+    <Modal title="Signup" requestClose={clearPrompts}>
       <SignupForm />
     </Modal>
   );
@@ -71,7 +72,9 @@ const ProfileSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="profile" />}
-        onClick={() => setPrompts({ signup: true, logout: false, wallet: false })}
+        onClick={() =>
+          setPrompts({ signup: true, logout: false, wallet: false })
+        }
       >
         Profile
       </Button>
@@ -79,7 +82,9 @@ const ProfileSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="add" />}
-        onClick={() => setPrompts({ signup: false, logout: false, wallet: true })}
+        onClick={() =>
+          setPrompts({ signup: false, logout: false, wallet: true })
+        }
       >
         New Wallet
       </Button>
@@ -87,7 +92,9 @@ const ProfileSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="logout" />}
-        onClick={() => setPrompts({ signup: false, logout: true, wallet: false })}
+        onClick={() =>
+          setPrompts({ signup: false, logout: true, wallet: false })
+        }
       >
         Logout
       </Button>
