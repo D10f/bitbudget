@@ -9,7 +9,6 @@ class SessionStorageService {
   }
 
   clear() {
-    console.log('Clearing session storage...');
     sessionStorage.clear();
   }
 }

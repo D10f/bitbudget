@@ -61,8 +61,8 @@ class SnapshotService {
   }
 
   async decryptData(encryptedBuffer: ArrayBuffer) {
-    const encryptedBytes = new Uint8Array(encryptedBuffer);
 
+    const encryptedBytes = new Uint8Array(encryptedBuffer);
     const salt = encryptedBytes.slice(0, 32);
     const iv = encryptedBytes.slice(32, 32 + 16);
     const data = encryptedBytes.slice(32 + 16);
@@ -73,8 +73,7 @@ class SnapshotService {
       { name: "AES-GCM", iv },
       key,
       data
-    );
-
+    );  
     return decryptedBuffer;
   }
 
@@ -86,20 +85,24 @@ class SnapshotService {
 
   async createEncryptedSnapshot(state: RootState) {
     const { user, wallets } = state;
-    const dataBuffer = await this.objectToBuffer(wallets);
+
+    const snapshot = {
+      wallets: wallets.wallets,
+    };
+
+    const dataBuffer = await this.objectToBuffer(snapshot);
     const encryptedData = await this.encryptData(dataBuffer);
-    await this.ApiService.patch(`/users/${user.user?.id}`, encryptedData);
+    // const base64Encoded = btoa(encryptedData.toString());
+    await this.ApiService.patch(
+      `/users/snapshot/${user.user?.id}`,
+      encryptedData.buffer,
+      { requestType: 'raw' }
+    );
   }
 
-  async decryptSnapshot(encryptedSnapshot: string) {
-    // atob turns into a string, it needs to be converted into an array
-    const encryptedBufferAsString = atob(encryptedSnapshot).split(",");
-
-    // Uint8Array constructor only accepts array of numbers, not strings
-    const encryptedBuffer = new Uint8Array(encryptedBufferAsString.map(Number));
-
-    const decryptedBuffer = await this.decryptData(encryptedBuffer);
-    const decodedData = new TextDecoder().decode(decryptedBuffer);
+  async decryptSnapshot(encryptedBuffer: ArrayBuffer) {
+    const decryptedBytes = await this.decryptData(encryptedBuffer);
+    const decodedData = new TextDecoder().decode(decryptedBytes);
     const decryptedData = JSON.parse(decodedData);
     if (!decryptedData) throw new Error("Unable to decrypt user data!");
     return decryptedData;

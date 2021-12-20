@@ -2,10 +2,8 @@ import {
   ConflictException,
   Injectable,
   NotFoundException,
-  UseInterceptors,
 } from '@nestjs/common';
 import { FilterQuery, LeanDocument } from 'mongoose';
-import { Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
@@ -29,6 +27,11 @@ export class UsersService {
     return this.usersRepository.findOne(filter);
   }
 
+  async getUserData(id: string): Promise<Buffer> {
+    const user = await this.findOne({ id });
+    return Buffer.from(user.data, 'base64');
+  }
+
   async update(
     id: string,
     updateUserDto: UpdateUserDto,
@@ -38,6 +41,10 @@ export class UsersService {
       throw new NotFoundException('No user found with that id');
     }
     return user;
+  }
+
+  async storeSnapshot(id: string, data: Buffer): Promise<LeanDocument<User>> {
+    return this.update(id, { data: data.toString('base64') });
   }
 
   async remove(id: string): Promise<void> {

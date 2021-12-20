@@ -38,8 +38,10 @@ export class AuthService {
     };
 
     return {
+      id: user._id,
+      username: user.username,
+      email: user.email || "",
       accessToken: this.jwtService.sign(payload),
-      id: user._id
     };
   }
 
@@ -59,7 +61,9 @@ export class AuthService {
     };
 
     return {
-      userData: user.data,
+      id: user._id.toString(),
+      username: user.username,
+      email: user.email || "",
       accessToken: this.jwtService.sign(payload),
     };
   }

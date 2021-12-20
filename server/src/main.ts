@@ -4,6 +4,7 @@ import {
   isProduction,
   loadProdConfig,
 } from './config/config.loader';
+import { bodyParserMiddleware } from './middleware/bodyParserMiddleware';
 
 async function bootstrap() {
   const { app, config, logger } = await loadNestApplication();
@@ -13,6 +14,7 @@ async function bootstrap() {
   }
 
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  app.use(bodyParserMiddleware);
 
   await app.listen(config.port);
   logger.log(`App running on ${config.domain}:${config.port}`);

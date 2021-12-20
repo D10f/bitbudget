@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
 import SessionStorageService from "../../services/sessionStorage/sessionStorageService";
+import { setWallets } from "../wallets/walletsSlice";
 
 interface IUserState {
   user: IUser | null;
@@ -32,15 +33,13 @@ export const signupUser = createAsyncThunk(
 
 export const loginUser = createAsyncThunk(
   "user/login",
-  async (credentials: AuthUserPDO, { dispatch}) => {
+  async (credentials: AuthUserPDO, { dispatch }) => {
     const response = await Api.post("/auth/signin", credentials);
     SessionStorageService.set("token", response.data.accessToken);
     await SnapshotService.generateCryptoKey(credentials.password);
-    if (response.data.userData) {
-      const userData = await SnapshotService.decryptSnapshot(response.data.userData);
-      console.log(userData);
-      // dispatch(setUserData(userData));
-    }
+    const userData = await Api.get(`/users/${response.data.id}`, { responseType: 'raw' });
+    const decryptedData = await SnapshotService.decryptSnapshot(userData.data);
+    dispatch(setWallets(decryptedData.wallets));
     return {
       user: { id: response.data.id, username: response.data.username, email: response.data.email },
       token: response.data.accessToken,
@@ -84,9 +83,10 @@ export const userSlice = createSlice({
         state.token = action.payload.token;
         state.loading = false;
       })
-      .addCase(loginUser.rejected, (state) => {
+      .addCase(loginUser.rejected, (state, action) => {
+        console.log(action.error.message);
         state.loading = false;
-      });
+      })
   },
 });
 

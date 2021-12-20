@@ -40,7 +40,10 @@ export function isProduction(config: IAppConfig): boolean {
 }
 
 export async function loadNestApplication() {
-  const app = await NestFactory.create(AppModule, { bufferLogs: true });
+  const app = await NestFactory.create(AppModule, {
+    bufferLogs: true,
+    bodyParser: false,
+  });
   const config = loadAppConfiguration(app);
   const logger = new Logger(`Main Script - ${config.mode}`);
   return { app, config, logger };

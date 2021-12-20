@@ -36,9 +36,7 @@ export const addWalletAsync =
   async (dispatch, getState) => {
     try {
       dispatch(walletLoading(true));
-
       dispatch(addWallet(walletData));
-
       // Syncrhonize with server and create encrypted snapshot of current state
       await Api.post("/wallets/", walletData);
       await SnapshotService.createEncryptedSnapshot(getState());
@@ -107,6 +105,9 @@ export const walletsReducer = createSlice({
   name: "wallets",
   initialState,
   reducers: {
+    setWallets: (state, action: PayloadAction<IWallet[]>) => {
+      state.wallets = action.payload;
+    },
     addWallet: (state, action: PayloadAction<IWallet>) => {
       state.wallets.push(action.payload);
     },
@@ -140,6 +141,7 @@ export const walletsReducer = createSlice({
 });
 
 export const {
+  setWallets,
   addWallet,
   updateWallet,
   selectWallet,
