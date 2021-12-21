@@ -7,7 +7,7 @@ import Navbar from "../layout/Navbar/Navbar";
 import ExpenseList from "../layout/ExpenseList/ExpenseList";
 import Notification from "../features/notifications/Notification";
 import Dashboard from "../layout/Dashboard/Dashboard";
-import Welcome2 from "../layout/Welcome/Welcome2";
+import Welcome from "../layout/Welcome/Welcome";
 
 const App = () => {
   const isAuthenticated = useAppSelector((state) => state.user.token);
@@ -23,7 +23,7 @@ const App = () => {
           <Dashboard />
         </>
       ) : (
-        <Welcome2 />
+        <Welcome />
       )}
     </ThemeProvider>
   );

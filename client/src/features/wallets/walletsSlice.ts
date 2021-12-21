@@ -9,7 +9,7 @@ import { v4 as uuid } from "uuid";
 import { RootState } from "../../app/store";
 import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
-import { addNotification } from "../notifications/notifications.reducer";
+import { addNotification } from "../notifications/notificationsSlice";
 
 const defaultWallet = {
   id: uuid(),

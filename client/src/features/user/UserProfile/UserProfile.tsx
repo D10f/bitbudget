@@ -1,23 +1,25 @@
-import React from "react";
-import styled from "styled-components";
-import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { joiResolver } from "@hookform/resolvers/joi";
+import React from 'react';
+import styled from 'styled-components';
+import { joiResolver } from '@hookform/resolvers/joi';
+import { Controller, SubmitHandler, useForm } from 'react-hook-form';
+import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
+import { useAppSelector } from '../../../common/hooks/useAppSelector';
+import { profileValidationSchema } from '../../../common/validators/profileSchema';
 
-import { signupUser } from "../../../features/user/userSlice";
-import { signupValidationSchema } from "../../validators/signupSchema";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
+import Button from '../../../common/components/Button/Button';
+import FormControl from '../../../common/components/Form/FormControl';
+import TextInput from '../../../common/components/Form/TextInput';
 
-import FormControl from "../../components/Form/FormControl";
-import TextInput from "../../components/Form/TextInput";
-import Button from "../../components/Button/Button";
-
-type FormTypes = {
-  username: string;
+interface FormTypes {
+  username?: string;
   email?: string;
-  password: string;
-  confirmPassword: string;
-};
+  password?: string;
+  confirmPassword?: string;
+}
+
+interface IUserProfile {
+  submitCallback: () => void;
+}
 
 const StyledForm = styled.form`
   display: flex;
@@ -25,29 +27,24 @@ const StyledForm = styled.form`
   justify-content: flex-start;
   align-items: flex-start;
   gap: 2rem;
+  margin: 0 2rem;
 `;
 
-const SignupForm = () => {
-  const dispatch = useAppDispatch();
+const UserProfile = ({ submitCallback }: IUserProfile) => {
 
+  const { user } = useAppSelector(state => state.user);
+  const dispatch = useAppDispatch();
   const {
     handleSubmit,
     control,
     formState: { errors },
   } = useForm<FormTypes>({
-    resolver: joiResolver(signupValidationSchema),
+    resolver: joiResolver(profileValidationSchema),
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(signupUser(data))
-      .then(() => {
-        dispatch(
-          addNotification({ msg: "Signup Successfully", type: "success" })
-        );
-      })
-      .catch((error) => {
-        dispatch(addNotification({ msg: error.message, type: "error" }));
-      });
+    console.log(data);
+    submitCallback();
   };
 
   return (
@@ -56,73 +53,74 @@ const SignupForm = () => {
         <Controller
           name="username"
           control={control}
-          defaultValue="Morty"
+          defaultValue={user?.username}
           render={({ field }) => (
             <TextInput
               {...field}
               label="Username"
+              placeholder="Your username"
               autoFocus={true}
-              placeholder="eg.: CrazyTrain98"
+              readOnly={true}
               error={Boolean(errors.username)}
             />
           )}
         />
       </FormControl>
-
+      
       <FormControl>
         <Controller
           name="email"
           control={control}
-          defaultValue="some@example.com"
-          render={({ field }) => (
+          defaultValue={user?.email || ""}
+          render={(test) => (
             <TextInput
-              {...field}
-              label="Email"
+              {...test.field}
               required={false}
-              placeholder="eg.: something@example.com"
+              label="Email"
+              placeholder="email@example.com"
               error={Boolean(errors.email)}
             />
           )}
         />
       </FormControl>
-
+      
       <FormControl>
         <Controller
           name="password"
           control={control}
-          defaultValue="password"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
               label="Password"
-              type="password"
-              placeholder="Choose a strong password"
+              placeholder="Choose wisely"
               error={Boolean(errors.password)}
             />
           )}
         />
       </FormControl>
-
+      
       <FormControl>
         <Controller
           name="confirmPassword"
           control={control}
-          defaultValue="password"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
               label="Confirm Password"
-              type="password"
               placeholder=""
               error={Boolean(errors.confirmPassword)}
             />
           )}
         />
       </FormControl>
-
-      <Button variant="action">Signup</Button>
+      
+      <Button type="submit" variant="action">
+        Save
+      </Button>
     </StyledForm>
   );
 };
 
-export default SignupForm;
+export default UserProfile;

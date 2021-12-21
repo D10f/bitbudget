@@ -1,37 +1,45 @@
 import React, { useState, useRef, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
+
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
+import { logout } from "../../../features/user/userSlice";
+import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { addNotification } from "../../../features/notifications/notificationsSlice";
+
 import Button from "../../../common/components/Button/Button";
 import Icon from "../../../common/components/Icon/Icon";
 import Row from "../../../common/components/Row/Row";
 import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
-import SignupForm from "../../../common/components/SignupForm/SignupForm";
-import WalletForm from "../../../common/components/WalletForm/WalletForm";
+import WalletForm from "../../../features/wallets/WalletForm/WalletForm";
+import UserProfile from "../../../features/user/UserProfile/UserProfile";
+import CategoriesList from "../../../features/categories/CategoriesList/CategoriesList";
 
 interface IProfileSubMenuProps {
   isSubMenuOpen: boolean;
   closeSubMenu: () => void;
 }
 
-// Prompts
+// Sub menu options (and modal state switches)
 const initialState = {
-  logout: false,
-  signup: false,
-  wallet: false,
+  "Profile": false,
+  "Categories": false,
+  "Add Wallet": false,
+  "Logout": false,
 };
 
 const ProfileSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IProfileSubMenuProps) => {
+  const dispatch = useAppDispatch();
   const [prompts, setPrompts] = useState(initialState);
-  const clearPrompts = useCallback(() => setPrompts(initialState), []);
-
-  // Closes this submenu when clicked outside
+  const clearPrompts = useCallback(() => setPrompts(initialState), []); // minor optimization
   const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
+
   const closeOnClickOutside = () => {
-    if (prompts.logout || prompts.signup || prompts.wallet || !isSubMenuOpen) {
+    // Helps to keep modals and submenus open when accidentally click away
+    if (Object.values(prompts).some(Boolean) || !isSubMenuOpen) {
       return;
     }
     closeSubMenu();
@@ -43,7 +51,20 @@ const ProfileSubMenu = ({
     <Modal requestClose={clearPrompts}>
       <p>Are you sure you want to logout?</p>
       <Row>
-        <Button variant="action">Logout</Button>
+        <Button
+          variant="action"
+          onClick={() => {
+            dispatch(logout());
+            dispatch(
+              addNotification({
+                msg: "Logged out successuflly",
+                type: "success",
+              })
+            );
+          }}
+        >
+          Logout
+        </Button>
         <Button variant="link" onClick={clearPrompts}>
           Cancel
         </Button>
@@ -61,15 +82,59 @@ const ProfileSubMenu = ({
     </Modal>
   );
 
-  const signupPromptModal = () => (
-    <Modal title="Signup" requestClose={clearPrompts}>
-      <SignupForm />
+  const categoriesPromptModal = () => (
+    <Modal title="Expense Categories" requestClose={clearPrompts}>
+      <CategoriesList
+        submitCallback={() => {
+          setPrompts(initialState);
+        }}
+      />
+    </Modal>
+  );
+
+  const profilePromptModal = () => (
+    <Modal title="Profile" requestClose={clearPrompts}>
+      <UserProfile
+        submitCallback={() => {
+          clearPrompts();
+        }}
+      />
     </Modal>
   );
 
   return (
     <Popup ref={popupRef} align="bottom">
-      <Button
+      <>
+        {Object.keys(initialState).map((option) => {
+          const iconName = option.toLowerCase().split(" ")[0];
+          return (
+            <Button
+              key={option}
+              variant="link"
+              icon={<Icon name={iconName} />}
+              onClick={() => setPrompts({ ...initialState, [option]: true })}
+            >
+              {option}
+            </Button>
+          );
+        })}
+      </>
+      <AnimatePresence>
+        {prompts['Profile'] && profilePromptModal()}
+      </AnimatePresence>
+      <AnimatePresence>
+        {prompts['Categories'] && categoriesPromptModal()}
+      </AnimatePresence>
+      <AnimatePresence>
+        {prompts['Add Wallet'] && walletPromptModal()}
+      </AnimatePresence>
+      <AnimatePresence>{prompts['Logout'] && logoutPromptModal()}</AnimatePresence>
+    </Popup>
+  );
+};
+
+/*
+ <Button
         variant="link"
         icon={<Icon name="profile" />}
         onClick={() =>
@@ -77,6 +142,16 @@ const ProfileSubMenu = ({
         }
       >
         Profile
+      </Button>
+      
+      <Button
+        variant="link"
+        icon={<Icon name="profile" />}
+        onClick={() =>
+          setPrompts({ signup: true, logout: false, wallet: false })
+        }
+      >
+        Categories
       </Button>
 
       <Button
@@ -98,12 +173,6 @@ const ProfileSubMenu = ({
       >
         Logout
       </Button>
-
-      <AnimatePresence>{prompts.signup && signupPromptModal()}</AnimatePresence>
-      <AnimatePresence>{prompts.wallet && walletPromptModal()}</AnimatePresence>
-      <AnimatePresence>{prompts.logout && logoutPromptModal()}</AnimatePresence>
-    </Popup>
-  );
-};
+*/
 
 export default ProfileSubMenu;

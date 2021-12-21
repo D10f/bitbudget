@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import expensesReducer from "../features/expenses/expenses.reducer";
-import notificationsReducer from "../features/notifications/notifications.reducer";
+import categoriesSlice from "../features/categories/categoriesSlice";
+import expensesReducer from "../features/expenses/expensesSlice";
+import notificationsReducer from "../features/notifications/notificationsSlice";
 import userSlice from "../features/user/userSlice";
 import walletsSlice from "../features/wallets/walletsSlice";
 
@@ -10,6 +11,7 @@ export const store = configureStore({
     wallets: walletsSlice,
     notifications: notificationsReducer,
     user: userSlice,
+    categories: categoriesSlice
   }
 });
 

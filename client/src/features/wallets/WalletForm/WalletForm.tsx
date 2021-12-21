@@ -4,14 +4,14 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { v4 as uuid} from 'uuid';
 
 import { joiResolver } from "@hookform/resolvers/joi";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
 import { addWalletAsync, updateWalletAsync } from "../../../features/wallets/walletsSlice";
-import { walletValidationSchema } from "../../validators/walletSchema";
+import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { walletValidationSchema } from "../../../common/validators/walletSchema";
 
-import Button from "../../components/Button/Button";
-import FormControl from "../../components/Form/FormControl";
-import SelectInput from "../../components/Form/SelectInput";
-import TextInput from "../../components/Form/TextInput";
+import Button from "../../../common/components/Button/Button";
+import FormControl from "../../../common/components/Form/FormControl";
+import SelectInput from "../../../common/components/Form/SelectInput";
+import TextInput from "../../../common/components/Form/TextInput";
 
 interface IWalletFormProps {
   wallet?: IWallet;

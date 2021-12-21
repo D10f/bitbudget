@@ -11,7 +11,7 @@ interface AddNotificationType {
 
 const initialState: INotification[] = [];
 
-export const notificationReducer = createSlice({
+export const notificationsSlice = createSlice({
   name: "notifications",
   initialState,
   reducers: {
@@ -37,5 +37,5 @@ export const notificationReducer = createSlice({
   },
 });
 
-export const { addNotification, removeNotification, clearNotifications } = notificationReducer.actions;
-export default notificationReducer.reducer;
+export const { addNotification, removeNotification, clearNotifications } = notificationsSlice.actions;
+export default notificationsSlice.reducer;

@@ -3,14 +3,14 @@ import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { loginValidationSchema } from "../../validators/loginSchema";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
-
-import FormControl from "../../components/Form/FormControl";
-import TextInput from "../../components/Form/TextInput";
-import Button from "../../components/Button/Button";
 import { loginUser } from "../../../features/user/userSlice";
+import { addNotification } from "../../../features/notifications/notificationsSlice";
+import { loginValidationSchema } from "../../../common/validators/loginSchema";
+import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+
+import FormControl from "../../../common/components/Form/FormControl";
+import TextInput from "../../../common/components/Form/TextInput";
+import Button from "../../../common/components/Button/Button";
 
 type FormTypes = {
   username: string;
@@ -37,7 +37,13 @@ const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(loginUser(data)).catch(console.error);
+    dispatch(loginUser(data))
+      .then(() =>
+        dispatch(
+          addNotification({ msg: "Logged in successfully", type: "success" })
+        )
+      )
+      .catch(console.error);
   };
 
   return (

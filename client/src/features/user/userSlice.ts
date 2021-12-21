@@ -3,6 +3,7 @@ import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
 import SessionStorageService from "../../services/sessionStorage/sessionStorageService";
 import { setWallets } from "../wallets/walletsSlice";
+import { setCategories } from "../categories/categoriesSlice";
 
 interface IUserState {
   user: IUser | null;
@@ -39,7 +40,9 @@ export const loginUser = createAsyncThunk(
     await SnapshotService.generateCryptoKey(credentials.password);
     const userData = await Api.get(`/users/${response.data.id}`, { responseType: 'raw' });
     const decryptedData = await SnapshotService.decryptSnapshot(userData.data);
+    console.log(decryptedData);
     dispatch(setWallets(decryptedData.wallets));
+    dispatch(setCategories(decryptedData.categories));
     return {
       user: { id: response.data.id, username: response.data.username, email: response.data.email },
       token: response.data.accessToken,
@@ -54,10 +57,10 @@ export const userSlice = createSlice({
     setUserData: (state, action) => {
       state.data = action.payload;
     },
-    logout: (state) => {
+    logout: () => {
       SessionStorageService.clear();
       SnapshotService.deleteCryptoKey();
-      state = initialState;
+      return initialState;
     },
   },
   extraReducers: (builder) => {

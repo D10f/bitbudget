@@ -84,10 +84,11 @@ class SnapshotService {
   }
 
   async createEncryptedSnapshot(state: RootState) {
-    const { user, wallets } = state;
+    const { user, wallets, categories } = state;
 
     const snapshot = {
       wallets: wallets.wallets,
+      categories: categories.categories,
     };
 
     const dataBuffer = await this.objectToBuffer(snapshot);

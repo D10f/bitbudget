@@ -2,6 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
+import { AnimatePresence } from "framer-motion";
 import {
   selectWallet,
   deleteWalletAsync,
@@ -13,9 +14,8 @@ import Icon from "../../../common/components/Icon/Icon";
 import Row from "../../../common/components/Row/Row";
 import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
-import WalletForm from "../../../common/components/WalletForm/WalletForm";
-import ExpenseForm from "../../../common/components/ExpenseForm/ExpenseForm";
-import { AnimatePresence } from "framer-motion";
+import WalletForm from '../../../features/wallets/WalletForm/WalletForm';
+import ExpenseForm from "../../../features/expenses/ExpenseForm/ExpenseForm";
 
 interface IWalletSubMenuProps {
   wallet: IWallet;

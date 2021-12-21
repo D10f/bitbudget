@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { removeNotification } from "./notifications.reducer";
+import { removeNotification } from "./notificationsSlice";
 import { useAppDispatch } from "../../common/hooks/useAppDispatch";
 import Icon from "../../common/components/Icon/Icon";
 

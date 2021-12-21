@@ -3,16 +3,16 @@ import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { expenseValidationSchema } from "../../validators/expenseSchema";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
-import { useAppDispatch } from "../../hooks/useAppDispatch";
+import { expenseValidationSchema } from "../../../common/validators/expenseSchema";
+import { addNotification } from "../../../features/notifications/notificationsSlice";
+import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 
-import Button from "../../components/Button/Button";
-import FormControl from "../../components/Form/FormControl";
-import TextInput from "../../components/Form/TextInput";
-import SelectInput from "../../components/Form/SelectInput";
-import TextArea from "../../components/Form/TextArea";
-import DatePicker from "../../components/Form/DatePicker";
+import Button from "../../../common/components/Button/Button";
+import FormControl from "../../../common/components/Form/FormControl";
+import TextInput from "../../../common/components/Form/TextInput";
+import SelectInput from "../../../common/components/Form/SelectInput";
+import TextArea from "../../../common/components/Form/TextArea";
+import DatePicker from "../../../common/components/Form/DatePicker";
 
 const DEFAULT_CATEGORIES = ["Travel", "Groceries", "Electronics", "Food"];
 

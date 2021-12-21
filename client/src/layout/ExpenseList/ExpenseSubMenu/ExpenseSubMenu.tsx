@@ -2,12 +2,12 @@ import React, { useCallback, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
-import { addNotification } from "../../../features/notifications/notifications.reducer";
+import { addNotification } from "../../../features/notifications/notificationsSlice";
 import Button from "../../../common/components/Button/Button";
 import Icon from "../../../common/components/Icon/Icon";
 import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
-import ExpenseForm from "../../../common/components/ExpenseForm/ExpenseForm";
+import ExpenseForm from "../../../features/expenses/ExpenseForm/ExpenseForm";
 import Row from "../../../common/components/Row/Row";
 
 interface IExpenseSubMenuProps {

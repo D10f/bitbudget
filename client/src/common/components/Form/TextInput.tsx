@@ -66,9 +66,9 @@ const TextInput = React.forwardRef(
   (
     {
       label,
-      value = "",
       name,
       placeholder,
+      value = "",
       type = "text",
       required = true,
       error = false,
@@ -77,7 +77,7 @@ const TextInput = React.forwardRef(
       readOnly = false,
       onChange,
     }: ITextInputProps,
-    ref
+    ref: React.ForwardedRef<HTMLInputElement>
   ) => {
     return (
       <>
@@ -85,6 +85,7 @@ const TextInput = React.forwardRef(
           {label}
         </StyledLabel>
         <StyledInput
+          ref={ref}
           type={type}
           value={value}
           id={name}

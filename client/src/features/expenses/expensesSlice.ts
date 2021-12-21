@@ -67,7 +67,7 @@ const initialState: ExpensesState = {
   loading: expenseLoadingState.IDLE,
 };
 
-export const expensesReducer = createSlice({
+export const expensesSlice = createSlice({
   name: "expenses",
   initialState,
   reducers: {
@@ -77,5 +77,5 @@ export const expensesReducer = createSlice({
   },
 });
 
-export const { addExpense } = expensesReducer.actions;
-export default expensesReducer.reducer;
+export const { addExpense } = expensesSlice.actions;
+export default expensesSlice.reducer;
