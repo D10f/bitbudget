@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../common/hooks/useAppSelector";
+import { selectCurrentExpenses } from "../../features/expenses/expensesSlice";
 import ExpenseItem from "./ExpenseItem/ExpenseItem";
 import SearchBar from "./SearchBar/SearchBar";
 
@@ -27,7 +28,7 @@ const StyledList = styled.ul`
 
 const ExpenseList = () => {
   const [subMenuOpen, setSubMenuOpen] = useState<string | null>(null);
-  const expenses = useAppSelector((state) => state.expenses.expenses);
+  const expenses = useAppSelector(selectCurrentExpenses);
   const currentWallet = useAppSelector((state) =>
     state.wallets.wallets.find((w) => w.isCurrent)
   );
@@ -36,15 +37,19 @@ const ExpenseList = () => {
     <StyledContainer tabIndex={-1}>
       <StyledList>
         <SearchBar />
-        {expenses.map((expense) => (
-          <ExpenseItem
-            key={expense.id}
-            expense={expense}
-            wallet={currentWallet!}
-            subMenuOpen={subMenuOpen}
-            setSubMenuOpen={setSubMenuOpen}
-          />
-        ))}
+        {expenses.length > 0 ? (
+          expenses.map((expense) => (
+            <ExpenseItem
+              key={expense.id}
+              expense={expense}
+              wallet={currentWallet!}
+              subMenuOpen={subMenuOpen}
+              setSubMenuOpen={setSubMenuOpen}
+            />
+          ))
+        ) : (
+          <p>No Expenses To Show</p>
+        )}
       </StyledList>
     </StyledContainer>
   );

@@ -25,7 +25,7 @@ interface IWalletState {
 }
 
 const initialState: IWalletState = {
-  wallets: [defaultWallet],
+  wallets: [],
   loading: false,
 };
 

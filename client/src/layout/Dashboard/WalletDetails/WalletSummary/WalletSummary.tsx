@@ -1,7 +1,8 @@
 import React from "react";
-import { motion } from 'framer-motion';
 import styled from "styled-components";
+import { motion } from 'framer-motion';
 import { useAppSelector } from "../../../../common/hooks/useAppSelector";
+import { selectCurrentExpenses } from "../../../../features/expenses/expensesSlice";
 
 interface IWalletSummaryProps {
   wallet: IWallet | undefined;
@@ -64,7 +65,7 @@ const TotalProgress = styled(motion.div)<ITotalProgressProps>`
 `;
 
 const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
-  const expenses = useAppSelector((state) => state.expenses.expenses);
+  const expenses = useAppSelector(selectCurrentExpenses);
   const totalAmt = expenses
     .reduce((total, expense) => total + +expense.amount, 0)
     .toFixed(2);

@@ -1,10 +1,13 @@
 import React from "react";
 import styled from "styled-components";
+import { v4 as uuid} from 'uuid';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import { expenseValidationSchema } from "../../../common/validators/expenseSchema";
 import { addNotification } from "../../../features/notifications/notificationsSlice";
+import { selectCategories } from "../../categories/categoriesSlice";
+import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 
 import Button from "../../../common/components/Button/Button";
@@ -13,10 +16,10 @@ import TextInput from "../../../common/components/Form/TextInput";
 import SelectInput from "../../../common/components/Form/SelectInput";
 import TextArea from "../../../common/components/Form/TextArea";
 import DatePicker from "../../../common/components/Form/DatePicker";
-
-const DEFAULT_CATEGORIES = ["Travel", "Groceries", "Electronics", "Food"];
+import { createExpense } from "../expensesSlice";
 
 interface IExpenseFormProps {
+  walletId: string;
   expense?: IExpense;
   submitCallback: () => void;
 }
@@ -37,8 +40,9 @@ const StyledForm = styled.form`
   gap: 2rem;
 `;
 
-const ExpenseForm = ({ expense }: IExpenseFormProps) => {
+const ExpenseForm = ({ walletId, expense }: IExpenseFormProps) => {
   const dispatch = useAppDispatch();
+  const categories = useAppSelector(selectCategories);
 
   const {
     handleSubmit,
@@ -49,10 +53,13 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(
-      addNotification({ msg: "Expense Created Successfully", type: "success" })
-    );
-    console.log(data);
+    const updatedExpense = {
+      id: expense?.id || uuid(),
+      walletId,
+      ...data
+    }
+    console.log(updatedExpense);
+    dispatch(createExpense(updatedExpense));
   };
 
   return (
@@ -63,11 +70,11 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
           control={control}
           defaultValue={expense?.title || ""}
           render={({ field }) => {
-            console.log('render')
+            console.log(errors);
             return (
               <TextInput
                 {...field}
-                label="Name"
+                label="Title"
                 placeholder="e.g., New phone charger"
                 autoFocus={true}
                 error={Boolean(errors.title)}
@@ -117,7 +124,7 @@ const ExpenseForm = ({ expense }: IExpenseFormProps) => {
             <SelectInput
               {...field}
               label="Category"
-              options={DEFAULT_CATEGORIES}
+              options={categories}
               error={Boolean(errors.category)}
             />
           )}

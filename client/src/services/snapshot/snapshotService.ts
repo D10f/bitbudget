@@ -83,6 +83,13 @@ class SnapshotService {
     return await dataBlob.arrayBuffer();
   }
 
+  async encryptAsBase64String(obj: any) {
+    const buffer = await this.objectToBuffer(obj);
+    const encryptedBuffer = this.encryptData(buffer);
+    const base64Encoded = btoa(encryptedBuffer.toString());
+    return base64Encoded;
+  }
+
   async createEncryptedSnapshot(state: RootState) {
     const { user, wallets, categories } = state;
 

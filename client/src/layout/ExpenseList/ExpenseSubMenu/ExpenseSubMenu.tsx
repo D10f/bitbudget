@@ -44,6 +44,7 @@ const ExpenseSubMenu = ({
   const createExpenseModal = () => (
     <Modal title="Edit Expense" requestClose={clearPrompts}>
       <ExpenseForm
+        walletId={wallet.id}
         expense={expense}
         submitCallback={() => {
           dispatch(

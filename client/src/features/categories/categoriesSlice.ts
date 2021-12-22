@@ -1,5 +1,6 @@
 import {
   AnyAction,
+  createDraftSafeSelector,
   createSlice,
   PayloadAction,
   ThunkAction,
@@ -56,18 +57,17 @@ export const categoriesSlice = createSlice({
     setCategories: (state, action: PayloadAction<string[]>) => {
       state.categories = action.payload.sort((a, b) => (a > b ? 1 : -1));
     },
-    // addCategory: (state, action: PayloadAction<string>) => {
-    //   const categories = new Set(state.categories);
-    //   categories.add(action.payload);
-    //   state.categories = [...categories].sort((a, b) => (a > b ? 1 : -1));
-    // },
-    // removeCategory: (state, action: PayloadAction<string>) => {
-    //   state.categories = state.categories.filter(
-    //     (category) => category !== action.payload
-    //   );
-    // },
   },
 });
+
+// SELECTORS
+
+const selectSelf = (state: RootState) => state;
+
+export const selectCategories = createDraftSafeSelector(
+  selectSelf,
+  (state: RootState) => state.categories.categories
+);
 
 export const { setCategories } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

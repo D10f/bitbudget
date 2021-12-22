@@ -37,13 +37,7 @@ const LoginForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(loginUser(data))
-      .then(() =>
-        dispatch(
-          addNotification({ msg: "Logged in successfully", type: "success" })
-        )
-      )
-      .catch(console.error);
+    dispatch(loginUser(data));
   };
 
   return (

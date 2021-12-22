@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
 import SessionStorageService from "../../services/sessionStorage/sessionStorageService";
-import { setWallets } from "../wallets/walletsSlice";
+import { addWallet, setWallets } from "../wallets/walletsSlice";
 import { setCategories } from "../categories/categoriesSlice";
 
 interface IUserState {
@@ -21,8 +21,18 @@ const initialState: IUserState = {
 
 export const signupUser = createAsyncThunk(
   "user/signup",
-  async (credentials: AuthUserPDO) => {
+  async (credentials: AuthUserPDO, { dispatch }) => {
     const response = await Api.post("/auth/signup", credentials);
+
+    // Setup initial default wallet
+    dispatch(addWallet({
+      id: response.data.defaultWalletId,
+      name: "Default Wallet",
+      budget: "1000",
+      currency: "EUR",
+      isCurrent: true,
+    }));
+
     SessionStorageService.set("token", response.data.accessToken);
     await SnapshotService.generateCryptoKey(credentials.password);
     return {
@@ -40,7 +50,6 @@ export const loginUser = createAsyncThunk(
     await SnapshotService.generateCryptoKey(credentials.password);
     const userData = await Api.get(`/users/${response.data.id}`, { responseType: 'raw' });
     const decryptedData = await SnapshotService.decryptSnapshot(userData.data);
-    console.log(decryptedData);
     dispatch(setWallets(decryptedData.wallets));
     dispatch(setCategories(decryptedData.categories));
     return {

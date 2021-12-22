@@ -1,11 +1,13 @@
 import React, { ReactEventHandler, useState } from "react";
 import styled from "styled-components";
-import Button from "../../../common/components/Button/Button";
-import Row from "../../../common/components/Row/Row";
+
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import { addNotification } from "../../notifications/notificationsSlice";
-import { updateCategories } from "../categoriesSlice";
+import { selectCategories, updateCategories } from "../categoriesSlice";
+
+import Button from "../../../common/components/Button/Button";
+import Row from "../../../common/components/Row/Row";
 
 interface ICategoriesList {
   submitCallback: () => void;
@@ -68,7 +70,8 @@ const DeleteButton = styled.span`
 
 const CategoriesList = ({ submitCallback }: ICategoriesList) => {
   const dispatch = useAppDispatch();
-  const { categories } = useAppSelector((state) => state.categories);
+  const categories = useAppSelector(selectCategories);
+
   const [currentCategories, setCurrentCategories] = useState(categories);
   const [newCategoryValue, setNewCategoryValue] = useState("");
 
