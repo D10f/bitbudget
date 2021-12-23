@@ -84,7 +84,7 @@ const DatePicker = React.forwardRef(
             onFocusChange={({ focused }) => setDateFocus(focused)}
             noBorder={true}
           />
-          {error && <StyledIcon name="warning" />}
+          {error && <StyledIcon name="error" />}
         </StyledInputWrapper>
       </>
     );

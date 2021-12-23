@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import Icon from "../Icon/Icon";
 
 interface ITextAreaProps {
   label: string;
@@ -45,6 +46,15 @@ const StyledLabel = styled.label<ILabelStyleProps>`
   height: ${({ hide }) => (hide ? "0px" : "auto")};
 `;
 
+const StyledIcon = styled(Icon)`
+  position: absolute;
+  top: 4.7rem;
+  right: 1.6rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  fill: ${({ theme }) => theme.colors.error};
+`;
+
 const StyledSpan = styled.span`
   color: lightgray;
   font-size: 1.2rem;
@@ -61,6 +71,7 @@ const TextArea = React.forwardRef(
       readOnly = false,
       maxLength = 250,
       hideLabel = false,
+      error = false,
     }: ITextAreaProps,
     ref
   ) => {
@@ -80,8 +91,11 @@ const TextArea = React.forwardRef(
           maxLength={maxLength}
           autocomplete="off"
           rows={5}
+          error={error}
         />
+        {error && <StyledIcon name="error" />}
         <StyledSpan>{charactersLeft} characters left</StyledSpan>
+        
       </>
     );
   }

@@ -16,7 +16,7 @@ import TextInput from "../../../common/components/Form/TextInput";
 import SelectInput from "../../../common/components/Form/SelectInput";
 import TextArea from "../../../common/components/Form/TextArea";
 import DatePicker from "../../../common/components/Form/DatePicker";
-import { createExpense } from "../expensesSlice";
+import { createExpense, updateExpense } from "../expensesSlice";
 
 interface IExpenseFormProps {
   walletId: string;
@@ -40,7 +40,7 @@ const StyledForm = styled.form`
   gap: 2rem;
 `;
 
-const ExpenseForm = ({ walletId, expense }: IExpenseFormProps) => {
+const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector(selectCategories);
 
@@ -58,8 +58,8 @@ const ExpenseForm = ({ walletId, expense }: IExpenseFormProps) => {
       walletId,
       ...data
     }
-    console.log(updatedExpense);
-    dispatch(createExpense(updatedExpense));
+    dispatch(expense ? updateExpense(updatedExpense) : createExpense(updatedExpense));
+    submitCallback();
   };
 
   return (

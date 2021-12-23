@@ -1,12 +1,13 @@
-import { set, get, del } from "idb-keyval";
 import { RootState } from "../../app/store";
 import api from "../api/apiService";
+import IndexDBStorage from "../indexdbStorage/IndexDBStorage";
 
 const CRYPTO_INDEX_KEY = "cryptoKey";
 
 class SnapshotService {
   constructor(
     private readonly ApiService: typeof api,
+    private readonly indexDBStorage: typeof IndexDBStorage,
     private readonly cryptoIndexdbKey: string
   ) {}
 
@@ -20,16 +21,18 @@ class SnapshotService {
     );
 
     // Store key material in indexedDB
-    await set(this.cryptoIndexdbKey, keyMaterial);
+    await this.indexDBStorage.setItem(this.cryptoIndexdbKey, keyMaterial);
   }
 
   async deleteCryptoKey() {
-    await del(this.cryptoIndexdbKey);
+    await this.indexDBStorage.clear(this.cryptoIndexdbKey);
   }
 
   async deriveKey(salt = crypto.getRandomValues(new Uint8Array(32))) {
     // Retrieve key material from store
-    const keyMaterial = await get(this.cryptoIndexdbKey);
+    const keyMaterial = await this.indexDBStorage.getItem(
+      this.cryptoIndexdbKey
+    );
 
     const key = await crypto.subtle.deriveKey(
       {
@@ -61,7 +64,6 @@ class SnapshotService {
   }
 
   async decryptData(encryptedBuffer: ArrayBuffer) {
-
     const encryptedBytes = new Uint8Array(encryptedBuffer);
     const salt = encryptedBytes.slice(0, 32);
     const iv = encryptedBytes.slice(32, 32 + 16);
@@ -73,7 +75,7 @@ class SnapshotService {
       { name: "AES-GCM", iv },
       key,
       data
-    );  
+    );
     return decryptedBuffer;
   }
 
@@ -104,7 +106,7 @@ class SnapshotService {
     await this.ApiService.patch(
       `/users/snapshot/${user.user?.id}`,
       encryptedData.buffer,
-      { requestType: 'raw' }
+      { requestType: "raw" }
     );
   }
 
@@ -117,4 +119,4 @@ class SnapshotService {
   }
 }
 
-export default new SnapshotService(api, CRYPTO_INDEX_KEY);
+export default new SnapshotService(api, IndexDBStorage, CRYPTO_INDEX_KEY);

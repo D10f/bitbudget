@@ -8,9 +8,11 @@ import {
 import moment from "moment";
 import { RootState } from "../../app/store";
 import Api from "../../services/api/apiService";
+import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
 import snapshotService from "../../services/snapshot/snapshotService";
 import { formatDateAsMMYY } from "../../utils/formatDateAsMMYY";
-import { selectFilters } from "../filters/filtersSlice";
+import { selectCurrentMMYY, selectFilters } from "../filters/filtersSlice";
+import { addNotification } from "../notifications/notificationsSlice";
 import { selectCurrentWallet } from "../wallets/walletsSlice";
 
 // const mockExpenses: IExpense[] = [
@@ -95,7 +97,7 @@ export const createExpense =
       dispatch(setLoading(true));
 
       // encrypt sensitive information
-      const data = await snapshotService.encryptAsBase64String({      
+      const data = await snapshotService.encryptAsBase64String({
         title: expense.title,
         description: expense.description,
         amount: expense.amount,
@@ -107,12 +109,96 @@ export const createExpense =
         _id: expense.id,
         data,
         walletId: expense.walletId,
-        expenseDate: formatDateAsMMYY(expense.createdAt)
-      }
+        expenseDate: formatDateAsMMYY(expense.createdAt),
+      };
 
       dispatch(addExpense(expense));
       await Api.post("/expenses", encryptedExpense);
     } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const updateExpense =
+  (expense: IExpense): ThunkAction<void, RootState, unknown, AnyAction> =>
+  async (dispatch, getState) => {
+    try {
+      dispatch(setLoading(true));
+
+      // encrypt sensitive information
+      const data = await snapshotService.encryptAsBase64String({
+        title: expense.title,
+        description: expense.description,
+        amount: expense.amount,
+        category: expense.category,
+      });
+
+      const currentExpense = getState().expenses.expenses.find(
+        (exp) => exp.id === expense.id
+      )!;
+
+      // reconstruct expense for upload
+      const encryptedExpense = {
+        _id: expense.id,
+        data,
+        walletId: expense.walletId,
+        expenseDate: formatDateAsMMYY(currentExpense.createdAt),
+        newExpenseDate: formatDateAsMMYY(expense.createdAt),
+      };
+
+      dispatch(modifyExpense(expense));
+      await Api.patch(`/expenses/${expense.id}`, encryptedExpense);
+    } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const startGetExpenses =
+  (
+    currentWallet: IWallet,
+    currentMMYY: string
+  ): ThunkAction<void, RootState, unknown, AnyAction> =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+
+      const indexedDBExpenseKey = `expenses:${currentWallet.id}:${currentMMYY}`;
+      let expenses: IExpense[];
+
+      // Check and retrieve expenses from local storage first
+      expenses = await IndexDBStorage.getItem(indexedDBExpenseKey);
+      
+      if (expenses) {
+        return dispatch(setExpenses(expenses));
+      }
+
+      // If unavailable, continue with a new API call
+      const response = await Api.get(
+        `/wallets/expenses?q=${currentWallet.id}&mmyy=${currentMMYY}`
+      );
+
+      console.log(response);
+
+      // Decrypt expenses
+      // const decryptedExpenses = await decryptExpensesWithWorkers(response.data);
+
+      // Save to indexedDB
+      // await IndexDBStorage.setItem(indexedDBExpenseKey, decryptedExpenses);
+
+      // Update redux state
+      // dispatch(setExpenses(decryptedExpenses));
+    } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
     } finally {
       dispatch(setLoading(false));
     }
@@ -124,6 +210,14 @@ export const expensesSlice = createSlice({
   reducers: {
     addExpense: (state, action: PayloadAction<IExpense>) => {
       state.expenses = [...state.expenses, action.payload];
+    },
+    modifyExpense: (state, action: PayloadAction<IExpense>) => {
+      state.expenses = state.expenses.map((expense) =>
+        expense.id === action.payload.id ? action.payload : expense
+      );
+    },
+    setExpenses: (state, action: PayloadAction<IExpense[]>) => {
+      state.expenses = action.payload;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
@@ -152,5 +246,6 @@ export const selectCurrentExpenses = createDraftSafeSelector(
   }
 );
 
-export const { addExpense, setLoading } = expensesSlice.actions;
+export const { addExpense, modifyExpense, setExpenses, setLoading } =
+  expensesSlice.actions;
 export default expensesSlice.reducer;

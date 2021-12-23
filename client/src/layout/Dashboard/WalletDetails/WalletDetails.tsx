@@ -26,7 +26,6 @@ const WalletTitle = styled.h2`
   font-size: 3rem;
 `;
 
-
 const WalletDetails = ({ wallet }: IWalletDetailsProps) => {
   return (
     <WalletCard>

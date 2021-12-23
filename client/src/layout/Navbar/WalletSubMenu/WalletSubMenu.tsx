@@ -75,7 +75,10 @@ const WalletSubMenu = ({
 
   const createExpenseModal = () => (
     <Modal title="New Expense" requestClose={clearPrompts}>
-      <ExpenseForm walletId={wallet.id} submitCallback={clearPrompts} />
+      <ExpenseForm walletId={wallet.id} submitCallback={() => {
+        clearPrompts();
+        closeSubMenu();
+      }} />
     </Modal>
   );
 

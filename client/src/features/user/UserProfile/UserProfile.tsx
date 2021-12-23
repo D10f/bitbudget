@@ -92,8 +92,8 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           render={({ field }) => (
             <TextInput
               {...field}
-              label="Password"
-              placeholder="Choose wisely"
+              label="New Password"
+              placeholder=""
               error={Boolean(errors.password)}
             />
           )}
@@ -108,7 +108,7 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           render={({ field }) => (
             <TextInput
               {...field}
-              label="Confirm Password"
+              label="Confirm New Password"
               placeholder=""
               error={Boolean(errors.confirmPassword)}
             />

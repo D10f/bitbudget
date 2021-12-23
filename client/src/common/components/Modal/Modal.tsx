@@ -78,6 +78,10 @@ const ModalHeader = styled.header`
   margin-bottom: 2rem;
 `;
 
+const CloseButton = styled(Button)`
+  transform: scale(1.5);
+`;
+
 const Modal = ({ requestClose, title, children }: IModalProps) => {
   useKeyPress("Escape", requestClose);
 
@@ -94,9 +98,9 @@ const Modal = ({ requestClose, title, children }: IModalProps) => {
         {title && (
           <ModalHeader>
             <h1>{title}</h1>
-            <Button variant="link" onClick={requestClose}>
+            <CloseButton variant="link" onClick={requestClose}>
               &times;
-            </Button>
+            </CloseButton>
           </ModalHeader>
         )}
 

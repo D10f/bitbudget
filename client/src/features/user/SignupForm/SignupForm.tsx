@@ -39,15 +39,7 @@ const SignupForm = () => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    dispatch(signupUser(data))
-      .then(() => {
-        dispatch(
-          addNotification({ msg: "Signup Successfully", type: "success" })
-        );
-      })
-      .catch((error) => {
-        dispatch(addNotification({ msg: error.message, type: "error" }));
-      });
+    dispatch(signupUser(data));
   };
 
   return (

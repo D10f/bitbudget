@@ -113,10 +113,7 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
           </CategoryTag>
         ))}
       </CategoryList>
-      <Row marginless>
         <Button variant="action" onClick={handleSave}>Save</Button>
-        <Button variant="link" onClick={submitCallback}>Cancel</Button>
-      </Row>
     </>
   );
 };

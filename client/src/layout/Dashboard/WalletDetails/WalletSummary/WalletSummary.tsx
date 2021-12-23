@@ -58,7 +58,7 @@ const TotalProgress = styled(motion.div)<ITotalProgressProps>`
   &::after {
     content: attr(value)"%";
     position: absolute;
-    right: 0;
+    right: ${({ value }) => parseFloat(value) < 10 ? "-4rem" : "0"};
     top: 1rem;
     color: ${({ theme }) => theme.colors.light.default};
   }
@@ -69,6 +69,7 @@ const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
   const totalAmt = expenses
     .reduce((total, expense) => total + +expense.amount, 0)
     .toFixed(2);
+
 
   const budgetUsed = Math.min(
     (Number(totalAmt) * 100) / Number(wallet!.budget),
