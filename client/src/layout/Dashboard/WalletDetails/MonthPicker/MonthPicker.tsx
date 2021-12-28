@@ -1,6 +1,10 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Row from '../../../../common/components/Row/Row';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Row from "../../../../common/components/Row/Row";
+import { useAppDispatch } from "../../../../common/hooks/useAppDispatch";
+import { useAppSelector } from "../../../../common/hooks/useAppSelector";
+import { useMonthPicker } from "../../../../common/hooks/useMonthPicker";
+import { selectFilters } from "../../../../features/filters/filtersSlice";
 
 interface ITimeTag {
   datetime: string;
@@ -22,10 +26,49 @@ const StyledButton = styled.button`
   }
 `;
 
-const MonthPicker = () => {
+const months = [
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
+];
 
-  const [month, setMonth] = useState(0);
-  const [year, setYear] = useState(2021);
+const MonthPicker = () => {
+  const { month, year, decreaseMonth, increaseMonth } = useMonthPicker();
+
+  const translateMonth = (n: number) => {
+    return months[n];
+  };
+
+  return (
+    <Row marginless>
+      <StyledTimeTag datetime={`${month}-${year}`}>
+        {translateMonth(month)}
+      </StyledTimeTag>
+      <StyledTimeTag datetime={`${month}-${year}`}>{year}</StyledTimeTag>
+      <Row marginless gap={2}>
+        <StyledButton onClick={decreaseMonth}>&larr;</StyledButton>
+        <StyledButton onClick={increaseMonth}>&rarr;</StyledButton>
+      </Row>
+    </Row>
+  );
+};
+
+export default MonthPicker;
+
+/*
+const dispatch = useAppDispatch();
+  const { currentMonth, currentYear } = useAppSelector(selectFilters);
+  const [month, setMonth] = useState(currentMonth);
+  const [year, setYear] = useState(currentYear);
 
   const decreaseMonth = () => {
     if (month === 0) {
@@ -44,35 +87,4 @@ const MonthPicker = () => {
       setMonth(month + 1);
     }
   };
-
-  const translateMonth = (n: number) => {
-    const months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-    return months[n];
-  };
-
-  return (
-    <Row marginless>
-      <StyledTimeTag datetime={`${month}-${year}`}>{translateMonth(month)}</StyledTimeTag>
-      <StyledTimeTag datetime={`${month}-${year}`}>{year}</StyledTimeTag>
-      <Row marginless gap={2}>
-        <StyledButton onClick={decreaseMonth}>&larr;</StyledButton>
-        <StyledButton onClick={increaseMonth}>&rarr;</StyledButton>
-      </Row>
-    </Row>
-  );
-};
-
-export default MonthPicker;
+*/

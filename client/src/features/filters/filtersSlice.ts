@@ -1,6 +1,7 @@
 import {
   createSelector,
   createSlice,
+  PayloadAction,
 } from "@reduxjs/toolkit";
 import moment from "moment";
 import { RootState } from "../../app/store";
@@ -8,6 +9,11 @@ import { RootState } from "../../app/store";
 interface IFilters {
   currentMonth: number;
   currentYear: number;
+}
+
+export interface IFilterUpdate {
+  newMonth: number;
+  newYear: number;
 }
 
 const initialState: IFilters = {
@@ -19,7 +25,10 @@ export const filtersSlice = createSlice({
   name: "filters",
   initialState,
   reducers: {
-    setCurrentMonth: (state, action) => {},
+    setCurrentMonth: (state, action: PayloadAction<IFilterUpdate>) => {
+      state.currentMonth = action.payload.newMonth;
+      state.currentYear = action.payload.newYear;
+    },
   },
 });
 
@@ -27,6 +36,7 @@ export const filtersSlice = createSlice({
 
 export const selectFilters = (state: RootState) => state.filters;
 
+/* Returns a stirng with the current month and year selected, formatted as MMYY */
 export const selectCurrentMMYY = createSelector(
   selectFilters,
   ({ currentMonth, currentYear }: IFilters) =>
