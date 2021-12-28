@@ -1,9 +1,10 @@
 import React from "react";
+import styled from "styled-components";
 import { createPortal } from "react-dom";
 import { motion } from "framer-motion";
-import styled from "styled-components";
-import Button from "../Button/Button";
 import { useKeyPress } from "../../hooks/useKeyPress";
+
+import Button from "../Button/Button";
 
 interface IModalProps {
   title?: string;
@@ -20,7 +21,7 @@ const popupMotion = {
     transition: {
       type: "spring",
       duration: 0.3,
-    },
+    }
   },
   exit: {
     scale: 0,
@@ -36,31 +37,18 @@ const Background = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  /* display: flex;
-  justify-content: center;
-  align-items: center; */
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(0.2rem); // ignored on firefox
 `;
 
 const Container = styled(motion.aside)`
-  /* Currently the parent element uses flexbox for positioning */
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start; */
-
-  /* In either case these two settings don't play well in Chromium browsers */
-  /* overflow-x: hidden;
-  overflow-y: auto; */
+  /* framer-motion doesn't animate these two settings well in Chromium-based browsers */
+  overflow-y: auto;
+  overflow-x: hidden;
 
   position: relative;
   margin: 2rem auto;
   width: max-content;
-
-  /* max-width: 80vw; */
-  overflow-y: auto;
-  overflow-x: hidden;
   max-height: 90vh;
   padding: 4rem 6rem;
   border: 1px solid ${({ theme }) => theme.colors.light.default};
@@ -104,7 +92,7 @@ const Modal = ({ requestClose, title, children }: IModalProps) => {
           </ModalHeader>
         )}
 
-        <section>{children}</section>
+        {children}
       </Container>
     </Background>,
     document.getElementById("root")!

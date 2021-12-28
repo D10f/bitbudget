@@ -87,7 +87,7 @@ class SnapshotService {
 
   async encryptAsBase64String(obj: any) {
     const buffer = await this.objectToBuffer(obj);
-    const encryptedBuffer = this.encryptData(buffer);
+    const encryptedBuffer = await this.encryptData(buffer);
     const base64Encoded = btoa(encryptedBuffer.toString());
     return base64Encoded;
   }
@@ -100,14 +100,18 @@ class SnapshotService {
       categories: categories.categories,
     };
 
-    const dataBuffer = await this.objectToBuffer(snapshot);
-    const encryptedData = await this.encryptData(dataBuffer);
-    // const base64Encoded = btoa(encryptedData.toString());
-    await this.ApiService.patch(
-      `/users/snapshot/${user.user?.id}`,
-      encryptedData.buffer,
-      { requestType: "raw" }
-    );
+    try {
+      const dataBuffer = await this.objectToBuffer(snapshot);
+      const encryptedData = await this.encryptData(dataBuffer);
+      // const base64Encoded = btoa(encryptedData.toString());
+      await this.ApiService.patch(
+        `/users/snapshot/${user.user?.id}`,
+        encryptedData.buffer,
+        { requestType: "raw" }
+      );
+    } catch (error) {
+      throw new Error("Could not synchronize with server.");
+    }
   }
 
   async decryptSnapshot(encryptedBuffer: ArrayBuffer) {

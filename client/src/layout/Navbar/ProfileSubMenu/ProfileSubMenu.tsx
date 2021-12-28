@@ -133,46 +133,4 @@ const ProfileSubMenu = ({
   );
 };
 
-/*
- <Button
-        variant="link"
-        icon={<Icon name="profile" />}
-        onClick={() =>
-          setPrompts({ signup: true, logout: false, wallet: false })
-        }
-      >
-        Profile
-      </Button>
-      
-      <Button
-        variant="link"
-        icon={<Icon name="profile" />}
-        onClick={() =>
-          setPrompts({ signup: true, logout: false, wallet: false })
-        }
-      >
-        Categories
-      </Button>
-
-      <Button
-        variant="link"
-        icon={<Icon name="add" />}
-        onClick={() =>
-          setPrompts({ signup: false, logout: false, wallet: true })
-        }
-      >
-        New Wallet
-      </Button>
-
-      <Button
-        variant="link"
-        icon={<Icon name="logout" />}
-        onClick={() =>
-          setPrompts({ signup: false, logout: true, wallet: false })
-        }
-      >
-        Logout
-      </Button>
-*/
-
 export default ProfileSubMenu;

@@ -1,8 +1,9 @@
 import React, { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
+import { AnimatePresence } from "framer-motion";
+
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
-import { AnimatePresence } from "framer-motion";
 import {
   selectWallet,
   deleteWalletAsync,

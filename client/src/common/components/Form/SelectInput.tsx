@@ -44,7 +44,7 @@ const StyledSelectInput = styled.select<IStyledSelectProps>`
 `;
 
 const SelectInputToggleIcon = styled.span`
-  position: relative;
+  position: absolute;
   left: 90%;
   bottom: 4.8rem;
   font-size: 2rem;

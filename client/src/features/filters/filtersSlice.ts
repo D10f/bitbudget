@@ -1,14 +1,9 @@
 import {
-  AnyAction,
-  createDraftSafeSelector,
+  createSelector,
   createSlice,
-  PayloadAction,
-  ThunkAction,
 } from "@reduxjs/toolkit";
 import moment from "moment";
 import { RootState } from "../../app/store";
-import snapshotService from "../../services/snapshot/snapshotService";
-import { addNotification } from "../notifications/notificationsSlice";
 
 interface IFilters {
   currentMonth: number;
@@ -32,7 +27,7 @@ export const filtersSlice = createSlice({
 
 export const selectFilters = (state: RootState) => state.filters;
 
-export const selectCurrentMMYY = createDraftSafeSelector(
+export const selectCurrentMMYY = createSelector(
   selectFilters,
   ({ currentMonth, currentYear }: IFilters) =>
     `${currentMonth.toString().padStart(2, "0")}` +

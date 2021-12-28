@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../common/hooks/useAppSelector";
 import { selectCurrentExpenses } from "../../features/expenses/expensesSlice";
+import { selectCurrentWallet } from "../../features/wallets/walletsSlice";
 import ExpenseItem from "./ExpenseItem/ExpenseItem";
 import SearchBar from "./SearchBar/SearchBar";
 
@@ -29,9 +30,7 @@ const StyledList = styled.ul`
 const ExpenseList = () => {
   const [subMenuOpen, setSubMenuOpen] = useState<string | null>(null);
   const expenses = useAppSelector(selectCurrentExpenses);
-  const currentWallet = useAppSelector((state) =>
-    state.wallets.wallets.find((w) => w.isCurrent)
-  );
+  const currentWallet = useAppSelector(selectCurrentWallet);
 
   return (
     <StyledContainer tabIndex={-1}>

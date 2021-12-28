@@ -1,6 +1,6 @@
 import {
   AnyAction,
-  createDraftSafeSelector,
+  createSelector,
   createSlice,
   PayloadAction,
   ThunkAction,
@@ -62,11 +62,11 @@ export const categoriesSlice = createSlice({
 
 // SELECTORS
 
-const selectSelf = (state: RootState) => state;
+const selectCategoryState = (state: RootState) => state.categories;
 
-export const selectCategories = createDraftSafeSelector(
-  selectSelf,
-  (state: RootState) => state.categories.categories
+export const selectCategories = createSelector(
+  selectCategoryState,
+  (categories: ICategories) => categories.categories
 );
 
 export const { setCategories } = categoriesSlice.actions;

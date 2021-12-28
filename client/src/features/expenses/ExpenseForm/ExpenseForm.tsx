@@ -5,7 +5,6 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import { expenseValidationSchema } from "../../../common/validators/expenseSchema";
-import { addNotification } from "../../../features/notifications/notificationsSlice";
 import { selectCategories } from "../../categories/categoriesSlice";
 import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
@@ -53,12 +52,12 @@ const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) =
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    const updatedExpense = {
+    const expenseData: IExpense = {
       id: expense?.id || uuid(),
       walletId,
       ...data
-    }
-    dispatch(expense ? updateExpense(updatedExpense) : createExpense(updatedExpense));
+    };
+    dispatch(expense ? updateExpense(expenseData) : createExpense(expenseData));
     submitCallback();
   };
 
@@ -69,18 +68,15 @@ const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) =
           name="title"
           control={control}
           defaultValue={expense?.title || ""}
-          render={({ field }) => {
-            console.log(errors);
-            return (
-              <TextInput
-                {...field}
-                label="Title"
-                placeholder="e.g., New phone charger"
-                autoFocus={true}
-                error={Boolean(errors.title)}
-              />
-            )
-          }}
+          render={({ field }) => (
+            <TextInput
+              {...field}
+              label="Title"
+              placeholder="e.g., New phone charger"
+              autoFocus={true}
+              error={Boolean(errors.title)}
+            />
+          )}
         />
       </FormControl>
 

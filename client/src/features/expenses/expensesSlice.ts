@@ -1,6 +1,6 @@
 import {
   AnyAction,
-  createDraftSafeSelector,
+  createSelector,
   createSlice,
   PayloadAction,
   ThunkAction,
@@ -10,75 +10,10 @@ import { RootState } from "../../app/store";
 import Api from "../../services/api/apiService";
 import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
 import snapshotService from "../../services/snapshot/snapshotService";
-import { formatDateAsMMYY } from "../../utils/formatDateAsMMYY";
+import { decryptExpensesWithWorkers, formatDateAsMMYY } from "../../utils/expenses";
 import { selectCurrentMMYY, selectFilters } from "../filters/filtersSlice";
 import { addNotification } from "../notifications/notificationsSlice";
 import { selectCurrentWallet } from "../wallets/walletsSlice";
-
-// const mockExpenses: IExpense[] = [
-//   {
-//     id: Math.random().toString(),
-//     title: "Beer",
-//     description:
-//       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam quae iste asperiores quasi excepturi et.",
-//     amount: "2",
-//     createdAt:
-//       "Fri Dec 03 2021 18:49:44 GMT+0100 (Central European Standard Time)",
-//     category: "Drinks",
-//     walletId: "123",
-//   },
-//   {
-//     id: Math.random().toString(),
-//     title: "Shopping",
-//     description: "Consectetur adipisicing elit.",
-//     amount: "36.18",
-//     createdAt:
-//       "Fri Dec 03 2021 18:49:44 GMT+0100 (Central European Standard Time)",
-//     category: "Groceries",
-//     walletId: "123",
-//   },
-//   {
-//     id: Math.random().toString(),
-//     title: "Fuel",
-//     description: "",
-//     amount: "40",
-//     createdAt:
-//       "Fri Dec 03 2021 18:49:44 GMT+0100 (Central European Standard Time)",
-//     category: "Transport",
-//     walletId: "123",
-//   },
-//   {
-//     id: Math.random().toString(),
-//     title: "Phone charger",
-//     description: "Aliquam quae iste asperiores quasi excepturi et.",
-//     amount: "8.99",
-//     createdAt:
-//       "Fri Dec 03 2021 18:49:44 GMT+0100 (Central European Standard Time)",
-//     category: "Electronics",
-//     walletId: "123",
-//   },
-//   {
-//     id: Math.random().toString(),
-//     title: "Christmas presents for this year",
-//     description:
-//       "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aliquam quae iste asperiores quasi excepturi et.",
-//     amount: "120.41",
-//     createdAt:
-//       "Fri Dec 03 2021 18:49:44 GMT+0100 (Central European Standard Time)",
-//     category: "Other",
-//     walletId: "123",
-//   },
-// ];
-
-interface IExpense {
-  id: string;
-  title: string;
-  description: string;
-  amount: string;
-  createdAt: string;
-  category: string;
-  walletId: string;
-}
 
 interface ExpensesState {
   expenses: IExpense[];
@@ -114,6 +49,9 @@ export const createExpense =
 
       dispatch(addExpense(expense));
       await Api.post("/expenses", encryptedExpense);
+
+      // Update local storage (indexdb)
+      // const existingExpenses = await IndexDBStorage.getItem(indexedDBExpenseKey);
     } catch (error) {
       dispatch(
         addNotification({ msg: (error as Error).message, type: "error" })
@@ -182,19 +120,17 @@ export const startGetExpenses =
 
       // If unavailable, continue with a new API call
       const response = await Api.get(
-        `/wallets/expenses?q=${currentWallet.id}&mmyy=${currentMMYY}`
+        `/wallets/expenses/${currentWallet.id}/${currentMMYY}`
       );
 
-      console.log(response);
-
       // Decrypt expenses
-      // const decryptedExpenses = await decryptExpensesWithWorkers(response.data);
+      const decryptedExpenses = await decryptExpensesWithWorkers(response.data);
 
       // Save to indexedDB
-      // await IndexDBStorage.setItem(indexedDBExpenseKey, decryptedExpenses);
-
+      await IndexDBStorage.setItem(indexedDBExpenseKey, decryptedExpenses);
+      
       // Update redux state
-      // dispatch(setExpenses(decryptedExpenses));
+      dispatch(setExpenses(decryptedExpenses));
     } catch (error) {
       dispatch(
         addNotification({ msg: (error as Error).message, type: "error" })
@@ -232,7 +168,7 @@ const selectExpenses = (state: RootState) => state.expenses.expenses;
 /**
  * Selects the expenses for the current wallet and current month
  */
-export const selectCurrentExpenses = createDraftSafeSelector(
+export const selectCurrentExpenses = createSelector(
   [selectExpenses, selectCurrentWallet, selectFilters],
   (expenses, wallet, { currentMonth, currentYear }) => {
     return expenses.filter((expense) => {

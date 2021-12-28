@@ -1,23 +1,15 @@
 import {
   createSlice,
-  createDraftSafeSelector,
   PayloadAction,
   AnyAction,
   ThunkAction,
+  createSelector,
 } from "@reduxjs/toolkit";
 import { v4 as uuid } from "uuid";
 import { RootState } from "../../app/store";
 import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
 import { addNotification } from "../notifications/notificationsSlice";
-
-const defaultWallet = {
-  id: uuid(),
-  name: "Default Wallet",
-  budget: "1000",
-  currency: "EUR",
-  isCurrent: true,
-};
 
 interface IWalletState {
   wallets: IWallet[];
@@ -152,14 +144,14 @@ export default walletsReducer.reducer;
 
 // SELECTORS
 
-const selectSelf = (state: RootState) => state;
+const selectWalletState = (state: RootState) => state.wallets;
 
-export const selectCurrentWallet = createDraftSafeSelector(
-  selectSelf,
-  (state: RootState) => state.wallets.wallets.find((wallet) => wallet.isCurrent)
+export const selectCurrentWallet = createSelector(
+  selectWalletState,
+  (wallets: IWalletState) => wallets.wallets.find((wallet) => wallet.isCurrent)
 );
 
-export const selectTotalExpenseAmount = createDraftSafeSelector(
+export const selectTotalExpenseAmount = createSelector(
   selectCurrentWallet,
   (wallet: IWallet | undefined) => 0
 );

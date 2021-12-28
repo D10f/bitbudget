@@ -19,6 +19,13 @@ interface IExpense {
   category: string;
   description: string;
   createdAt: string;
+  walletId: string;
+}
+
+interface IEncryptedExpense {
+  _id: string;
+  data: string;
+  walletId: string;
 }
 
 interface INotification {

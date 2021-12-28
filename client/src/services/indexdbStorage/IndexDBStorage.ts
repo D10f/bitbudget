@@ -17,9 +17,9 @@ class IndexDBStorage {
     await del(key);
   }
 
-  /** Creates a new index in the store using the keys provide */
-  async createIndex(wallet: IWallet, MMYY: string, prefix: string) {
-    return `${prefix}:${wallet.id}:${MMYY}`;
+  /** Retrieves all expenses for the current wallet and dates selected */
+  async retrieveExpenses(wallet: IWallet, MMYY: string) {
+    return await this.getItem(`expenses:${wallet.id}:${MMYY}`);
   }
 }
 

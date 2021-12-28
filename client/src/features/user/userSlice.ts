@@ -76,54 +76,48 @@ export const signupUser =
     }
   };
 
-// export const signupUser = createAsyncThunk(
-//   "user/signup",
-//   async (credentials: AuthUserPDO, { dispatch, getState }) => {
-//     const response = await Api.post("/auth/signup", credentials);
+export const loginUser =
+  (
+    credentials: AuthUserPDO
+  ): ThunkAction<void, RootState, unknown, AnyAction> =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      const response = await Api.post("/auth/signin", credentials);
+      SessionStorageService.set("token", response.data.accessToken);
+      await SnapshotService.generateCryptoKey(credentials.password);
 
-//     // Setup initial default wallet
-//     dispatch(addWallet({
-//       id: response.data.defaultWalletId,
-//       name: "Default Wallet",
-//       budget: "1000",
-//       currency: "EUR",
-//       isCurrent: true,
-//     }));
+      // Retrieve user data
+      const userData = await Api.get(`/users/${response.data.id}`, {
+        responseType: "raw",
+      });
 
-//     SessionStorageService.set("token", response.data.accessToken);
-//     await SnapshotService.generateCryptoKey(credentials.password);
-//     const state = getState() as RootState;
-//     await SnapshotService.createEncryptedSnapshot(state);
-//     return {
-//       user: { id: response.data.id, username: response.data.username, email: response.data.email },
-//       token: response.data.accessToken,
-//     };
-//   }
-// );
+      // Decrypt user data
+      const decryptedData = await SnapshotService.decryptSnapshot(
+        userData.data
+      );
 
-export const loginUser = createAsyncThunk(
-  "user/login",
-  async (credentials: AuthUserPDO, { dispatch }) => {
-    const response = await Api.post("/auth/signin", credentials);
-    SessionStorageService.set("token", response.data.accessToken);
-    await SnapshotService.generateCryptoKey(credentials.password);
-    const userData = await Api.get(`/users/${response.data.id}`, {
-      responseType: "raw",
-    });
-    const decryptedData = await SnapshotService.decryptSnapshot(userData.data);
-    console.log(decryptedData);
-    dispatch(setWallets(decryptedData.wallets));
-    dispatch(setCategories(decryptedData.categories));
-    return {
-      user: {
-        id: response.data.id,
-        username: response.data.username,
-        email: response.data.email,
-      },
-      token: response.data.accessToken,
-    };
-  }
-);
+      // Update user data
+      dispatch(setWallets(decryptedData.wallets));
+      dispatch(setCategories(decryptedData.categories));
+      dispatch(
+        setUserData({
+          user: {
+            id: response.data.id,
+            username: response.data.username,
+            email: response.data.email,
+          },
+          token: response.data.accessToken,
+        })
+      );
+    } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
 
 export const userSlice = createSlice({
   name: "user",
@@ -141,21 +135,6 @@ export const userSlice = createSlice({
       SnapshotService.deleteCryptoKey();
       return initialState;
     },
-  },
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginUser.pending, (state) => {
-        state.loading = true;
-      })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-        state.loading = false;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        console.log(action.error.message);
-        state.loading = false;
-      });
   },
 });
 
