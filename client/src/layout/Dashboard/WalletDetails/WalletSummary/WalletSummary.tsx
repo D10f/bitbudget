@@ -107,7 +107,7 @@ const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
         <TotalProgress
           initial={{ width: "0%" }}
           animate={{ width: budgetUsed + "%" }}
-          transition={{ duration: 0.6, type: "spring" }}
+          transition={{ delay: 0.1, duration: 0.6, type: "spring" }}
           value={budgetUsed}
         />
       </ProgressBar>

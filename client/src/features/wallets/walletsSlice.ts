@@ -147,7 +147,7 @@ const selectWalletState = (state: RootState) => state.wallets;
 
 export const selectCurrentWallet = createSelector(
   selectWalletState,
-  (wallets: IWalletState) => wallets.wallets.find((wallet) => wallet.isCurrent)
+  (wallets: IWalletState) => wallets.wallets.find((wallet) => wallet.isCurrent)!
 );
 
 export const selectTotalExpenseAmount = createSelector(

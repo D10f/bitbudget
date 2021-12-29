@@ -1,14 +1,6 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import {
-  Chart as ChartJS,
-  ChartData,
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  Title,
-  Tooltip,
-} from "chart.js";
+import { Chart as ChartJS, ChartData, TooltipItem } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import {
@@ -17,8 +9,7 @@ import {
 } from "../../../features/filters/filtersSlice";
 import { selectAmountByDay } from "../../../features/expenses/expensesSlice";
 import { createGradient } from "../../../utils/chartGradient";
-
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
+import { selectCurrentWallet } from "../../../features/wallets/walletsSlice";
 
 const Card = styled.article`
   width: 100%;
@@ -29,24 +20,49 @@ const Card = styled.article`
 `;
 
 const DailyExpenses = () => {
+  const { currency } = useAppSelector(selectCurrentWallet);
   const labels = useAppSelector(selectLabeledDaysInMonth);
   const currentMMYY = useAppSelector(selectCurrentMMYYByName);
   const [dailyExpenses] = useAppSelector(selectAmountByDay);
   const chartRef = useRef<ChartJS<"bar">>(null);
 
+  const tooltipTitle = (ctx: TooltipItem<"bar">[]) => {
+    const dayOfMonth = ctx[0].label.replace(/^0/, "");
+    const lastDigit = dayOfMonth[dayOfMonth.length - 1];
+    switch (lastDigit) {
+      case "1":
+        return dayOfMonth + "st";
+      case "2":
+        return dayOfMonth + "nd";
+      case "3":
+        return dayOfMonth + "rd";
+      default:
+        return dayOfMonth + "th";
+    }
+  };
+
+  const tooltipLabel = (ctx: TooltipItem<"bar">) => {
+    const amount = ctx.raw as string;
+    return `${amount} ${currency}`;
+  };
+
   const options = {
     responsive: true,
     plugins: {
+      legend: {
+        display: false,
+      },
       title: {
         display: true,
         text: `Daily Expenses For ${currentMMYY}`,
         color: "rgb(255,255,255)",
       },
-    },
-    elements: {
-      bar: {
-        backgroundColor: "rgb(255,255,255)",
-        borderColor: "rgb(255,255,255)",
+      tooltip: {
+        displayColors: false,
+        callbacks: {
+          title: tooltipTitle,
+          label: tooltipLabel,
+        },
       },
     },
     scales: {
@@ -55,6 +71,7 @@ const DailyExpenses = () => {
           color: "rgba(255,255,255, 0.2)",
         },
         ticks: {
+          callback: (value: string | number) => `${value} ${currency}`,
           color: "rgba(255,255,255,0.8)",
         },
       },

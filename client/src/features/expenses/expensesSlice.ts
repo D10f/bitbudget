@@ -261,16 +261,37 @@ export const selectTotalCategories = createSelector(
 /**
  * Selects the total spent amount, sorted by expense category.
  */
-export const selectAmountByCategory = createSelector(
-  [selectCurrentExpenses, selectCategoriesByName],
-  (expenses, categories) => {
+// export const selectAmountByCategory = createSelector(
+//   [selectCurrentExpenses, selectCategoriesByName],
+//   (expenses, categories) => {
+//     const result = categories.reduce((acc: ICategoryToExpenseMap, cat) => {
+//       acc[cat.toLowerCase()] = 0;
+//       return acc;
+//     }, {});
+
+//     for (const { category, amount } of expenses) {
+//       result[category.toLowerCase()] += Math.abs(+amount);
+//     }
+
+//     return Object.values(result);
+//   }
+// );
+
+/**
+ * Selects the percentage spent amount, sorted by expense category.
+ */
+export const selectPercentByCategory = createSelector(
+  [selectCurrentExpenses, selectCategoriesByName, selectCurrentExpenseAmount],
+  (expenses, categories, [ expenseTotal, incomeTotal ]) => {
     const result = categories.reduce((acc: ICategoryToExpenseMap, cat) => {
       acc[cat.toLowerCase()] = 0;
       return acc;
     }, {});
 
+    const totalAmount = expenseTotal + incomeTotal;
+
     for (const { category, amount } of expenses) {
-      result[category.toLowerCase()] += Math.abs(+amount);
+      result[category.toLowerCase()] += Math.abs(+amount) * 100 / totalAmount;
     }
 
     return Object.values(result);
