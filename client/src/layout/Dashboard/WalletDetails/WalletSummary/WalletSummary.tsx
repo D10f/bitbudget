@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { motion } from 'framer-motion';
+import { motion } from "framer-motion";
 import { useAppSelector } from "../../../../common/hooks/useAppSelector";
 import { selectCurrentExpenseAmount } from "../../../../features/expenses/expensesSlice";
 
@@ -26,7 +26,6 @@ const SummaryContainer = styled.article`
 
 const SummaryTitle = styled.h4`
   color: ${({ theme }) => theme.colors.light.darker};
-  /* text-transform: uppercase; */
   font-size: 1.2rem;
 `;
 
@@ -57,20 +56,24 @@ const TotalProgress = styled(motion.div)<ITotalProgressProps>`
   font-size: 1.25rem;
 
   &::after {
-    content: attr(value)"%";
+    content: attr(value) "%";
     position: absolute;
-    right: ${({ value }) => parseFloat(value) < 10 ? "-4rem" : "0"};
+    right: ${({ value }) => (parseFloat(value) < 10 ? "-4rem" : "0")};
     top: 1rem;
     color: ${({ theme }) => theme.colors.light.default};
   }
 `;
 
 const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
-  const expenseAmount = useAppSelector(selectCurrentExpenseAmount);
-  const totalAmt = expenseAmount.toFixed(2);
+  const [expenseAmount, incomeAmount] = useAppSelector(
+    selectCurrentExpenseAmount
+  );
+  const totalExpenseAmnt = expenseAmount.toFixed(2);
+  const totalIncomeAmnt = incomeAmount.toFixed(2);
 
   const budgetUsed = Math.min(
-    (Number(totalAmt) * 100) / Math.max(Number(wallet!.budget), 1),
+    ((+totalExpenseAmnt - +totalIncomeAmnt) * 100) /
+      Math.max(Number(wallet!.budget), 1),
     100
   ).toFixed(2);
 
@@ -86,13 +89,15 @@ const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
       <SummaryContainer>
         <SummaryTitle>Total Spent</SummaryTitle>
         <SummaryInfo>
-          {totalAmt} {wallet?.currency}
+          {totalExpenseAmnt} {wallet?.currency}
         </SummaryInfo>
       </SummaryContainer>
 
       <SummaryContainer>
-        <SummaryTitle>Categories</SummaryTitle>
-        <SummaryInfo>5</SummaryInfo>
+        <SummaryTitle>Total Income</SummaryTitle>
+        <SummaryInfo>
+          {totalIncomeAmnt} {wallet?.currency}
+        </SummaryInfo>
       </SummaryContainer>
 
       <ProgressBar
@@ -100,14 +105,12 @@ const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
         role="progressbar"
       >
         <TotalProgress
-          initial={{ width: '0%' }}
-          animate={{ width: budgetUsed + '%' }}
-          transition={{ duration: 0.6, type: 'spring' }}
+          initial={{ width: "0%" }}
+          animate={{ width: budgetUsed + "%" }}
+          transition={{ duration: 0.6, type: "spring" }}
           value={budgetUsed}
         />
       </ProgressBar>
-
-      {/* <StackedProgress total={+totalAmt} values={[28.17,36.77]}></StackedProgress> */}
     </Container>
   );
 };

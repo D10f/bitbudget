@@ -31,8 +31,9 @@ const GlobalStyles = createGlobalStyle`
     gap: 2rem;
     display: grid;
     grid-template:
-      "navbar expenses wallet" auto
-      "navbar expenses graphs" auto /
+      "navbar expenses dashboard" auto
+      "navbar expenses dashboard" auto
+      "navbar expenses dashboard" auto /
       auto    3fr      4fr;
   }
 

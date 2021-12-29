@@ -23,6 +23,7 @@ const StyledList = styled.ul`
   align-items: center;
   gap: 2rem;
   margin-right: 2rem;
+  margin-left: 1rem;
   padding-bottom: 2rem;
   /* max-width: 35rem; */
 `;

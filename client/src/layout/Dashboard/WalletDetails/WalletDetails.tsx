@@ -8,8 +8,9 @@ interface IWalletDetailsProps {
 }
 
 const WalletCard = styled.article`
-  grid-area: wallet;
+  width: 100%;
   padding: 2rem;
+  padding-bottom: 3rem;
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
   border-radius: ${({ theme }) => theme.layout.borderRadius};

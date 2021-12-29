@@ -38,7 +38,7 @@ export const theme = {
     notifications: 60
   },
   effects: {
-    shadow: '0.5rem 1rem 2rem rgba(0, 0, 0, 0.25)',
+    shadow: '0.4rem 1rem 1rem rgba(0, 0, 0, 0.25)',
   },
   breakpoints: {
     xs: "480px",

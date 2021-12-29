@@ -8,19 +8,15 @@ import {
   BarElement,
   Title,
   Tooltip,
-  ChartArea,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useAppSelector } from "../../../../common/hooks/useAppSelector";
+import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import {
   selectCurrentMMYYByName,
   selectLabeledDaysInMonth,
-} from "../../../../features/filters/filtersSlice";
-import { selectAmountByDay } from "../../../../features/expenses/expensesSlice";
-
-interface IExpenseSummary {
-  expenses: IExpense[];
-}
+} from "../../../features/filters/filtersSlice";
+import { selectAmountByDay } from "../../../features/expenses/expensesSlice";
+import { createGradient } from "../../../utils/chartGradient";
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
@@ -32,19 +28,11 @@ const Card = styled.article`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
 `;
 
-const ExpenseSummary = ({ expenses }: IExpenseSummary) => {
+const DailyExpenses = () => {
   const labels = useAppSelector(selectLabeledDaysInMonth);
   const currentMMYY = useAppSelector(selectCurrentMMYYByName);
   const [dailyExpenses] = useAppSelector(selectAmountByDay);
   const chartRef = useRef<ChartJS<"bar">>(null);
-
-  const createGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
-    const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
-    gradient.addColorStop(0, "#eb904a"); // primary dark
-    gradient.addColorStop(0.5, "#FF8C00"); // primary default
-    gradient.addColorStop(1, "#ecbc37"); // primary light
-    return gradient;
-  };
 
   const options = {
     responsive: true,
@@ -81,7 +69,7 @@ const ExpenseSummary = ({ expenses }: IExpenseSummary) => {
     },
   };
 
-  let data: ChartData<"bar", number[], string> = {
+  const data: ChartData<"bar", number[], string> = {
     labels,
     datasets: [
       {
@@ -100,4 +88,4 @@ const ExpenseSummary = ({ expenses }: IExpenseSummary) => {
   );
 };
 
-export default ExpenseSummary;
+export default DailyExpenses;

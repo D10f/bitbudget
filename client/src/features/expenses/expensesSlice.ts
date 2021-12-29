@@ -10,14 +10,24 @@ import { RootState } from "../../app/store";
 import Api from "../../services/api/apiService";
 import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
 import snapshotService from "../../services/snapshot/snapshotService";
-import { decryptExpensesWithWorkers, formatDateAsMMYY } from "../../utils/expenses";
-import { selectDaysInCurrentMonth, selectFilters } from "../filters/filtersSlice";
+import {
+  decryptExpensesWithWorkers,
+  formatDateAsMMYY,
+} from "../../utils/expenses";
+import {
+  selectDaysInCurrentMonth,
+  selectFilters,
+} from "../filters/filtersSlice";
 import { addNotification } from "../notifications/notificationsSlice";
 import { selectCurrentWallet } from "../wallets/walletsSlice";
 
 interface ExpensesState {
   expenses: IExpense[];
   loading: boolean;
+}
+
+interface ICategoryToExpenseMap {
+  [key: string]: number;
 }
 
 const initialState: ExpensesState = {
@@ -113,7 +123,7 @@ export const startGetExpenses =
 
       // Check and retrieve expenses from local storage first
       expenses = await IndexDBStorage.getItem(indexedDBExpenseKey);
-      
+
       if (expenses) {
         return dispatch(setExpenses(expenses));
       }
@@ -128,7 +138,7 @@ export const startGetExpenses =
 
       // Save to indexedDB
       await IndexDBStorage.setItem(indexedDBExpenseKey, decryptedExpenses);
-      
+
       // Update redux state
       dispatch(setExpenses(decryptedExpenses));
     } catch (error) {
@@ -187,38 +197,85 @@ export const selectCurrentExpenses = createSelector(
  */
 export const selectCurrentExpenseAmount = createSelector(
   [selectCurrentExpenses],
-  (expenses) => expenses.reduce((total, expense) => total + +(expense.amount), 0)
+  (expenses) => {
+    let expenseAmnt = 0;
+    let incomeAmnt = 0;
+
+    for (const expense of expenses) {
+      if (+expense.amount >= 0 || expense.category.toLowerCase() === "income") {
+        expenseAmnt += +expense.amount;
+      } else {
+        incomeAmnt += Math.abs(+expense.amount);
+      }
+    }
+
+    return [expenseAmnt, incomeAmnt];
+  }
 );
 
 /**
  * Selects the total spent amount, sorted by expense day of month.
  */
- export const selectAmountByDay = createSelector(
+export const selectAmountByDay = createSelector(
   [selectCurrentExpenses, selectDaysInCurrentMonth],
   (expenses, daysInMonth) => {
-    // Chart.js expects an array of values, in this case each item represents an amount per day of
-    // the month. Amount defaults to 0.
     const expenseResult = new Array(daysInMonth).fill(0);
-    const incomeResult  = new Array(daysInMonth).fill(0);
+    const incomeResult = new Array(daysInMonth).fill(0);
 
-    expenses.forEach(({ createdAt, amount, category }) => {
-      // Get the numeric day when expense was created, substracting 1 because arrays are 0-indexed.
-      const expenseDay = +(moment(createdAt).format('D')) - 1;
-
-      // Increase total amount for that day by the amount of current expense
-      if (category.toLowerCase() === 'income') {
-        // incomeResult[expenseDay] += parseFloat((+amount / 100).toFixed(2));
-        incomeResult[expenseDay] += parseFloat(amount);
-      } else {
+    for (const { createdAt, amount, category } of expenses) {
+      const expenseDay = +moment(createdAt).format("D") - 1;
+      if (+amount >= 0 || category.toLowerCase() === "income") {
         // expenseResult[expenseDay] += parseFloat((+amount / 100).toFixed(2));
         expenseResult[expenseDay] += parseFloat(amount);
+      } else {
+        incomeResult[expenseDay] += parseFloat(amount);
       }
-    });
+    }
 
-    return [ expenseResult, incomeResult ];
+    return [expenseResult, incomeResult];
   }
 );
 
+/**
+ * Selects the different categories in the current expenses by name
+ */
+export const selectCategoriesByName = createSelector(
+  [selectCurrentExpenses],
+  (expenses) => {
+    const categories = new Set<string>();
+    for (const expense of expenses) {
+      categories.add(expense.category);
+    }
+    return Array.from(categories);
+  }
+);
+
+/**
+ * Selects the number of different categories in the current expenses
+ */
+export const selectTotalCategories = createSelector(
+  [selectCategoriesByName],
+  (categoryArray) => categoryArray.length
+);
+
+/**
+ * Selects the total spent amount, sorted by expense category.
+ */
+export const selectAmountByCategory = createSelector(
+  [selectCurrentExpenses, selectCategoriesByName],
+  (expenses, categories) => {
+    const result = categories.reduce((acc: ICategoryToExpenseMap, cat) => {
+      acc[cat.toLowerCase()] = 0;
+      return acc;
+    }, {});
+
+    for (const { category, amount } of expenses) {
+      result[category.toLowerCase()] += Math.abs(+amount);
+    }
+
+    return Object.values(result);
+  }
+);
 
 export const { addExpense, modifyExpense, setExpenses, setLoading } =
   expensesSlice.actions;
