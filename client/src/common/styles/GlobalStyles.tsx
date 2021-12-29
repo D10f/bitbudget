@@ -32,7 +32,7 @@ const GlobalStyles = createGlobalStyle`
     display: grid;
     grid-template:
       "navbar expenses wallet" auto
-      "navbar expenses graphs" 50% /
+      "navbar expenses graphs" auto /
       auto    3fr      4fr;
   }
 

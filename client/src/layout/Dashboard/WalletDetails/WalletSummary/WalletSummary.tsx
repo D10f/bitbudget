@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from 'framer-motion';
 import { useAppSelector } from "../../../../common/hooks/useAppSelector";
-import { selectCurrentExpenses } from "../../../../features/expenses/expensesSlice";
+import { selectCurrentExpenseAmount } from "../../../../features/expenses/expensesSlice";
 
 interface IWalletSummaryProps {
   wallet: IWallet | undefined;
@@ -46,6 +46,7 @@ const ProgressBar = styled.div`
 
 const TotalProgress = styled(motion.div)<ITotalProgressProps>`
   position: relative;
+  width: 100%;
   height: 1rem;
   background-image: linear-gradient(
     to right,
@@ -65,14 +66,11 @@ const TotalProgress = styled(motion.div)<ITotalProgressProps>`
 `;
 
 const WalletSummary = ({ wallet }: IWalletSummaryProps) => {
-  const expenses = useAppSelector(selectCurrentExpenses);
-  const totalAmt = expenses
-    .reduce((total, expense) => total + +expense.amount, 0)
-    .toFixed(2);
-
+  const expenseAmount = useAppSelector(selectCurrentExpenseAmount);
+  const totalAmt = expenseAmount.toFixed(2);
 
   const budgetUsed = Math.min(
-    (Number(totalAmt) * 100) / Number(wallet!.budget),
+    (Number(totalAmt) * 100) / Math.max(Number(wallet!.budget), 1),
     100
   ).toFixed(2);
 

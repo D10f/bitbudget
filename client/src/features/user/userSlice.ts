@@ -1,6 +1,5 @@
 import {
   createSlice,
-  createAsyncThunk,
   ThunkAction,
   AnyAction,
   PayloadAction,

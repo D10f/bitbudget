@@ -7,7 +7,7 @@ interface IWalletDetailsProps {
   wallet: IWallet | undefined;
 }
 
-const WalletCard = styled.section`
+const WalletCard = styled.article`
   grid-area: wallet;
   padding: 2rem;
   background-color: ${({ theme }) => theme.colors.dark.darkest};

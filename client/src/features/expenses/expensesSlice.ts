@@ -11,7 +11,7 @@ import Api from "../../services/api/apiService";
 import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
 import snapshotService from "../../services/snapshot/snapshotService";
 import { decryptExpensesWithWorkers, formatDateAsMMYY } from "../../utils/expenses";
-import { selectCurrentMMYY, selectFilters } from "../filters/filtersSlice";
+import { selectDaysInCurrentMonth, selectFilters } from "../filters/filtersSlice";
 import { addNotification } from "../notifications/notificationsSlice";
 import { selectCurrentWallet } from "../wallets/walletsSlice";
 
@@ -181,6 +181,44 @@ export const selectCurrentExpenses = createSelector(
     });
   }
 );
+
+/**
+ * Selects the total amount for all expenses in the current wallet and month
+ */
+export const selectCurrentExpenseAmount = createSelector(
+  [selectCurrentExpenses],
+  (expenses) => expenses.reduce((total, expense) => total + +(expense.amount), 0)
+);
+
+/**
+ * Selects the total spent amount, sorted by expense day of month.
+ */
+ export const selectAmountByDay = createSelector(
+  [selectCurrentExpenses, selectDaysInCurrentMonth],
+  (expenses, daysInMonth) => {
+    // Chart.js expects an array of values, in this case each item represents an amount per day of
+    // the month. Amount defaults to 0.
+    const expenseResult = new Array(daysInMonth).fill(0);
+    const incomeResult  = new Array(daysInMonth).fill(0);
+
+    expenses.forEach(({ createdAt, amount, category }) => {
+      // Get the numeric day when expense was created, substracting 1 because arrays are 0-indexed.
+      const expenseDay = +(moment(createdAt).format('D')) - 1;
+
+      // Increase total amount for that day by the amount of current expense
+      if (category.toLowerCase() === 'income') {
+        // incomeResult[expenseDay] += parseFloat((+amount / 100).toFixed(2));
+        incomeResult[expenseDay] += parseFloat(amount);
+      } else {
+        // expenseResult[expenseDay] += parseFloat((+amount / 100).toFixed(2));
+        expenseResult[expenseDay] += parseFloat(amount);
+      }
+    });
+
+    return [ expenseResult, incomeResult ];
+  }
+);
+
 
 export const { addExpense, modifyExpense, setExpenses, setLoading } =
   expensesSlice.actions;
