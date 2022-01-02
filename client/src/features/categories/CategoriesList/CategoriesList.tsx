@@ -1,4 +1,4 @@
-import React, { ReactEventHandler, useState } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
@@ -7,7 +7,6 @@ import { addNotification } from "../../notifications/notificationsSlice";
 import { selectCategories, updateCategories } from "../categoriesSlice";
 
 import Button from "../../../common/components/Button/Button";
-import Row from "../../../common/components/Row/Row";
 
 interface ICategoriesList {
   submitCallback: () => void;

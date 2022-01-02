@@ -27,7 +27,16 @@ const DailyExpenses = () => {
   const chartRef = useRef<ChartJS<"bar">>(null);
 
   const tooltipTitle = (ctx: TooltipItem<"bar">[]) => {
-    const dayOfMonth = ctx[0].label.replace(/^0/, "");
+    const dayOfMonth = ctx[0].label.replace(/^0/, '');
+    return sufixDayOfMonth(dayOfMonth);
+  };
+
+  const scaleXLabel = (value: string | number) => {
+    const dayOfMonth = value.toString()
+    return sufixDayOfMonth(dayOfMonth);
+  };
+
+  const sufixDayOfMonth = (dayOfMonth: string) => {
     const lastDigit = dayOfMonth[dayOfMonth.length - 1];
     switch (lastDigit) {
       case "1":
@@ -71,16 +80,19 @@ const DailyExpenses = () => {
           color: "rgba(255,255,255, 0.2)",
         },
         ticks: {
-          callback: (value: string | number) => `${value} ${currency}`,
           color: "rgba(255,255,255,0.8)",
+          callback: (value: string | number) => `${value} ${currency}`,
         },
       },
       x: {
         grid: {
           display: false,
         },
+        min: 1,
+        max: 31,
         ticks: {
           color: "rgba(255,255,255,0.8)",
+          callback: scaleXLabel
         },
       },
     },

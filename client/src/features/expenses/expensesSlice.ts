@@ -15,6 +15,7 @@ import {
   formatDateAsMMYY,
 } from "../../utils/expenses";
 import {
+  selectCurrentMMYY,
   selectDaysInCurrentMonth,
   selectFilters,
 } from "../filters/filtersSlice";
@@ -41,6 +42,10 @@ export const createExpense =
     try {
       dispatch(setLoading(true));
 
+      // Update local state and storage (indexdb)
+      dispatch(addExpense(expense));
+      await IndexDBStorage.saveExpense(expense, formatDateAsMMYY(expense.createdAt));
+
       // encrypt sensitive information
       const data = await snapshotService.encryptAsBase64String({
         title: expense.title,
@@ -57,11 +62,8 @@ export const createExpense =
         expenseDate: formatDateAsMMYY(expense.createdAt),
       };
 
-      dispatch(addExpense(expense));
+      // Synchronize with server
       await Api.post("/expenses", encryptedExpense);
-
-      // Update local storage (indexdb)
-      // const existingExpenses = await IndexDBStorage.getItem(indexedDBExpenseKey);
     } catch (error) {
       dispatch(
         addNotification({ msg: (error as Error).message, type: "error" })
@@ -119,10 +121,10 @@ export const startGetExpenses =
       dispatch(setLoading(true));
 
       const indexedDBExpenseKey = `expenses:${currentWallet.id}:${currentMMYY}`;
-      let expenses: IExpense[];
+      let expenses: IExpense[] | undefined;
 
       // Check and retrieve expenses from local storage first
-      expenses = await IndexDBStorage.getItem(indexedDBExpenseKey);
+      expenses = await IndexDBStorage.getItem<IExpense[]>(indexedDBExpenseKey);
 
       if (expenses) {
         return dispatch(setExpenses(expenses));
@@ -282,7 +284,7 @@ export const selectTotalCategories = createSelector(
  */
 export const selectPercentByCategory = createSelector(
   [selectCurrentExpenses, selectCategoriesByName, selectCurrentExpenseAmount],
-  (expenses, categories, [ expenseTotal, incomeTotal ]) => {
+  (expenses, categories, [expenseTotal, incomeTotal]) => {
     const result = categories.reduce((acc: ICategoryToExpenseMap, cat) => {
       acc[cat.toLowerCase()] = 0;
       return acc;
@@ -291,7 +293,7 @@ export const selectPercentByCategory = createSelector(
     const totalAmount = expenseTotal + incomeTotal;
 
     for (const { category, amount } of expenses) {
-      result[category.toLowerCase()] += Math.abs(+amount) * 100 / totalAmount;
+      result[category.toLowerCase()] += (Math.abs(+amount) * 100) / totalAmount;
     }
 
     return Object.values(result);

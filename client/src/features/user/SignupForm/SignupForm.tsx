@@ -4,7 +4,6 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import { signupUser } from "../../../features/user/userSlice";
-import { addNotification } from "../../../features/notifications/notificationsSlice";
 import { signupValidationSchema } from "../../../common/validators/signupSchema";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 

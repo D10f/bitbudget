@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import { ChartData, TooltipItem, TooltipCallbacks } from "chart.js";
+import { ChartData, TooltipItem } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useAppSelector } from "../../../common/hooks/useAppSelector";
 import {
@@ -85,8 +85,9 @@ const CategorySummary = () => {
         grid: {
           display: false,
         },
+        min: 0,
+        max: 100,
         ticks: {
-          beginAtZero: true,
           color: "rgba(255,255,255,0.8)",
           callback: (value: string | number) => value + "%",
         },

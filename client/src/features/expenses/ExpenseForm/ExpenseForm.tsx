@@ -16,7 +16,6 @@ import SelectInput from "../../../common/components/Form/SelectInput";
 import TextArea from "../../../common/components/Form/TextArea";
 import DatePicker from "../../../common/components/Form/DatePicker";
 import { createExpense, updateExpense } from "../expensesSlice";
-import moment from "moment";
 
 interface IExpenseFormProps {
   walletId: string;

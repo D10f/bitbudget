@@ -8,7 +8,8 @@ import Worker from "worker-loader!./decrypt.worker";
  */
 export const formatDateAsMMYY = (date: string) => {
   const momentObj = moment(date);
-  const month = momentObj.month().toString().padStart(2, "0");
+  // increase by 1 as moment counts months from 0 to 11
+  const month = (momentObj.month() + 1).toString().padStart(2, "0");
   const year = momentObj.year().toString().slice(2);
   return `${month}${year}`;
 };

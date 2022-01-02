@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useAppDispatch } from '../../../common/hooks/useAppDispatch';
 import { useAppSelector } from '../../../common/hooks/useAppSelector';
 import { profileValidationSchema } from '../../../common/validators/profileSchema';
 
@@ -33,7 +32,6 @@ const StyledForm = styled.form`
 const UserProfile = ({ submitCallback }: IUserProfile) => {
 
   const { user } = useAppSelector(state => state.user);
-  const dispatch = useAppDispatch();
   const {
     handleSubmit,
     control,

@@ -30,9 +30,13 @@ class SnapshotService {
 
   async deriveKey(salt = crypto.getRandomValues(new Uint8Array(32))) {
     // Retrieve key material from store
-    const keyMaterial = await this.indexDBStorage.getItem(
+    const keyMaterial = await this.indexDBStorage.getItem<CryptoKey>(
       this.cryptoIndexdbKey
     );
+
+    if (!keyMaterial) {
+      throw new Error('Could not derive cryptographic key.');
+    }
 
     const key = await crypto.subtle.deriveKey(
       {

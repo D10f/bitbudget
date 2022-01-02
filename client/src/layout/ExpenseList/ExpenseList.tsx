@@ -33,23 +33,24 @@ const ExpenseList = () => {
   const expenses = useAppSelector(selectCurrentExpenses);
   const currentWallet = useAppSelector(selectCurrentWallet);
 
+  const showExpenseList = () =>
+    expenses.map((expense) => (
+      <ExpenseItem
+        key={expense.id}
+        expense={expense}
+        wallet={currentWallet!}
+        subMenuOpen={subMenuOpen}
+        setSubMenuOpen={setSubMenuOpen}
+      />
+    ));
+
+  const showEmptyList = () => <p>No Expenses For This Period</p>;
+
   return (
     <StyledContainer tabIndex={-1}>
       <StyledList>
         <SearchBar />
-        {expenses.length > 0 ? (
-          expenses.map((expense) => (
-            <ExpenseItem
-              key={expense.id}
-              expense={expense}
-              wallet={currentWallet!}
-              subMenuOpen={subMenuOpen}
-              setSubMenuOpen={setSubMenuOpen}
-            />
-          ))
-        ) : (
-          <p>No Expenses To Show</p>
-        )}
+        {expenses.length > 0 ? showExpenseList() : showEmptyList()}
       </StyledList>
     </StyledContainer>
   );
