@@ -15,7 +15,6 @@ import {
   formatDateAsMMYY,
 } from "../../utils/expenses";
 import {
-  selectCurrentMMYY,
   selectDaysInCurrentMonth,
   selectFilters,
 } from "../filters/filtersSlice";
@@ -44,7 +43,10 @@ export const createExpense =
 
       // Update local state and storage (indexdb)
       dispatch(addExpense(expense));
-      await IndexDBStorage.saveExpense(expense, formatDateAsMMYY(expense.createdAt));
+      await IndexDBStorage.saveExpense(
+        expense,
+        formatDateAsMMYY(expense.createdAt)
+      );
 
       // encrypt sensitive information
       const data = await snapshotService.encryptAsBase64String({
@@ -64,6 +66,12 @@ export const createExpense =
 
       // Synchronize with server
       await Api.post("/expenses", encryptedExpense);
+      dispatch(
+        addNotification({
+          msg: "Expense created successfully",
+          type: "success",
+        })
+      );
     } catch (error) {
       dispatch(
         addNotification({ msg: (error as Error).message, type: "error" })
@@ -78,6 +86,13 @@ export const updateExpense =
   async (dispatch, getState) => {
     try {
       dispatch(setLoading(true));
+
+      // Update local state and storage (indexdb)
+      dispatch(modifyExpense(expense));
+      await IndexDBStorage.saveExpense(
+        expense,
+        formatDateAsMMYY(expense.createdAt)
+      );
 
       // encrypt sensitive information
       const data = await snapshotService.encryptAsBase64String({
@@ -100,8 +115,34 @@ export const updateExpense =
         newExpenseDate: formatDateAsMMYY(expense.createdAt),
       };
 
-      dispatch(modifyExpense(expense));
       await Api.patch(`/expenses/${expense.id}`, encryptedExpense);
+    } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
+export const deleteExpense =
+  (expense: IExpense): ThunkAction<void, RootState, unknown, AnyAction> =>
+  async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      dispatch(removeExpense(expense.id));
+      const expenseDateAsMMY = formatDateAsMMYY(expense.createdAt);
+
+      await IndexDBStorage.deleteExpense(expense, expenseDateAsMMY);
+
+      await Api.delete(`/expenses/${expense.id}/${expenseDateAsMMY}`);
+
+      dispatch(
+        addNotification({
+          msg: "Expense deleted Successfully",
+          type: "success",
+        })
+      );
     } catch (error) {
       dispatch(
         addNotification({ msg: (error as Error).message, type: "error" })
@@ -125,6 +166,7 @@ export const startGetExpenses =
 
       // Check and retrieve expenses from local storage first
       expenses = await IndexDBStorage.getItem<IExpense[]>(indexedDBExpenseKey);
+      console.log(expenses);
 
       if (expenses) {
         return dispatch(setExpenses(expenses));
@@ -137,6 +179,7 @@ export const startGetExpenses =
 
       // Decrypt expenses
       const decryptedExpenses = await decryptExpensesWithWorkers(response.data);
+      console.log(decryptedExpenses);
 
       // Save to indexedDB
       await IndexDBStorage.setItem(indexedDBExpenseKey, decryptedExpenses);
@@ -162,6 +205,11 @@ export const expensesSlice = createSlice({
     modifyExpense: (state, action: PayloadAction<IExpense>) => {
       state.expenses = state.expenses.map((expense) =>
         expense.id === action.payload.id ? action.payload : expense
+      );
+    },
+    removeExpense: (state, action: PayloadAction<string>) => {
+      state.expenses = state.expenses.filter(
+        (expense) => expense.id !== action.payload
       );
     },
     setExpenses: (state, action: PayloadAction<IExpense[]>) => {
@@ -300,6 +348,11 @@ export const selectPercentByCategory = createSelector(
   }
 );
 
-export const { addExpense, modifyExpense, setExpenses, setLoading } =
-  expensesSlice.actions;
+export const {
+  addExpense,
+  modifyExpense,
+  removeExpense,
+  setExpenses,
+  setLoading,
+} = expensesSlice.actions;
 export default expensesSlice.reducer;

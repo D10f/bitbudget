@@ -8,9 +8,12 @@ import Api from "../../services/api/apiService";
 import SnapshotService from "../../services/snapshot/snapshotService";
 import SessionStorageService from "../../services/sessionStorage/sessionStorageService";
 import { addWallet, setWallets } from "../wallets/walletsSlice";
-import { setCategories } from "../categories/categoriesSlice";
+import { resetCategories, setCategories } from "../categories/categoriesSlice";
 import { RootState } from "../../app/store";
 import { addNotification } from "../notifications/notificationsSlice";
+import { resetFilters } from "../filters/filtersSlice";
+import { setExpenses } from "../expenses/expensesSlice";
+import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
 
 interface IUserState {
   user: IUser | null;
@@ -118,24 +121,49 @@ export const loginUser =
     }
   };
 
+export const logoutUser =
+  (): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {
+    try {
+      dispatch(setLoading(true));
+      dispatch(setUserData({ user: null, token: null }));
+      dispatch(resetFilters());
+      dispatch(resetCategories());
+      dispatch(setExpenses([]));
+      dispatch(setWallets([]));
+      // SessionStorageService.clear();
+      IndexDBStorage.clearAll();
+      // SnapshotService.deleteCryptoKey();
+      dispatch(
+        addNotification({
+          msg: "Logged out successuflly",
+          type: "success",
+        })
+      );
+    } catch (error) {
+      dispatch(
+        addNotification({ msg: (error as Error).message, type: "error" })
+      );
+    } finally {
+      dispatch(setLoading(false));
+    }
+  };
+
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    setUserData: (state, action) => {
+    setUserData: (
+      state,
+      action: PayloadAction<Pick<IUserState, "user" | "token">>
+    ) => {
       state.user = action.payload.user;
       state.token = action.payload.token;
     },
     setLoading: (state, action: PayloadAction<boolean>) => {
       state.loading = action.payload;
     },
-    logout: () => {
-      SessionStorageService.clear();
-      SnapshotService.deleteCryptoKey();
-      return initialState;
-    },
   },
 });
 
-export const { setUserData, setLoading, logout } = userSlice.actions;
+export const { setUserData, setLoading } = userSlice.actions;
 export default userSlice.reducer;

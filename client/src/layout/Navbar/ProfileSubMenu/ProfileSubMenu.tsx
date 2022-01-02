@@ -2,7 +2,7 @@ import React, { useState, useRef, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
-import { logout } from "../../../features/user/userSlice";
+import { logoutUser } from "../../../features/user/userSlice";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
 import { addNotification } from "../../../features/notifications/notificationsSlice";
 
@@ -22,10 +22,10 @@ interface IProfileSubMenuProps {
 
 // Sub menu options (and modal state switches)
 const initialState = {
-  "Profile": false,
-  "Categories": false,
+  Profile: false,
+  Categories: false,
   "Add Wallet": false,
-  "Logout": false,
+  Logout: false,
 };
 
 const ProfileSubMenu = ({
@@ -51,18 +51,7 @@ const ProfileSubMenu = ({
     <Modal requestClose={clearPrompts}>
       <p>Are you sure you want to logout?</p>
       <Row>
-        <Button
-          variant="action"
-          onClick={() => {
-            dispatch(logout());
-            dispatch(
-              addNotification({
-                msg: "Logged out successuflly",
-                type: "success",
-              })
-            );
-          }}
-        >
+        <Button variant="action" onClick={() => dispatch(logoutUser())}>
           Logout
         </Button>
         <Button variant="link" onClick={clearPrompts}>
@@ -120,15 +109,17 @@ const ProfileSubMenu = ({
         })}
       </>
       <AnimatePresence>
-        {prompts['Profile'] && profilePromptModal()}
+        {prompts["Profile"] && profilePromptModal()}
       </AnimatePresence>
       <AnimatePresence>
-        {prompts['Categories'] && categoriesPromptModal()}
+        {prompts["Categories"] && categoriesPromptModal()}
       </AnimatePresence>
       <AnimatePresence>
-        {prompts['Add Wallet'] && walletPromptModal()}
+        {prompts["Add Wallet"] && walletPromptModal()}
       </AnimatePresence>
-      <AnimatePresence>{prompts['Logout'] && logoutPromptModal()}</AnimatePresence>
+      <AnimatePresence>
+        {prompts["Logout"] && logoutPromptModal()}
+      </AnimatePresence>
     </Popup>
   );
 };

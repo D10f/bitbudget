@@ -1,4 +1,4 @@
-import { get, set, update, del } from "idb-keyval";
+import { get, set, update, clear, del } from "idb-keyval";
 
 class IndexDBStorage {
   /** Retrieves an item from the IndexedDB with the key provided */
@@ -15,6 +15,11 @@ class IndexDBStorage {
   async clear(key: string) {
     await del(key);
   }
+  
+  /** Deletes all keys from the store */
+  async clearAll() {
+    await clear();
+  }
 
   /** Retrieves all expenses for the current wallet and dates selected */
   async retrieveExpenses(wallet: IWallet, MMYY: string) {
@@ -30,12 +35,25 @@ class IndexDBStorage {
     // const dateMMYY = formatDateAsMMYY(expense.createdAt);
 
     const idbKey = `expenses:${expense.walletId}:${MMYY}`;
-    console.log(MMYY)
     await update<IExpense[]>(idbKey, (currentExpenses) => {
-      return currentExpenses
-        ? [ ...currentExpenses, expense ]
-        : [ expense ];
+      return currentExpenses ? [...currentExpenses, expense] : [expense];
     });
+  }
+
+  /** Updates the given expense to indexdb */
+  async updateExpense(expense: IExpense, MMYY: string) {
+    const idbKey = `expenses:${expense.walletId}:${MMYY}`;
+    await update<IExpense[]>(idbKey, (currentExpenses) =>
+      currentExpenses!.map((exp) => (exp.id === expense.id ? expense : exp))
+    );
+  }
+  
+  /** Deletes the given expense to indexdb */
+  async deleteExpense(expense: IExpense, MMYY: string) {
+    const idbKey = `expenses:${expense.walletId}:${MMYY}`;
+    await update<IExpense[]>(idbKey, (currentExpenses) =>
+      currentExpenses!.filter((exp) => (exp.id !== expense.id))
+    );
   }
 }
 

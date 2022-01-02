@@ -57,6 +57,22 @@ export const categoriesSlice = createSlice({
     setCategories: (state, action: PayloadAction<string[]>) => {
       state.categories = action.payload.sort((a, b) => (a > b ? 1 : -1));
     },
+    resetCategories: (state) => {
+      state = {
+        categories: [
+          "Travel",
+          "Food",
+          "Electronics",
+          "Entertainment",
+          "Groceries",
+          "Gifts",
+          "Drinks",
+          "Tickets",
+          "Sports",
+          "Education",
+        ],
+      };
+    },
   },
 });
 
@@ -69,5 +85,5 @@ export const selectCategories = createSelector(
   (categories: ICategories) => categories.categories
 );
 
-export const { setCategories } = categoriesSlice.actions;
+export const { setCategories, resetCategories } = categoriesSlice.actions;
 export default categoriesSlice.reducer;

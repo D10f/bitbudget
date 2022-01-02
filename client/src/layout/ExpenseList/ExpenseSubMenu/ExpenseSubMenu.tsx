@@ -9,6 +9,7 @@ import Popup from "../../../common/components/Popup/Popup";
 import Modal from "../../../common/components/Modal/Modal";
 import ExpenseForm from "../../../features/expenses/ExpenseForm/ExpenseForm";
 import Row from "../../../common/components/Row/Row";
+import { deleteExpense } from "../../../features/expenses/expensesSlice";
 
 interface IExpenseSubMenuProps {
   expense: IExpense;
@@ -66,12 +67,8 @@ const ExpenseSubMenu = ({
         <Button
           variant="action"
           onClick={() => {
-            dispatch(
-              addNotification({
-                msg: "Expense Deleted Successfully",
-                type: "success",
-              })
-            );
+            dispatch(deleteExpense(expense));
+            setPrompts(initialState);
           }}
         >
           Confirm

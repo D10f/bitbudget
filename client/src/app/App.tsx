@@ -11,7 +11,6 @@ import Welcome from "../layout/Welcome/Welcome";
 
 const App = () => {
   const isAuthenticated = useAppSelector((state) => state.user.token);
-  // const isAuthenticated = true;
   return (
     <ThemeProvider theme={theme}>
       <GlobalStyles />
