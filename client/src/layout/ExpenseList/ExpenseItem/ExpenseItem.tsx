@@ -29,10 +29,6 @@ const popupMotion = {
   },
   exit: {
     scale: 0,
-    transition: {
-      delay: 0.5,
-      duration: 0.2,
-    },
   },
 };
 
@@ -100,7 +96,6 @@ const ExpenseItem = ({
       variants={popupMotion}
       initial="initial"
       animate="visible"
-      exit="exit"
     >
       <ExpenseHeader>
         <ExpenseTitle>

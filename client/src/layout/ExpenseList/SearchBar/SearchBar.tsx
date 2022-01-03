@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Icon from '../../../common/components/Icon/Icon';
+import React, { useState } from "react";
+import styled from "styled-components";
+import Icon from "../../../common/components/Icon/Icon";
+
+interface ISearchBar {
+  setTextFilter: (term: string) => void;
+}
 
 const StyledContainer = styled.aside`
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.dark.darkest};;
+  width: 90%;
+  border-bottom: 2px solid ${({ theme }) => theme.colors.dark.darkest}; ;
 `;
 
 const StyledLabel = styled.label`
@@ -19,21 +24,20 @@ const StyledLabel = styled.label`
 `;
 
 const StyledInput = styled.input`
-  width: 100%;
+  display: inline-block;
   background: none;
   color: inherit;
-  font-size: 2rem;
+  font-size: 1.6rem;
   padding: 1rem;
   border: none;
 `;
 
-const SearchBar = () => {
-
+const SearchBar = ({ setTextFilter }: ISearchBar) => {
   const [text, setText] = useState('');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
-    // TODO: create filter function and update expense list
+    setTextFilter(e.target.value);
   };
 
   return (
@@ -41,7 +45,12 @@ const SearchBar = () => {
       <StyledLabel htmlFor="search">
         <Icon name="search" />
       </StyledLabel>
-      <StyledInput id="search" name="search" value={text} onChange={handleChange} />
+      <StyledInput
+        id="search"
+        name="search"
+        value={text}
+        onChange={handleChange}
+      />
     </StyledContainer>
   );
 };
