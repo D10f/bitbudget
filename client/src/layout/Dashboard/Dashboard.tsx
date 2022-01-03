@@ -54,7 +54,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     dispatch(startGetExpenses(currentWallet, currentMMYY));
-  }, [currentWallet, currentMMYY]);
+  }, [dispatch, currentWallet, currentMMYY]);
 
   return (
     <DashboardContainer>

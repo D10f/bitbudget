@@ -4,7 +4,6 @@ import { AnimatePresence } from "framer-motion";
 import { useClickOutside } from "../../../common/hooks/useClickOutside";
 import { logoutUser } from "../../../features/user/userSlice";
 import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
-import { addNotification } from "../../../features/notifications/notificationsSlice";
 
 import Button from "../../../common/components/Button/Button";
 import Icon from "../../../common/components/Icon/Icon";

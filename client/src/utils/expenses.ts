@@ -36,6 +36,7 @@ export const decryptExpensesWithWorkers = (
     for (let _core = 0; _core < logicalCores; _core++) {
       const worker = new Worker();
 
+      // eslint-disable-next-line
       worker.addEventListener("message", (message: MessageEvent<IExpense>) => {
         const expense = message.data;
         decryptedExpenses.push(expense);
