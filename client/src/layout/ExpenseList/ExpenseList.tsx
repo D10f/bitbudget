@@ -1,3 +1,4 @@
+import { AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
 import { useAppSelector } from "../../common/hooks/useAppSelector";
@@ -50,7 +51,9 @@ const ExpenseList = () => {
     <StyledContainer tabIndex={-1}>
       <StyledList>
         <SearchBar />
-        {expenses.length > 0 ? showExpenseList() : showEmptyList()}
+        <AnimatePresence>
+          {expenses.length > 0 ? showExpenseList() : showEmptyList()}
+        </AnimatePresence>
       </StyledList>
     </StyledContainer>
   );

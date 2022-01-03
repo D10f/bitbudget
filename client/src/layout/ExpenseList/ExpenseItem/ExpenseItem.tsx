@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import moment from "moment";
-import { AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import ExpenseSubMenu from "../ExpenseSubMenu/ExpenseSubMenu";
 
 interface IExpenseItemProps {
@@ -15,7 +15,28 @@ interface IExpenseDateStyleProps {
   datetime: string;
 }
 
-const ExpenseCard = styled.article`
+const popupMotion = {
+  initial: {
+    scale: 0,
+  },
+  visible: {
+    scale: 1,
+    transition: {
+      type: "spring",
+      delay: 0.2,
+      duration: 0.3,
+    },
+  },
+  exit: {
+    scale: 0,
+    transition: {
+      delay: 0.5,
+      duration: 0.2,
+    },
+  },
+};
+
+const ExpenseCard = styled(motion.article)`
   position: relative;
   /* max-width: 35rem; */
   padding: 2rem;
@@ -74,7 +95,13 @@ const ExpenseItem = ({
   setSubMenuOpen,
 }: IExpenseItemProps) => {
   return (
-    <ExpenseCard>
+    <ExpenseCard
+      key={expense.id}
+      variants={popupMotion}
+      initial="initial"
+      animate="visible"
+      exit="exit"
+    >
       <ExpenseHeader>
         <ExpenseTitle>
           <ExpenseLink

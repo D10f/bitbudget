@@ -67,8 +67,8 @@ const ExpenseSubMenu = ({
         <Button
           variant="action"
           onClick={() => {
-            dispatch(deleteExpense(expense));
             setPrompts(initialState);
+            dispatch(deleteExpense(expense));
           }}
         >
           Confirm
