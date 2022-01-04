@@ -2,21 +2,21 @@ import React, { useState, useRef, useCallback } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
-import { useClickOutside } from "../../../common/hooks/useClickOutside";
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { useClickOutside } from "@hooks/useClickOutside";
 import {
   selectWallet,
   deleteWalletAsync,
   updateWalletAsync,
-} from "../../../features/wallets/walletsSlice";
+} from "@features/wallets/walletsSlice";
+import WalletForm from "@features/wallets/WalletForm";
+import ExpenseForm from "@features/expenses/ExpenseForm";
 
-import Button from "../../../common/components/Button/Button";
-import Icon from "../../../common/components/Icon/Icon";
-import Row from "../../../common/components/Row/Row";
-import Popup from "../../../common/components/Popup/Popup";
-import Modal from "../../../common/components/Modal/Modal";
-import WalletForm from '../../../features/wallets/WalletForm/WalletForm';
-import ExpenseForm from "../../../features/expenses/ExpenseForm/ExpenseForm";
+import Button from "@components/Button/Button";
+import Icon from "@components/Icon/Icon";
+import Row from "@components/Row/Row";
+import Popup from "@components/Popup/Popup";
+import Modal from "@components/Modal/Modal";
 
 interface IWalletSubMenuProps {
   wallet: IWallet;
@@ -40,7 +40,6 @@ const WalletSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IWalletSubMenuProps) => {
-
   const [prompts, setPrompts] = useState(initialState);
   const clearPrompts = useCallback(() => setPrompts(initialState), []);
   const dispatch = useAppDispatch();
@@ -76,10 +75,13 @@ const WalletSubMenu = ({
 
   const createExpenseModal = () => (
     <Modal title="New Expense" requestClose={clearPrompts}>
-      <ExpenseForm walletId={wallet.id} submitCallback={() => {
-        clearPrompts();
-        closeSubMenu();
-      }} />
+      <ExpenseForm
+        walletId={wallet.id}
+        submitCallback={() => {
+          clearPrompts();
+          closeSubMenu();
+        }}
+      />
     </Modal>
   );
 
@@ -125,7 +127,9 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="edit" />}
-        onClick={() => setPrompts({ delete: false, editing: true, expense: false })}
+        onClick={() =>
+          setPrompts({ delete: false, editing: true, expense: false })
+        }
       >
         Edit Wallet
       </Button>
@@ -133,7 +137,9 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="add" />}
-        onClick={() => setPrompts({ delete: false, editing: false, expense: true })}
+        onClick={() =>
+          setPrompts({ delete: false, editing: false, expense: true })
+        }
       >
         Add Expense
       </Button>
@@ -141,14 +147,20 @@ const WalletSubMenu = ({
       <Button
         variant="link"
         icon={<Icon name="trash" />}
-        onClick={() => setPrompts({ delete: true, editing: false, expense: false })}
+        onClick={() =>
+          setPrompts({ delete: true, editing: false, expense: false })
+        }
       >
         Delete Wallet
       </Button>
 
-      <AnimatePresence>{prompts.delete && confirmDeleteModal()}</AnimatePresence>
+      <AnimatePresence>
+        {prompts.delete && confirmDeleteModal()}
+      </AnimatePresence>
       <AnimatePresence>{prompts.editing && editWalletModal()}</AnimatePresence>
-      <AnimatePresence>{prompts.expense && createExpenseModal()}</AnimatePresence>
+      <AnimatePresence>
+        {prompts.expense && createExpenseModal()}
+      </AnimatePresence>
     </Popup>
   );
 };

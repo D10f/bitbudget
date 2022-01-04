@@ -2,12 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import { ChartData, TooltipItem } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useAppSelector } from "../../../common/hooks/useAppSelector";
+import { useAppSelector } from "@hooks/useAppSelector";
+import useExpenseFilters from "@hooks/useExpenseFilters";
 import {
   selectCategoriesByName,
   selectPercentByCategory,
-} from "../../../features/expenses/expensesSlice";
-import { selectCurrentMMYYByName } from "../../../features/filters/filtersSlice";
+} from "@features/expenses/expensesSlice";
+import { selectCurrentMMYYByName } from "@features/filters/filtersSlice";
 
 const CardContainer = styled.div`
   width: 100%;
@@ -44,11 +45,19 @@ const CategorySummary = () => {
   const labels = useAppSelector(selectCategoriesByName);
   const categoryExpenseAmnt = useAppSelector(selectPercentByCategory);
   const currentMMYY = useAppSelector(selectCurrentMMYYByName);
+  const { updateSearchTerm } = useExpenseFilters();
+
+  // TODO: Add proper typing...
+  const handleClick = (...args: any) => {
+    const category = args[2].tooltip.dataPoints[0].dataset.label;
+    updateSearchTerm(`/${category}`);
+  };
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
     indexAxis: "y" as const,
+    onClick: handleClick,
     plugins: {
       legend: {
         position: "bottom" as const,
@@ -64,7 +73,7 @@ const CategorySummary = () => {
       },
       tooltip: {
         callbacks: {
-          title: () => '',
+          title: () => "",
           label: (ctx: TooltipItem<"bar">) =>
             `${ctx.dataset.label} ${(ctx.raw as number).toFixed(2)}%`,
         },

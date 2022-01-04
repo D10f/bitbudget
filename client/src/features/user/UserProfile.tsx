@@ -1,13 +1,14 @@
-import React from 'react';
-import styled from 'styled-components';
-import { joiResolver } from '@hookform/resolvers/joi';
-import { Controller, SubmitHandler, useForm } from 'react-hook-form';
-import { useAppSelector } from '../../../common/hooks/useAppSelector';
-import { profileValidationSchema } from '../../../common/validators/profileSchema';
+import React from "react";
+import { joiResolver } from "@hookform/resolvers/joi";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-import Button from '../../../common/components/Button/Button';
-import FormControl from '../../../common/components/Form/FormControl';
-import TextInput from '../../../common/components/Form/TextInput';
+import { useAppSelector } from "../../common/hooks/useAppSelector";
+import { profileValidationSchema } from "../../common/validators/profileSchema";
+
+import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
+import FormControl from "../../common/components/Form/FormControl/FormControl";
+import Button from "../../common/components/Button/Button";
+import TextInput from "../../common/components/Form/TextInput/TextInput";
 
 interface FormTypes {
   username?: string;
@@ -20,18 +21,8 @@ interface IUserProfile {
   submitCallback: () => void;
 }
 
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 2rem;
-  margin: 0 2rem;
-`;
-
 const UserProfile = ({ submitCallback }: IUserProfile) => {
-
-  const { user } = useAppSelector(state => state.user);
+  const { user } = useAppSelector((state) => state.user);
   const {
     handleSubmit,
     control,
@@ -41,12 +32,11 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
   });
 
   const onSubmit: SubmitHandler<FormTypes> = (data) => {
-    console.log(data);
     submitCallback();
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
           name="username"
@@ -64,7 +54,7 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           )}
         />
       </FormControl>
-      
+
       <FormControl>
         <Controller
           name="email"
@@ -81,7 +71,7 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           )}
         />
       </FormControl>
-      
+
       <FormControl>
         <Controller
           name="password"
@@ -97,7 +87,7 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           )}
         />
       </FormControl>
-      
+
       <FormControl>
         <Controller
           name="confirmPassword"
@@ -113,11 +103,11 @@ const UserProfile = ({ submitCallback }: IUserProfile) => {
           )}
         />
       </FormControl>
-      
+
       <Button type="submit" variant="action">
         Save
       </Button>
-    </StyledForm>
+    </FormContainer>
   );
 };
 

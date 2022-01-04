@@ -1,21 +1,21 @@
 import React from "react";
-import styled from "styled-components";
 import { v4 as uuid} from 'uuid';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { expenseValidationSchema } from "../../../common/validators/expenseSchema";
-import { selectCategories } from "../../categories/categoriesSlice";
-import { useAppSelector } from "../../../common/hooks/useAppSelector";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { expenseValidationSchema } from "../../common/validators/expenseSchema";
+import { selectCategories } from "../categories/categoriesSlice";
+import { useAppSelector } from "../../common/hooks/useAppSelector";
+import { useAppDispatch } from "../../common/hooks/useAppDispatch";
+import { createExpense, updateExpense } from "./expensesSlice";
 
-import Button from "../../../common/components/Button/Button";
-import FormControl from "../../../common/components/Form/FormControl";
-import TextInput from "../../../common/components/Form/TextInput";
-import SelectInput from "../../../common/components/Form/SelectInput";
-import TextArea from "../../../common/components/Form/TextArea";
-import DatePicker from "../../../common/components/Form/DatePicker";
-import { createExpense, updateExpense } from "../expensesSlice";
+import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
+import FormControl from "../../common/components/Form/FormControl/FormControl";
+import Button from "../../common/components/Button/Button";
+import TextInput from "../../common/components/Form/TextInput/TextInput";
+import SelectInput from "../../common/components/Form/SelectInput/SelectInput";
+import TextArea from "../../common/components/Form/TextArea/TextArea";
+import DatePicker from "../../common/components/Form/DatePicker/DatePicker";
 
 interface IExpenseFormProps {
   walletId: string;
@@ -30,14 +30,6 @@ type FormTypes = {
   category: string;
   createdAt: string;
 };
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 2rem;
-`;
 
 const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) => {
   const dispatch = useAppDispatch();
@@ -62,7 +54,7 @@ const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) =
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
           name="title"
@@ -146,7 +138,7 @@ const ExpenseForm = ({ walletId, expense, submitCallback }: IExpenseFormProps) =
       <Button type="submit" variant="action">
         {expense ? "Update" : "Create"}
       </Button>
-    </StyledForm>
+    </FormContainer>
   );
 };
 

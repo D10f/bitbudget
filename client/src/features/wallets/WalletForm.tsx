@@ -1,17 +1,17 @@
 import React from "react";
-import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
-import { v4 as uuid} from 'uuid';
-
+import { v4 as uuid } from "uuid";
 import { joiResolver } from "@hookform/resolvers/joi";
-import { addWalletAsync, updateWalletAsync } from "../../../features/wallets/walletsSlice";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
-import { walletValidationSchema } from "../../../common/validators/walletSchema";
 
-import Button from "../../../common/components/Button/Button";
-import FormControl from "../../../common/components/Form/FormControl";
-import SelectInput from "../../../common/components/Form/SelectInput";
-import TextInput from "../../../common/components/Form/TextInput";
+import { addWalletAsync, updateWalletAsync } from "./walletsSlice";
+import { useAppDispatch } from "../../common/hooks/useAppDispatch";
+import { walletValidationSchema } from "../../common/validators/walletSchema";
+
+import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
+import FormControl from "../../common/components/Form/FormControl/FormControl";
+import SelectInput from "../../common/components/Form/SelectInput/SelectInput";
+import TextInput from "../../common/components/Form/TextInput/TextInput";
+import Button from "../../common/components/Button/Button";
 
 interface IWalletFormProps {
   wallet?: IWallet;
@@ -23,15 +23,6 @@ type FormTypes = {
   currency: string;
   budget: string;
 };
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 2rem;
-  margin: 0 2rem;
-`;
 
 const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
   const dispatch = useAppDispatch();
@@ -49,12 +40,14 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
       isCurrent: wallet?.isCurrent || false,
       ...data,
     };
-    dispatch(wallet ? updateWalletAsync(walletObject) : addWalletAsync(walletObject));
+    dispatch(
+      wallet ? updateWalletAsync(walletObject) : addWalletAsync(walletObject)
+    );
     submitCallback();
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
           name="name"
@@ -120,7 +113,7 @@ const WalletForm = ({ wallet, submitCallback }: IWalletFormProps) => {
       <Button type="submit" variant="action">
         {wallet ? "Update" : "Create"}
       </Button>
-    </StyledForm>
+    </FormContainer>
   );
 };
 

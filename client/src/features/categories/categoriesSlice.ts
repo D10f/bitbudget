@@ -5,9 +5,9 @@ import {
   PayloadAction,
   ThunkAction,
 } from "@reduxjs/toolkit";
-import { RootState } from "../../app/store";
-import snapshotService from "../../services/snapshot/snapshotService";
-import { addNotification } from "../notifications/notificationsSlice";
+import { RootState } from "@app/store";
+import snapshotService from "@services/snapshot/snapshotService";
+import { addNotification } from "@features/notifications/notificationsSlice";
 
 interface ICategories {
   categories: string[];

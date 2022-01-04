@@ -6,20 +6,17 @@ import {
   ThunkAction,
 } from "@reduxjs/toolkit";
 import moment from "moment";
-import { RootState } from "../../app/store";
-import Api from "../../services/api/apiService";
-import IndexDBStorage from "../../services/indexdbStorage/IndexDBStorage";
-import snapshotService from "../../services/snapshot/snapshotService";
-import {
-  decryptExpensesWithWorkers,
-  formatDateAsMMYY,
-} from "../../utils/expenses";
+import { RootState } from "@app/store";
+import Api from "@services/api/apiService";
+import IndexDBStorage from "@services/indexdbStorage/IndexDBStorage";
+import snapshotService from "@services/snapshot/snapshotService";
+import { decryptExpensesWithWorkers, formatDateAsMMYY } from "@utils/expenses";
 import {
   selectDaysInCurrentMonth,
   selectFilters,
-} from "../filters/filtersSlice";
-import { addNotification } from "../notifications/notificationsSlice";
-import { selectCurrentWallet } from "../wallets/walletsSlice";
+} from "@features/filters/filtersSlice";
+import { addNotification } from "@features/notifications/notificationsSlice";
+import { selectCurrentWallet } from "@features/wallets/walletsSlice";
 
 interface ExpensesState {
   expenses: IExpense[];
@@ -166,7 +163,6 @@ export const startGetExpenses =
 
       // Check and retrieve expenses from local storage first
       expenses = await IndexDBStorage.getItem<IExpense[]>(indexedDBExpenseKey);
-      console.log(expenses);
 
       if (expenses) {
         return dispatch(setExpenses(expenses));

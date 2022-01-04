@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
-import { useAppSelector } from "../../common/hooks/useAppSelector";
-import Icon from "../../common/components/Icon/Icon";
+import { useAppSelector } from "@hooks/useAppSelector";
+import Icon from "@components/Icon/Icon";
 import NavbarItem from "./NavbarItem/NavbarItem";
 import WalletSubMenu from "./WalletSubMenu/WalletSubMenu";
 import ProfileSubMenu from "./ProfileSubMenu/ProfileSubMenu";

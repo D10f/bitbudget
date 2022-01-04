@@ -1,15 +1,12 @@
-import {
-  createSelector,
-  createSlice,
-  PayloadAction,
-} from "@reduxjs/toolkit";
+import { createSelector, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import moment from "moment";
-import { RootState } from "../../app/store";
-import { months } from '../../common/constants';
+import { RootState } from "@app/store";
+import { months } from "@constants";
 
 interface IFilters {
   currentMonth: number;
   currentYear: number;
+  searchText: string;
 }
 
 export interface IFilterUpdate {
@@ -20,6 +17,7 @@ export interface IFilterUpdate {
 const initialState: IFilters = {
   currentMonth: moment().month(),
   currentYear: moment().year(),
+  searchText: "",
 };
 
 export const filtersSlice = createSlice({
@@ -30,10 +28,14 @@ export const filtersSlice = createSlice({
       state.currentMonth = action.payload.newMonth;
       state.currentYear = action.payload.newYear;
     },
+    setTextFilter: (state, action: PayloadAction<string>) => {
+      state.searchText = action.payload;
+    },
     resetFilters: (state) => {
       state = {
         currentMonth: moment().month(),
         currentYear: moment().year(),
+        searchText: "",
       };
     },
   },
@@ -60,7 +62,8 @@ export const selectCurrentMMYYByName = createSelector(
 
 export const selectDaysInCurrentMonth = createSelector(
   [selectFilters],
-  ({ currentMonth, currentYear}) => moment({ month: currentMonth, year: currentYear }).daysInMonth()
+  ({ currentMonth, currentYear }) =>
+    moment({ month: currentMonth, year: currentYear }).daysInMonth()
 );
 
 export const selectLabeledDaysInMonth = createSelector(
@@ -71,12 +74,16 @@ export const selectLabeledDaysInMonth = createSelector(
 
     for (let day = 1; day <= daysInMonth; day++) {
       // result.push(`${day.toString().padStart(2, '0')}${month}`);
-      result.push(`${day.toString().padStart(2, '0')}`);
+      result.push(`${day.toString().padStart(2, "0")}`);
     }
     return result;
   }
-)
+);
 
+export const selectSearchText = createSelector(
+  [selectFilters],
+  ({ searchText }) => searchText
+);
 
-export const { setCurrentMonth, resetFilters } = filtersSlice.actions;
+export const { setCurrentMonth, setTextFilter, resetFilters } = filtersSlice.actions;
 export default filtersSlice.reducer;

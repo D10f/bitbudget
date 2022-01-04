@@ -1,18 +1,18 @@
 import React, { useState, useRef, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 
-import { useClickOutside } from "../../../common/hooks/useClickOutside";
-import { logoutUser } from "../../../features/user/userSlice";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { useClickOutside } from "@hooks/useClickOutside";
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { logoutUser } from "@features/user/userSlice";
+import WalletForm from "@features/wallets/WalletForm";
+import UserProfile from "@features/user/UserProfile";
+import CategoriesList from "@features/categories/CategoriesList/CategoriesList";
 
-import Button from "../../../common/components/Button/Button";
-import Icon from "../../../common/components/Icon/Icon";
-import Row from "../../../common/components/Row/Row";
-import Popup from "../../../common/components/Popup/Popup";
-import Modal from "../../../common/components/Modal/Modal";
-import WalletForm from "../../../features/wallets/WalletForm/WalletForm";
-import UserProfile from "../../../features/user/UserProfile/UserProfile";
-import CategoriesList from "../../../features/categories/CategoriesList/CategoriesList";
+import Button from "@components/Button/Button";
+import Icon from "@components/Icon/Icon";
+import Row from "@components/Row/Row";
+import Popup from "@components/Popup/Popup";
+import Modal from "@components/Modal/Modal";
 
 interface IProfileSubMenuProps {
   isSubMenuOpen: boolean;

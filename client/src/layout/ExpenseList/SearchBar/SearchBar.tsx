@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import Icon from "../../../common/components/Icon/Icon";
-
-interface ISearchBar {
-  setTextFilter: (term: string) => void;
-}
+import { useAppSelector } from "@hooks/useAppSelector";
+import useExpenseFilters from "@hooks/useExpenseFilters";
+import { selectSearchText } from "@features/filters/filtersSlice";
+import Icon from "@components/Icon/Icon";
 
 const StyledContainer = styled.aside`
   display: flex;
@@ -32,13 +31,19 @@ const StyledInput = styled.input`
   border: none;
 `;
 
-const SearchBar = ({ setTextFilter }: ISearchBar) => {
+const SearchBar = () => {
   const [text, setText] = useState('');
+  const searchText = useAppSelector(selectSearchText);
+  const { updateSearchTerm } = useExpenseFilters();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setText(e.target.value);
-    setTextFilter(e.target.value);
+    updateSearchTerm(e.target.value);
   };
+
+  useEffect(() => {
+    setText(searchText);
+  }, [searchText]);
 
   return (
     <StyledContainer>

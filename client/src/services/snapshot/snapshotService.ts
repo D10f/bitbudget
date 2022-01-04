@@ -1,6 +1,6 @@
-import { RootState } from "../../app/store";
-import api from "../api/apiService";
-import IndexDBStorage from "../indexdbStorage/IndexDBStorage";
+import { RootState } from "@app/store";
+import api from "@services/api/apiService";
+import IndexDBStorage from "@services/indexdbStorage/IndexDBStorage";
 
 const CRYPTO_INDEX_KEY = "cryptoKey";
 

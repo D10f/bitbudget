@@ -1,13 +1,15 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import { theme } from "../common/styles/theme";
-import { useAppSelector } from "../common/hooks/useAppSelector";
-import GlobalStyles from "../common/styles/GlobalStyles";
-import Navbar from "../layout/Navbar/Navbar";
-import ExpenseList from "../layout/ExpenseList/ExpenseList";
-import Notification from "../features/notifications/Notification";
-import Dashboard from "../layout/Dashboard/Dashboard";
-import Welcome from "../layout/Welcome/Welcome";
+
+import { theme } from "@styles/theme";
+import GlobalStyles from "@styles/GlobalStyles";
+import { useAppSelector } from "@hooks/useAppSelector";
+import Notification from "@features/notifications/Notification/Notification";
+
+import Navbar from "@layout/Navbar/Navbar";
+import ExpenseList from "@layout/ExpenseList/ExpenseList";
+import Dashboard from "@layout/Dashboard/Dashboard/Dashboard";
+import Welcome from "@layout/Welcome/Welcome";
 
 const App = () => {
   const isAuthenticated = useAppSelector((state) => state.user.token);

@@ -1,9 +1,9 @@
 import { AnimatePresence } from "framer-motion";
 import React, { useState } from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../common/hooks/useAppSelector";
-import useExpenseFilters from "../../common/hooks/useExpenseFilters";
-import { selectCurrentWallet } from "../../features/wallets/walletsSlice";
+import { useAppSelector } from "@hooks/useAppSelector";
+import useExpenseFilters from "@hooks/useExpenseFilters";
+import { selectCurrentWallet } from "@features/wallets/walletsSlice";
 import ExpenseItem from "./ExpenseItem/ExpenseItem";
 import SearchBar from "./SearchBar/SearchBar";
 
@@ -32,7 +32,7 @@ const StyledList = styled.ul`
 const ExpenseList = () => {
   const currentWallet = useAppSelector(selectCurrentWallet);
   const [subMenuOpen, setSubMenuOpen] = useState<string | null>(null);
-  const { setTextFilter, filteredExpenses } = useExpenseFilters();
+  const { filteredExpenses } = useExpenseFilters();
 
   const showExpenseList = () =>
     filteredExpenses.map((expense) => (
@@ -50,7 +50,7 @@ const ExpenseList = () => {
   return (
     <StyledContainer tabIndex={-1}>
       <StyledList>
-        <SearchBar setTextFilter={setTextFilter} />
+        <SearchBar />
         <AnimatePresence>
           {filteredExpenses.length > 0 ? showExpenseList() : showEmptyList()}
         </AnimatePresence>

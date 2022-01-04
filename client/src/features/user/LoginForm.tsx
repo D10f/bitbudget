@@ -1,28 +1,20 @@
 import React from "react";
-import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { loginUser } from "../../../features/user/userSlice";
-import { loginValidationSchema } from "../../../common/validators/loginSchema";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { loginUser } from "./userSlice";
+import { loginValidationSchema } from "../../common/validators/loginSchema";
+import { useAppDispatch } from "../../common/hooks/useAppDispatch";
 
-import FormControl from "../../../common/components/Form/FormControl";
-import TextInput from "../../../common/components/Form/TextInput";
-import Button from "../../../common/components/Button/Button";
+import FormContainer from '../../common/components/Form/FormContainer/FormContainer';
+import FormControl from "../../common/components/Form/FormControl/FormControl";
+import TextInput from "../../common/components/Form/TextInput/TextInput";
+import Button from "../../common/components/Button/Button";
 
 type FormTypes = {
   username: string;
   password: string;
 };
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 2rem;
-`;
 
 const LoginForm = () => {
   const dispatch = useAppDispatch();
@@ -40,7 +32,7 @@ const LoginForm = () => {
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
           name="username"
@@ -76,7 +68,7 @@ const LoginForm = () => {
       </FormControl>
 
       <Button variant="action">Login</Button>
-    </StyledForm>
+    </FormContainer>
   );
 };
 

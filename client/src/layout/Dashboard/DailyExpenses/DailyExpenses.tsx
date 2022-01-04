@@ -2,14 +2,15 @@ import React, { useRef } from "react";
 import styled from "styled-components";
 import { Chart as ChartJS, ChartData, TooltipItem } from "chart.js";
 import { Bar } from "react-chartjs-2";
-import { useAppSelector } from "../../../common/hooks/useAppSelector";
+import { useAppSelector } from "@hooks/useAppSelector";
+import useExpenseFilters from "@hooks/useExpenseFilters";
 import {
   selectCurrentMMYYByName,
   selectLabeledDaysInMonth,
-} from "../../../features/filters/filtersSlice";
-import { selectAmountByDay } from "../../../features/expenses/expensesSlice";
-import { createGradient } from "../../../utils/chartGradient";
-import { selectCurrentWallet } from "../../../features/wallets/walletsSlice";
+} from "@features/filters/filtersSlice";
+import { selectAmountByDay } from "@features/expenses/expensesSlice";
+import { selectCurrentWallet } from "@features/wallets/walletsSlice";
+import { createGradient } from "@utils/chartGradient";
 
 const Card = styled.article`
   width: 100%;
@@ -25,6 +26,7 @@ const DailyExpenses = () => {
   const currentMMYY = useAppSelector(selectCurrentMMYYByName);
   const [dailyExpenses] = useAppSelector(selectAmountByDay);
   const chartRef = useRef<ChartJS<"bar">>(null);
+  const { updateSearchTerm } = useExpenseFilters();
 
   const tooltipTitle = (ctx: TooltipItem<"bar">[]) => {
     const dayOfMonth = ctx[0].label.replace(/^0/, "");
@@ -60,8 +62,15 @@ const DailyExpenses = () => {
     return `${amount} ${currency}`;
   };
 
+  // TODO: Add proper typing...
+  const handleClick = (...args: any) => {
+    const dayOfMonth = args[2].tooltip.dataPoints[0].label;
+    updateSearchTerm(`@${dayOfMonth}`);
+  };
+
   const options = {
     responsive: true,
+    onClick: handleClick,
     plugins: {
       legend: {
         display: false,

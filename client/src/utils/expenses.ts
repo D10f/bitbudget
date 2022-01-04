@@ -1,5 +1,5 @@
 import moment from "moment";
-import { makeGenerator } from "./makeGenerator";
+import { makeGenerator } from "@utils/makeGenerator";
 // eslint-disable-next-line import/no-webpack-loader-syntax
 import Worker from "worker-loader!./decrypt.worker";
 

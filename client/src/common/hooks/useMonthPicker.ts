@@ -2,9 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import {
   selectFilters,
   setCurrentMonth,
-} from "../../features/filters/filtersSlice";
-import { useAppDispatch } from "./useAppDispatch";
-import { useAppSelector } from "./useAppSelector";
+} from "@features/filters/filtersSlice";
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { useAppSelector } from "@hooks/useAppSelector";
 
 /**
  * Extracts the current month/year from the current state and provides

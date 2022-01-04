@@ -1,4 +1,4 @@
-import sessionStorageService from "../sessionStorage/sessionStorageService";
+import sessionStorageService from "@services/sessionStorage/sessionStorageService";
 
 const publicAccessRoutes = ["auth/signup", "auth/signin"];
 

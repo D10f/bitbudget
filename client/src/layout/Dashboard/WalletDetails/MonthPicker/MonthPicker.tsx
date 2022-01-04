@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import Row from "../../../../common/components/Row/Row";
-import { useMonthPicker } from "../../../../common/hooks/useMonthPicker";
-import { months } from '../../../../common/constants';
+import { useMonthPicker } from "@hooks/useMonthPicker";
+import { months } from '@constants';
+import Row from "@components/Row/Row";
 
 interface ITimeTag {
   datetime: string;

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import { useAppSelector } from "../../../../common/hooks/useAppSelector";
-import { selectCurrentExpenseAmount } from "../../../../features/expenses/expensesSlice";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { selectCurrentExpenseAmount } from "@features/expenses/expensesSlice";
 
 interface IWalletSummaryProps {
   wallet: IWallet | undefined;

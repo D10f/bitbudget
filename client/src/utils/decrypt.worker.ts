@@ -1,4 +1,4 @@
-import SnapshotService from "../services/snapshot/snapshotService";
+import SnapshotService from "@services/snapshot/snapshotService";
 
 // eslint-disable-next-line
 const ctx: Worker = self as any;

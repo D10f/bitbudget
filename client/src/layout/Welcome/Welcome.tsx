@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import Button from "../../common/components/Button/Button";
-import Modal from "../../common/components/Modal/Modal";
-import LoginForm from "../../features/user/LoginForm/LoginForm";
-import SignupForm from "../../features/user/SignupForm/SignupForm";
+import Button from "@components/Button/Button";
+import Modal from "@components/Modal/Modal";
+import LoginForm from "@features/user/LoginForm";
+import SignupForm from "@features/user/SignupForm";
 
 enum AUTH_ACTION {
   LOGIN,

@@ -1,5 +1,5 @@
 import React from "react";
-import svgSprite from "../../../assets/sprite.svg";
+import svgSprite from "@assets/sprite.svg";
 
 interface IconProps {
   name: string;

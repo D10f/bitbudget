@@ -1,15 +1,17 @@
 import React, { useCallback, useRef, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
-import { useClickOutside } from "../../../common/hooks/useClickOutside";
-import { addNotification } from "../../../features/notifications/notificationsSlice";
-import Button from "../../../common/components/Button/Button";
-import Icon from "../../../common/components/Icon/Icon";
-import Popup from "../../../common/components/Popup/Popup";
-import Modal from "../../../common/components/Modal/Modal";
-import ExpenseForm from "../../../features/expenses/ExpenseForm/ExpenseForm";
-import Row from "../../../common/components/Row/Row";
-import { deleteExpense } from "../../../features/expenses/expensesSlice";
+
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { useClickOutside } from "@hooks/useClickOutside";
+import { addNotification } from "@features/notifications/notificationsSlice";
+import { deleteExpense } from "@features/expenses/expensesSlice";
+
+import ExpenseForm from "@features/expenses/ExpenseForm";
+import Button from "@components/Button/Button";
+import Icon from "@components/Icon/Icon";
+import Popup from "@components/Popup/Popup";
+import Modal from "@components/Modal/Modal";
+import Row from "@components/Row/Row";
 
 interface IExpenseSubMenuProps {
   expense: IExpense;

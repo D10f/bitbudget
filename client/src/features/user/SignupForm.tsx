@@ -1,15 +1,15 @@
 import React from "react";
-import styled from "styled-components";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { signupUser } from "../../../features/user/userSlice";
-import { signupValidationSchema } from "../../../common/validators/signupSchema";
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
+import { signupUser } from "./userSlice";
+import { signupValidationSchema } from "../../common/validators/signupSchema";
+import { useAppDispatch } from "../../common/hooks/useAppDispatch";
 
-import FormControl from "../../../common/components/Form/FormControl";
-import TextInput from "../../../common/components/Form/TextInput";
-import Button from "../../../common/components/Button/Button";
+import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
+import FormControl from "../../common/components/Form/FormControl/FormControl";
+import TextInput from "../../common/components/Form/TextInput/TextInput";
+import Button from "../../common/components/Button/Button";
 
 type FormTypes = {
   username: string;
@@ -17,14 +17,6 @@ type FormTypes = {
   password: string;
   confirmPassword: string;
 };
-
-const StyledForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: flex-start;
-  gap: 2rem;
-`;
 
 const SignupForm = () => {
   const dispatch = useAppDispatch();
@@ -42,7 +34,7 @@ const SignupForm = () => {
   };
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <FormContainer onSubmit={handleSubmit(onSubmit)}>
       <FormControl>
         <Controller
           name="username"
@@ -112,7 +104,7 @@ const SignupForm = () => {
       </FormControl>
 
       <Button variant="action">Signup</Button>
-    </StyledForm>
+    </FormContainer>
   );
 };
 

@@ -1,6 +1,10 @@
 import React from "react";
-import styled from "styled-components";
-import Icon from "../Icon/Icon";
+import {
+  StyledLabel,
+  StyledIcon,
+  StyledSpan,
+  StyledTextArea,
+} from "./TextArea.styled";
 
 interface ITextAreaProps {
   label: string;
@@ -14,51 +18,6 @@ interface ITextAreaProps {
   hideLabel?: boolean;
   onChange: () => void;
 }
-
-interface ITextAreaStyleProps {
-  error?: boolean;
-  autocomplete: "on" | "off";
-}
-
-interface ILabelStyleProps {
-  hide?: boolean;
-}
-
-const StyledTextArea = styled.textarea<ITextAreaStyleProps>`
-  margin: 1rem 0;
-  padding: 1rem;
-  font-size: 1.6rem;
-  max-height: 30rem;
-  min-width: 30rem;
-  height: auto;
-  outline: none;
-  border: none;
-  border: 1px solid
-    ${({ theme, error }) => (error ? theme.colors.error : theme.colors.light.default)};
-  border-radius: ${({ theme }) => theme.layout.borderRadius};
-  background: ${({ theme }) => theme.colors.dark.default};
-  color: ${({ theme }) => theme.colors.light.default};
-  resize: vertical;
-`;
-
-const StyledLabel = styled.label<ILabelStyleProps>`
-  visibility: ${({ hide }) => (hide ? "hidden" : "visible")};
-  height: ${({ hide }) => (hide ? "0px" : "auto")};
-`;
-
-const StyledIcon = styled(Icon)`
-  position: absolute;
-  top: 4.7rem;
-  right: 1.6rem;
-  width: 1.6rem;
-  height: 1.6rem;
-  fill: ${({ theme }) => theme.colors.error};
-`;
-
-const StyledSpan = styled.span`
-  color: lightgray;
-  font-size: 1.2rem;
-`;
 
 const TextArea = React.forwardRef(
   (
@@ -95,7 +54,6 @@ const TextArea = React.forwardRef(
         />
         {error && <StyledIcon name="error" />}
         <StyledSpan>{charactersLeft} characters left</StyledSpan>
-        
       </>
     );
   }
