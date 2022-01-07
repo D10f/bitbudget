@@ -1,8 +1,7 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { AnimatePresence } from "framer-motion";
 
 import { useAppDispatch } from "@hooks/useAppDispatch";
-import { useClickOutside } from "@hooks/useClickOutside";
 import { addNotification } from "@features/notifications/notificationsSlice";
 import { deleteExpense } from "@features/expenses/expensesSlice";
 
@@ -35,14 +34,12 @@ const ExpenseSubMenu = ({
   const clearPrompts = useCallback(() => setPrompts(initialState), []);
 
   const dispatch = useAppDispatch();
-  const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
-
-  useClickOutside(popupRef, () => {
+  const onClickOutside = () => {
     if (prompts.editing || prompts.delete) {
       return;
     }
     closeSubMenu();
-  });
+  };
 
   const createExpenseModal = () => (
     <Modal title="Edit Expense" requestClose={clearPrompts}>
@@ -83,7 +80,7 @@ const ExpenseSubMenu = ({
   );
 
   return (
-    <Popup ref={popupRef} align="top">
+    <Popup onClickOutside={onClickOutside} align="top">
       <Button
         variant="link"
         icon={<Icon name="edit" />}

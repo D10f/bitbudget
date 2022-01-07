@@ -1,7 +1,6 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import { AnimatePresence } from "framer-motion";
 
-import { useClickOutside } from "@hooks/useClickOutside";
 import { useAppDispatch } from "@hooks/useAppDispatch";
 import { logoutUser } from "@features/user/userSlice";
 import WalletForm from "@features/wallets/WalletForm";
@@ -33,10 +32,8 @@ const ProfileSubMenu = ({
 }: IProfileSubMenuProps) => {
   const dispatch = useAppDispatch();
   const [prompts, setPrompts] = useState(initialState);
-  const clearPrompts = useCallback(() => setPrompts(initialState), []); // minor optimization
-  const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
 
-  const closeOnClickOutside = () => {
+  const onClickOutside = () => {
     // Helps to keep modals and submenus open when accidentally click away
     if (Object.values(prompts).some(Boolean) || !isSubMenuOpen) {
       return;
@@ -44,7 +41,7 @@ const ProfileSubMenu = ({
     closeSubMenu();
   };
 
-  useClickOutside(popupRef, closeOnClickOutside);
+  const clearPrompts = useCallback(() => setPrompts(initialState), []); // minor optimization
 
   const logoutPromptModal = () => (
     <Modal requestClose={clearPrompts}>
@@ -91,7 +88,7 @@ const ProfileSubMenu = ({
   );
 
   return (
-    <Popup ref={popupRef} align="bottom">
+    <Popup align="bottom" onClickOutside={onClickOutside}>
       <>
         {Object.keys(initialState).map((option) => {
           const iconName = option.toLowerCase().split(" ")[0];

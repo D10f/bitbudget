@@ -1,9 +1,8 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 
 import { useAppDispatch } from "@hooks/useAppDispatch";
-import { useClickOutside } from "@hooks/useClickOutside";
 import {
   selectWallet,
   deleteWalletAsync,
@@ -44,10 +43,7 @@ const WalletSubMenu = ({
   const clearPrompts = useCallback(() => setPrompts(initialState), []);
   const dispatch = useAppDispatch();
 
-  const popupRef = useRef() as React.MutableRefObject<HTMLElement>;
-
-  // Closes this submenu when clicked outside, but not when there's one of the modals open
-  const closeOnClickOutside = () => {
+  const onClickOutside =  () => {
     if (
       prompts.delete ||
       prompts.editing ||
@@ -58,8 +54,6 @@ const WalletSubMenu = ({
     }
     closeSubMenu();
   };
-
-  useClickOutside(popupRef, closeOnClickOutside);
 
   const editWalletModal = () => (
     <Modal title="Edit Wallet" requestClose={clearPrompts}>
@@ -113,7 +107,7 @@ const WalletSubMenu = ({
   };
 
   return (
-    <Popup ref={popupRef}>
+    <Popup onClickOutside={onClickOutside}>
       <WalletTitle>{wallet.name}</WalletTitle>
       <Button
         variant="link"
