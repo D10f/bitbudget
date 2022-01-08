@@ -1,4 +1,5 @@
 import { createGlobalStyle } from "styled-components";
+import { breakpoints } from '@constants';
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -39,7 +40,7 @@ const GlobalStyles = createGlobalStyle`
       "navbar expenses dashboard" auto /
       auto    3fr      4fr;
     
-    @media (max-width: 48em) {
+    @media (max-width: ${breakpoints.tabletPortrait}) {
       grid-template:
       "navbar" auto
       "dashboard" auto

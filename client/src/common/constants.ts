@@ -1,3 +1,23 @@
+/**
+*  MEDIA QUERY REFERENCE
+*  | Breakpoint      | Pixels |  Em   |
+*  | --------------- | ------ | ----- |
+*  | XS              | < 400  | 25    |
+*  | Phone           | < 600  | 37.5  |
+*  | TabletPortrait  | < 768  | 48    |
+*  | TabletLandscape | < 1200 | 75    |
+*  | Desktop         | < 1800 | 112.5 |
+*  | WideScreen      | > 1800 | 112.5 |
+*/
+export const breakpoints = {
+  xs: "25em",
+  phone: "37.5em",
+  tabletPortrait: "48em",
+  tabletLandscape: "75em",
+  desktop: "112.5em",
+  widescreen: "112.5em",
+};
+
 export const months = [
   "January",
   "February",
@@ -12,10 +32,3 @@ export const months = [
   "November",
   "December",
 ];
-
-export const breakpoints = {
-  xs: "480px",
-  sm: "600px",
-  md: "900px",
-  lg: '1200'
-};

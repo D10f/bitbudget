@@ -10,7 +10,7 @@ export const StyledContainer = styled.aside`
     display: none;
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
     overflow-y: unset;
     overflow-x: unset;
   }
@@ -27,7 +27,7 @@ export const StyledList = styled.ul`
   padding-bottom: 2rem;
   /* max-width: 35rem; */
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
     margin-left: 0;
     margin-right: 0;
   }

@@ -13,6 +13,11 @@ export const NavItem = styled.li<INavItemStyles>`
 
   &:hover::before {
     height: ${({ active }) => (active ? "60%" : "0.5rem")};
+
+    @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+      height: 0.5rem;
+      width: ${({ active }) => (active ? "60%" : "0.5rem")};
+    }
   }
 
   &::before {
@@ -24,7 +29,7 @@ export const NavItem = styled.li<INavItemStyles>`
     height: ${({ active }) => (active ? "60%" : "0")};
     border-radius: ${({ theme }) => theme.layout.borderRadius};
     transform: translateY(-50%);
-    transition: height 0.2s;
+    transition: all 0.2s;
     /* background-color: ${({ theme }) => theme.colors.primary.default}; */
     background-image: linear-gradient(
       to right bottom,
@@ -32,6 +37,14 @@ export const NavItem = styled.li<INavItemStyles>`
       ${({ theme }) => theme.colors.primary.dark}
     );
     overflow: hidden;
+    
+    @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+      top: 110%;
+      left: 50%;
+      height: 0.5rem;
+      width: ${({ active }) => (active ? "60%" : "0")};
+      transform: translateX(-50%);
+    }
   }
 
   &:last-child {
@@ -41,9 +54,10 @@ export const NavItem = styled.li<INavItemStyles>`
     }
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
     &:last-child {
       margin-top: 0;
+      margin-left: auto;
     }
   }
 `;

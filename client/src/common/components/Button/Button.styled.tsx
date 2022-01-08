@@ -47,7 +47,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
         fill: ${({ theme }) => theme.colors.light.default};
       }
 
-      @media (max-width: ${theme.breakpoints.md}) {
+      @media (max-width: ${theme.breakpoints.tabletPortrait}) {
         font-size: 1.8rem;
       }
     `}

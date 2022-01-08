@@ -15,7 +15,7 @@ export const StyledPopup = styled(motion.aside)<IPopupStyles>`
   box-shadow: ${({ theme }) => theme.effects.shadow};
   z-index: ${({ theme }) => theme.depth.popup};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
     /* Affects the title only */
     font-size: 2.2rem;
   }

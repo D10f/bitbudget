@@ -19,7 +19,7 @@ export const DashboardContainer = styled.section`
     display: none;
   }
 
-  @media (max-width: ${({theme}) => theme.breakpoints.md}) {
+  @media (max-width: ${({theme}) => theme.breakpoints.tabletPortrait}) {
     margin-left: 0;
     padding-right: 0;
 
