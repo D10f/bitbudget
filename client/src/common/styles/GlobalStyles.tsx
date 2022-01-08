@@ -22,6 +22,11 @@ const GlobalStyles = createGlobalStyle`
     color: #f4f4f4;
     box-sizing: border-box;
     overflow: hidden;
+
+    @media (max-width: 48em) {
+      overflow: unset;
+      overflow-x: hidden;
+    };
   }
 
   main {
@@ -33,6 +38,15 @@ const GlobalStyles = createGlobalStyle`
     grid-template:
       "navbar expenses dashboard" auto /
       auto    3fr      4fr;
+    
+    @media (max-width: 48em) {
+      grid-template:
+      "navbar" auto
+      "dashboard" auto
+      "expenses" auto /
+      1fr;
+      height: unset;
+    };
   }
 
   ul {

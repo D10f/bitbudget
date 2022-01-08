@@ -2,8 +2,7 @@ import { motion } from "framer-motion";
 import styled, { css } from "styled-components";
 
 interface IPopupStyles {
-  ref?: any;
-  align?: string;
+  align?: "bottom" | "top" | "right" | "left";
 }
 
 export const StyledPopup = styled(motion.aside)<IPopupStyles>`
@@ -14,8 +13,14 @@ export const StyledPopup = styled(motion.aside)<IPopupStyles>`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background-color: ${({ theme }) => theme.colors.dark.darker};
   box-shadow: ${({ theme }) => theme.effects.shadow};
+  z-index: ${({ theme }) => theme.depth.popup};
 
-  ${({ align }) => {
+  @media (max-width: ${({ theme }) => theme.breakpoints.md}) {
+    /* Affects the title only */
+    font-size: 2.2rem;
+  }
+
+  /* ${({ align }) => {
     switch (align) {
       case "bottom":
         return css`
@@ -34,7 +39,6 @@ export const StyledPopup = styled(motion.aside)<IPopupStyles>`
           right: 0;
         `;
     }
-  }}
+  }} */
 
-  z-index: ${({ theme }) => theme.depth.popup};
 `;

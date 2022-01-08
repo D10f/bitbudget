@@ -88,7 +88,7 @@ const ProfileSubMenu = ({
   );
 
   return (
-    <Popup align="bottom" onClickOutside={onClickOutside}>
+    <Popup onClickOutside={onClickOutside}>
       <>
         {Object.keys(initialState).map((option) => {
           const iconName = option.toLowerCase().split(" ")[0];

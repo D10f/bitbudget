@@ -28,7 +28,7 @@ export const StyledButton = styled.button<StyledButtonProps>`
     background-color: ${({ theme }) => theme.colors.primary.default};
   }
 
-  ${({ variant }) =>
+  ${({ theme, variant }) =>
     variant === "link" &&
     css<StyledButtonProps>`
       padding: 0.5rem 0;
@@ -45,6 +45,10 @@ export const StyledButton = styled.button<StyledButtonProps>`
         width: 1.6rem;
         height: 1.6rem;
         fill: ${({ theme }) => theme.colors.light.default};
+      }
+
+      @media (max-width: ${theme.breakpoints.md}) {
+        font-size: 1.8rem;
       }
     `}
 `;

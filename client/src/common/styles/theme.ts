@@ -1,3 +1,5 @@
+import { breakpoints } from "@constants";
+
 export const theme = {
   colors: {
     // primary: {
@@ -40,10 +42,5 @@ export const theme = {
   effects: {
     shadow: '0.4rem 1rem 1rem rgba(0, 0, 0, 0.25)',
   },
-  breakpoints: {
-    xs: "480px",
-    sm: "600px",
-    md: "900px",
-    lg: '1200'
-  },
+  breakpoints
 };

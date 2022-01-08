@@ -39,9 +39,9 @@ const WalletSubMenu = ({
   isSubMenuOpen,
   closeSubMenu,
 }: IWalletSubMenuProps) => {
+  const dispatch = useAppDispatch();
   const [prompts, setPrompts] = useState(initialState);
   const clearPrompts = useCallback(() => setPrompts(initialState), []);
-  const dispatch = useAppDispatch();
 
   const onClickOutside =  () => {
     if (

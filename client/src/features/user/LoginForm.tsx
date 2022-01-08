@@ -3,13 +3,13 @@ import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import { loginUser } from "./userSlice";
-import { loginValidationSchema } from "../../common/validators/loginSchema";
-import { useAppDispatch } from "../../common/hooks/useAppDispatch";
+import { loginValidationSchema } from "@validators/loginSchema";
+import { useAppDispatch } from "@hooks/useAppDispatch";
 
-import FormContainer from '../../common/components/Form/FormContainer/FormContainer';
-import FormControl from "../../common/components/Form/FormControl/FormControl";
-import TextInput from "../../common/components/Form/TextInput/TextInput";
-import Button from "../../common/components/Button/Button";
+import FormContainer from '@components/Form/FormContainer/FormContainer';
+import FormControl from "@components/Form/FormControl/FormControl";
+import TextInput from "@components/Form/TextInput/TextInput";
+import Button from "@components/Button/Button";
 
 type FormTypes = {
   username: string;

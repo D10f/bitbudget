@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 
-import { useAppDispatch } from "../../../common/hooks/useAppDispatch";
-import { useAppSelector } from "../../../common/hooks/useAppSelector";
-import { addNotification } from "../../notifications/notificationsSlice";
-import { selectCategories, updateCategories } from "../categoriesSlice";
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { addNotification } from "@features/notifications/notificationsSlice";
+import { selectCategories, updateCategories } from "@features/categories/categoriesSlice";
 
-import Button from "../../../common/components/Button/Button";
+import Button from "@components/Button/Button";
 import { CategoryInput, CategoryList, CategoryTag, DeleteButton } from './CategoriesList.styled';
 
 interface ICategoriesList {

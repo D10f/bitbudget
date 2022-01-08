@@ -2,13 +2,13 @@ import React from "react";
 import { joiResolver } from "@hookform/resolvers/joi";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 
-import { useAppSelector } from "../../common/hooks/useAppSelector";
-import { profileValidationSchema } from "../../common/validators/profileSchema";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { profileValidationSchema } from "@validators/profileSchema";
 
-import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
-import FormControl from "../../common/components/Form/FormControl/FormControl";
-import Button from "../../common/components/Button/Button";
-import TextInput from "../../common/components/Form/TextInput/TextInput";
+import FormContainer from "@components/Form/FormContainer/FormContainer";
+import FormControl from "@components/Form/FormControl/FormControl";
+import Button from "@components/Button/Button";
+import TextInput from "@components/Form/TextInput/TextInput";
 
 interface FormTypes {
   username?: string;

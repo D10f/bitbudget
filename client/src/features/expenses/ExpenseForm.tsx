@@ -3,19 +3,19 @@ import { v4 as uuid} from 'uuid';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { expenseValidationSchema } from "../../common/validators/expenseSchema";
-import { selectCategories } from "../categories/categoriesSlice";
-import { useAppSelector } from "../../common/hooks/useAppSelector";
-import { useAppDispatch } from "../../common/hooks/useAppDispatch";
+import { expenseValidationSchema } from "@validators/expenseSchema";
+import { selectCategories } from "@features/categories/categoriesSlice";
+import { useAppSelector } from "@hooks/useAppSelector";
+import { useAppDispatch } from "@hooks/useAppDispatch";
 import { createExpense, updateExpense } from "./expensesSlice";
 
-import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
-import FormControl from "../../common/components/Form/FormControl/FormControl";
-import Button from "../../common/components/Button/Button";
-import TextInput from "../../common/components/Form/TextInput/TextInput";
-import SelectInput from "../../common/components/Form/SelectInput/SelectInput";
-import TextArea from "../../common/components/Form/TextArea/TextArea";
-import DatePicker from "../../common/components/Form/DatePicker/DatePicker";
+import FormContainer from "@components/Form/FormContainer/FormContainer";
+import FormControl from "@components/Form/FormControl/FormControl";
+import Button from "@components/Button/Button";
+import TextInput from "@components/Form/TextInput/TextInput";
+import SelectInput from "@components/Form/SelectInput/SelectInput";
+import TextArea from "@components/Form/TextArea/TextArea";
+import DatePicker from "@components/Form/DatePicker/DatePicker";
 
 interface IExpenseFormProps {
   walletId: string;

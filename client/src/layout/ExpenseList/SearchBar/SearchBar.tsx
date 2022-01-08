@@ -1,38 +1,14 @@
 import React, { useEffect, useState } from "react";
-import styled from "styled-components";
+
 import { useAppSelector } from "@hooks/useAppSelector";
 import useExpenseFilters from "@hooks/useExpenseFilters";
 import { selectSearchText } from "@features/filters/filtersSlice";
+
 import Icon from "@components/Icon/Icon";
-
-const StyledContainer = styled.aside`
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  width: 90%;
-  border-bottom: 2px solid ${({ theme }) => theme.colors.dark.darkest}; ;
-`;
-
-const StyledLabel = styled.label`
-  padding: 0 1rem;
-  svg {
-    width: 2rem;
-    height: 2rem;
-    fill: ${({ theme }) => theme.colors.light.darker};
-  }
-`;
-
-const StyledInput = styled.input`
-  display: inline-block;
-  background: none;
-  color: inherit;
-  font-size: 1.6rem;
-  padding: 1rem;
-  border: none;
-`;
+import { StyledContainer, StyledLabel, StyledInput } from "./SearchBar.styled";
 
 const SearchBar = () => {
-  const [text, setText] = useState('');
+  const [text, setText] = useState("");
   const searchText = useAppSelector(selectSearchText);
   const { updateSearchTerm } = useExpenseFilters();
 

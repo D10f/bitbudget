@@ -6,8 +6,8 @@ import GlobalStyles from "@styles/GlobalStyles";
 import { useAppSelector } from "@hooks/useAppSelector";
 import Notification from "@features/notifications/Notification/Notification";
 
-import Navbar from "@layout/Navbar/Navbar";
-import ExpenseList from "@layout/ExpenseList/ExpenseList";
+import Navbar from "@layout/Navbar/Navbar/Navbar";
+import ExpenseList from "@layout/ExpenseList/ExpenseList/ExpenseList";
 import Dashboard from "@layout/Dashboard/Dashboard/Dashboard";
 import Welcome from "@layout/Welcome/Welcome";
 

@@ -1,37 +1,18 @@
 import React, { useState } from "react";
-import styled from "styled-components";
 import { AnimatePresence } from "framer-motion";
 import { useAppSelector } from "@hooks/useAppSelector";
 import Icon from "@components/Icon/Icon";
-import NavbarItem from "./NavbarItem/NavbarItem";
-import WalletSubMenu from "./WalletSubMenu/WalletSubMenu";
-import ProfileSubMenu from "./ProfileSubMenu/ProfileSubMenu";
-
-const Nav = styled.nav`
-  grid-area: navbar;
-  width: 10rem;
-  border: 1px solid rgba(10, 10, 10, 0.1);
-  background-color: ${({ theme }) => theme.colors.dark.darkest};
-  box-shadow: ${({ theme }) => theme.effects.shadow};
-  border-radius: ${({ theme }) => theme.layout.borderRadius};
-`;
-
-const NavbarMenu = styled.ul`
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 2rem;
-  padding: 2rem 0;
-  height: 100%;
-`;
+import NavbarItem from "../NavbarItem/NavbarItem";
+import WalletSubMenu from "../WalletSubMenu/WalletSubMenu";
+import ProfileSubMenu from "../ProfileSubMenu/ProfileSubMenu";
+import { Nav, NavbarMenu } from "./Navbar.styled";
 
 const Navbar = () => {
   const wallets = useAppSelector((state) => state.wallets.wallets);
-  // const user = useAppSelector((state) => state.user.user);
 
   // Controls that only one menu is open at the same time
   const [navbarSubMenu, setNavbarSubMenu] = useState<string | null>(null);
+
   return (
     <Nav>
       <NavbarMenu>

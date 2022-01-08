@@ -1,5 +1,7 @@
 import { ChartArea } from "chart.js";
 
+// TODO: Use theme programatically
+
 export const createGradient = (ctx: CanvasRenderingContext2D, area: ChartArea) => {
   const gradient = ctx.createLinearGradient(0, area.bottom, 0, area.top);
   gradient.addColorStop(0, "#eb904a"); // primary dark

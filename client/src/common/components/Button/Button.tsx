@@ -1,5 +1,5 @@
 import React from "react";
-import { StyledButton } from './Button.styled';
+import { StyledButton } from "./Button.styled";
 
 interface IButtonProps {
   children: React.ReactChild;
@@ -26,7 +26,14 @@ const Button = ({
   variant = "action",
 }: IButtonProps) => {
   return (
-    <StyledButton disabled={disabled} variant={variant} onClick={onClick} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} className={className}>
+    <StyledButton
+      disabled={disabled}
+      variant={variant}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      className={className}
+    >
       {iconPosition === "start" && icon}
       {children}
       {iconPosition === "end" && icon}

@@ -13,8 +13,17 @@ export const DashboardContainer = styled.section`
 
   overflow-y: auto;
   overflow-x: overlay;
+  
   scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
+  }
+
+  @media (max-width: ${({theme}) => theme.breakpoints.md}) {
+    margin-left: 0;
+    padding-right: 0;
+
+    overflow-y: unset;
+    overflow-x: unset;
   }
 `;

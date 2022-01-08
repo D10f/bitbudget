@@ -4,14 +4,14 @@ import { v4 as uuid } from "uuid";
 import { joiResolver } from "@hookform/resolvers/joi";
 
 import { addWalletAsync, updateWalletAsync } from "./walletsSlice";
-import { useAppDispatch } from "../../common/hooks/useAppDispatch";
-import { walletValidationSchema } from "../../common/validators/walletSchema";
+import { useAppDispatch } from "@hooks/useAppDispatch";
+import { walletValidationSchema } from "@validators/walletSchema";
 
-import FormContainer from "../../common/components/Form/FormContainer/FormContainer";
-import FormControl from "../../common/components/Form/FormControl/FormControl";
-import SelectInput from "../../common/components/Form/SelectInput/SelectInput";
-import TextInput from "../../common/components/Form/TextInput/TextInput";
-import Button from "../../common/components/Button/Button";
+import FormContainer from "@components/Form/FormContainer/FormContainer";
+import FormControl from "@components/Form/FormControl/FormControl";
+import SelectInput from "@components/Form/SelectInput/SelectInput";
+import TextInput from "@components/Form/TextInput/TextInput";
+import Button from "@components/Button/Button";
 
 interface IWalletFormProps {
   wallet?: IWallet;

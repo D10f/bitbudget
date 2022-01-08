@@ -51,6 +51,7 @@ export const createExpense =
         description: expense.description,
         amount: expense.amount,
         category: expense.category,
+        createdAt: expense.createdAt,
       });
 
       // reconstruct expense for upload
@@ -97,6 +98,7 @@ export const updateExpense =
         description: expense.description,
         amount: expense.amount,
         category: expense.category,
+        createdAt: expense.createdAt,
       });
 
       const currentExpense = getState().expenses.expenses.find(

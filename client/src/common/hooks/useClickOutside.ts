@@ -1,7 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import { RefObject, useEffect, useRef } from "react";
 
 type HookProps = (
-  element: React.MutableRefObject<HTMLElement>,
+  // element: React.MutableRefObject<HTMLElement>,
+  element: RefObject<HTMLElement>,
   callback: () => void
 ) => void;
 
