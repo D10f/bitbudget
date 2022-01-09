@@ -8,7 +8,7 @@ export const Nav = styled.nav`
   box-shadow: ${({ theme }) => theme.effects.shadow};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
     width: 100%;
     height: 10rem;
   }
@@ -23,7 +23,7 @@ export const NavbarMenu = styled.ul`
   padding: 2rem 0;
   height: 100%;
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
     flex-direction: row;
     padding: 0 2rem;
   }

@@ -29,6 +29,12 @@ export const StyledSelectInput = styled.select<IStyledSelectProps>`
     outline: none;
     border: 1px solid ${({ theme }) => theme.colors.primary.default};
   }
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    min-width: unset;
+    display: block;
+    width: 100%;
+  }
 `;
 
 export const SelectInputToggleIcon = styled.span`

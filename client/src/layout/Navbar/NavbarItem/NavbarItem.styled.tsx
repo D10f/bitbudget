@@ -14,7 +14,7 @@ export const NavItem = styled.li<INavItemStyles>`
   &:hover::before {
     height: ${({ active }) => (active ? "60%" : "0.5rem")};
 
-    @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
       height: 0.5rem;
       width: ${({ active }) => (active ? "60%" : "0.5rem")};
     }
@@ -38,7 +38,7 @@ export const NavItem = styled.li<INavItemStyles>`
     );
     overflow: hidden;
     
-    @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+    @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
       top: 110%;
       left: 50%;
       height: 0.5rem;
@@ -54,7 +54,7 @@ export const NavItem = styled.li<INavItemStyles>`
     }
   }
 
-  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
     &:last-child {
       margin-top: 0;
       margin-left: auto;

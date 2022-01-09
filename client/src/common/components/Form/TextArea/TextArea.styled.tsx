@@ -25,6 +25,11 @@ export const StyledTextArea = styled.textarea<ITextAreaStyleProps>`
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light.default};
   resize: vertical;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    min-width: unset;
+    width: 100%;
+  }
 `;
 
 export const StyledLabel = styled.label<ILabelStyleProps>`

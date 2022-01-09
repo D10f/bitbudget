@@ -3,10 +3,19 @@ import React, { useState } from "react";
 import { useAppDispatch } from "@hooks/useAppDispatch";
 import { useAppSelector } from "@hooks/useAppSelector";
 import { addNotification } from "@features/notifications/notificationsSlice";
-import { selectCategories, updateCategories } from "@features/categories/categoriesSlice";
+import {
+  selectCategories,
+  updateCategories,
+} from "@features/categories/categoriesSlice";
 
 import Button from "@components/Button/Button";
-import { CategoryInput, CategoryList, CategoryTag, DeleteButton } from './CategoriesList.styled';
+import {
+  CategoryContainer,
+  CategoryInput,
+  CategoryList,
+  CategoryTag,
+  DeleteButton,
+} from "./CategoriesList.styled";
 
 interface ICategoriesList {
   submitCallback: () => void;
@@ -26,7 +35,9 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
     if (e.key === "Enter") {
       const match = currentCategories.find((cat) => cat === newCategoryValue);
       if (match) {
-        dispatch(addNotification({ msg: "Category already exists", type: "info" }))
+        dispatch(
+          addNotification({ msg: "Category already exists", type: "info" })
+        );
         return;
       }
       setCurrentCategories((prev) => [...prev, newCategoryValue]);
@@ -40,7 +51,7 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
   };
 
   return (
-    <>
+    <CategoryContainer>
       <CategoryInput
         placeholder="Add New Category"
         value={newCategoryValue}
@@ -57,8 +68,10 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
           </CategoryTag>
         ))}
       </CategoryList>
-        <Button variant="action" onClick={handleSave}>Save</Button>
-    </>
+      <Button variant="action" onClick={handleSave}>
+        Save
+      </Button>
+    </CategoryContainer>
   );
 };
 

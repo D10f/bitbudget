@@ -22,6 +22,11 @@ export const StyledInputWrapper = styled.div<IStyledWrapperProps>`
   background-color: ${({ theme }) => theme.colors.dark.default};
   min-width: 30rem;
   margin-bottom: 1rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    min-width: unset;
+    width: 100%;
+  }
 `;
 
 export const StyledIcon = styled(Icon)`

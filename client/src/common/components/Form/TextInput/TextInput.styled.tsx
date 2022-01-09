@@ -23,6 +23,11 @@ export const StyledInput = styled.input<IStyledInputProps>`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light.default};
+  
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    min-width: unset;
+    width: 100%;
+  }
 `;
 
 export const StyledIcon = styled(Icon)`

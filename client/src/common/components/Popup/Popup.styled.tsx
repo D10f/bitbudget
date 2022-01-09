@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import styled, { css } from "styled-components";
+import styled from "styled-components";
 
 interface IPopupStyles {
   align?: "bottom" | "top" | "right" | "left";
@@ -19,26 +19,4 @@ export const StyledPopup = styled(motion.aside)<IPopupStyles>`
     /* Affects the title only */
     font-size: 2.2rem;
   }
-
-  /* ${({ align }) => {
-    switch (align) {
-      case "bottom":
-        return css`
-          bottom: 0;
-        `;
-      case "top":
-        return css`
-          top: 0;
-        `;
-      case "left":
-        return css`
-          left: 0;
-        `;
-      case "right":
-        return css`
-          right: 0;
-        `;
-    }
-  }} */
-
 `;

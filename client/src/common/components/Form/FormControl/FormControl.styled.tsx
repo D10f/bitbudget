@@ -6,4 +6,5 @@ export const StyledControl = styled.div`
   flex-direction: column;
   margin: 0;
   position: relative;
+  width: 100%;
 `;

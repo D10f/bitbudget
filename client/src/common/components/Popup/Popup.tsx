@@ -12,11 +12,11 @@ interface IPopupProps {
 const slideInLeft = {
   initial: {
     opacity: 0,
-    x: 50,
+    x: -20,
   },
   visible: {
     opacity: 1,
-    x: 100,
+    x: 50,
     transition: {
       type: "spring",
       duration: 0.3,
@@ -24,7 +24,7 @@ const slideInLeft = {
   },
   exit: {
     opacity: 0,
-    x: 200,
+    x: 75,
     transition: {
       duration: 0.1,
     },
@@ -47,7 +47,7 @@ const Popup = ({ children, align, onClickOutside }: IPopupProps) => {
     const isOffscreenX = coords.x + coords.width > window.innerWidth;
     const isOffscreenY = coords.y + coords.height > window.innerHeight;
     if (isOffscreenX) {
-      el.style.right = "200%";
+      el.style.right = "4rem";
     }
     if (isOffscreenY) {
       el.style.bottom = "0";

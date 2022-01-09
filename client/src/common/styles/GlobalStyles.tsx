@@ -24,12 +24,13 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     overflow: hidden;
 
-    @media (max-width: 48em) {
+    @media (max-width: ${breakpoints.tabletLandscape}) {
       overflow: unset;
       overflow-x: hidden;
     };
   }
 
+  /* Main Layout */
   main {
     position: relative;
     height: 100vh;
@@ -40,7 +41,7 @@ const GlobalStyles = createGlobalStyle`
       "navbar expenses dashboard" auto /
       auto    3fr      4fr;
     
-    @media (max-width: ${breakpoints.tabletPortrait}) {
+    @media (max-width: ${breakpoints.tabletLandscape}) {
       grid-template:
       "navbar" auto
       "dashboard" auto

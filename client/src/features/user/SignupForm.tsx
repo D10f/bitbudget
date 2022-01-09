@@ -2,7 +2,7 @@ import React from "react";
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
-import { signupUser } from "./userSlice";
+import { signupUser } from "@features/user/userSlice";
 import { signupValidationSchema } from "@validators/signupSchema";
 import { useAppDispatch } from "@hooks/useAppDispatch";
 

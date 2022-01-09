@@ -2,11 +2,6 @@ import { breakpoints } from "@constants";
 
 export const theme = {
   colors: {
-    // primary: {
-    //   default: "#FF8C00",
-    //   dark: "#D97700",
-    //   light: "#FFA014",
-    // },
     primary: {
       default: "#FF8C00",
       dark: "#eb904a",
@@ -21,13 +16,13 @@ export const theme = {
     success: "#39d98a",
     info: {},
     dark: {
-      default: '#333',
-      darker: '#2f3136',
-      darkest: '#202225',
+      default: "#333",
+      darker: "#2f3136",
+      darkest: "#202225",
     },
     light: {
       default: "#f4f4f4",
-      darker: "#a6a6a6"
+      darker: "#a6a6a6",
     },
   },
   typography: {},
@@ -37,10 +32,10 @@ export const theme = {
   depth: {
     popup: 40,
     modal: 50,
-    notifications: 60
+    notifications: 60,
   },
   effects: {
-    shadow: '0.4rem 1rem 1rem rgba(0, 0, 0, 0.25)',
+    shadow: "0.4rem 1rem 1rem rgba(0, 0, 0, 0.25)",
   },
-  breakpoints
+  breakpoints,
 };

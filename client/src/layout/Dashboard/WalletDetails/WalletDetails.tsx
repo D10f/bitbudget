@@ -21,6 +21,10 @@ const WalletHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    flex-direction: column;
+  }
 `;
 
 const WalletTitle = styled.h2`

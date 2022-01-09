@@ -10,6 +10,7 @@ export const Background = styled.div`
   height: 100%;
   background-color: rgba(0, 0, 0, 0.5);
   backdrop-filter: blur(0.2rem); // ignored on firefox
+  z-index: ${({ theme }) => theme.depth.modal};
 `;
 
 export const Container = styled(motion.aside)`
@@ -26,7 +27,12 @@ export const Container = styled(motion.aside)`
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
-  z-index: ${({ theme }) => theme.depth.modal};
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
+    width: unset;
+    max-width: 90vw;
+    padding: 3rem 5rem;
+  }
 `;
 
 export const ModalHeader = styled.header`

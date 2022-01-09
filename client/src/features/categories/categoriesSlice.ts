@@ -41,6 +41,7 @@ export const updateCategories =
         })
       );
     } catch (error) {
+      console.log(error);
       dispatch(
         addNotification({
           msg: (error as Error).message,
