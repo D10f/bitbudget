@@ -1,8 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { WalletsService } from './wallets.service';
 import { CreateWalletDto } from './dto/create-wallet.dto';
 import { UpdateWalletDto } from './dto/update-wallet.dto';
 import { WalletDocument } from './schema/wallet.schema';
+import { ExpenseDocument } from 'src/expenses/schema/expense.schema';
 
 @Controller('wallets')
 export class WalletsController {
@@ -24,13 +34,19 @@ export class WalletsController {
     return this.walletsService.findOne(id);
   }
 
-  @Get('/expenses')
-  findExpenses(@Query('q') id: string, @Query('mmyy') mmyy: string): Promise<any> {
+  @Get('/expenses/:walletId/:mmyy')
+  findExpenses(
+    @Param('walletId') id: string,
+    @Param('mmyy') mmyy: string,
+  ): Promise<ExpenseDocument[]> {
     return this.walletsService.findExpenses(id, mmyy);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateWalletDto: UpdateWalletDto): Promise<WalletDocument> {
+  update(
+    @Param('id') id: string,
+    @Body() updateWalletDto: UpdateWalletDto,
+  ): Promise<WalletDocument> {
     return this.walletsService.update(id, updateWalletDto);
   }
 

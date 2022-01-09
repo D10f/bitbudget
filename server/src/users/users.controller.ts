@@ -25,7 +25,7 @@ export class UsersController {
   @UseGuards(SameUserGuard)
   async getUserData(
     @Param('id') id: string,
-    @Res({ passthrough: true }) res: Response,
+    @Res({ passthrough: false }) res: Response,
   ) {
     const data = await this.usersService.getUserData(id);
     return res.send(data);

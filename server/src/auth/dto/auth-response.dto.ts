@@ -2,6 +2,7 @@ export class AuthResponseDto {
   id: string;
   username: string;
   email: string;
-  userData?: string;
   accessToken: string;
+  userData?: string;
+  defaultWalletId?: string;
 }

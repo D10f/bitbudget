@@ -3,7 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { FilterQuery, LeanDocument } from 'mongoose';
+import { FilterQuery, LeanDocument, QueryOptions } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
@@ -23,12 +23,12 @@ export class UsersService {
     }
   }
 
-  findOne(filter: FilterQuery<UserDocument>): Promise<LeanDocument<User>> {
-    return this.usersRepository.findOne(filter);
+  findOne(filter: FilterQuery<UserDocument>, query?: QueryOptions): Promise<LeanDocument<User>> {
+    return this.usersRepository.findOne(filter, query);
   }
 
   async getUserData(id: string): Promise<Buffer> {
-    const user = await this.findOne({ id });
+    const user = await this.findOne({ id }, { data: 1 });
     return Buffer.from(user.data, 'base64');
   }
 

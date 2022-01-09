@@ -6,6 +6,7 @@ import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from './strategies/jwt.strategy';
+import { WalletsModule } from 'src/wallets/wallets.module';
 
 const jwtOptions = {
   imports: [ConfigModule],
@@ -21,6 +22,7 @@ const jwtOptions = {
 @Module({
   imports: [
     UsersModule,
+    WalletsModule,
     PassportModule,
     JwtModule.registerAsync(jwtOptions),
   ],

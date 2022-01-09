@@ -6,11 +6,14 @@ import { AuthCredentialsDto } from './dto/auth-credentials.dto';
 import { User, UserDocument } from '../users/schemas/user.schema';
 import { IJwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthResponseDto } from './dto/auth-response.dto';
+import { randomUUID } from 'crypto';
+import { WalletsService } from 'src/wallets/wallets.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     private userService: UsersService,
+    private walletService: WalletsService,
     private jwtService: JwtService,
   ) {}
 
@@ -37,11 +40,16 @@ export class AuthService {
       sub: user._id.toString(),
     };
 
+    // create user's first wallet by default
+    const walletId = randomUUID();
+    await this.walletService.create({ id: walletId });
+
     return {
       id: user._id,
       username: user.username,
       email: user.email || "",
       accessToken: this.jwtService.sign(payload),
+      defaultWalletId: walletId,
     };
   }
 

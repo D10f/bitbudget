@@ -21,8 +21,7 @@ export function loadAppConfiguration(app): IAppConfig {
   };
 }
 
-export function loadProdConfig(app: INestApplication, config: IAppConfig) {
-  app.enableCors(loadCorsConfiguration(config)); // <- this should be first
+export function loadProdConfig(app: INestApplication) {
   app.useLogger(app.get(PinoLogger));
   app.use(helmet());
 }
@@ -30,8 +29,10 @@ export function loadProdConfig(app: INestApplication, config: IAppConfig) {
 export function loadCorsConfiguration(config: IAppConfig): CorsOptions {
   return {
     allowedHeaders: ['Content-Type', 'Authorization'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    origin: isProduction(config) ? false : '*',
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
+    origin: isProduction(config) ? false : "*",
+    preflightContinue: false,
+    optionsSuccessStatus: 204
   };
 }
 

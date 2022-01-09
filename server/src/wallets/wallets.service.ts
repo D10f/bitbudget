@@ -59,8 +59,10 @@ export class WalletsService {
   }
 
   async findExpenses(walletId: string, mmyy: string): Promise<ExpenseDocument[]> {
-    const wallet = await this.findOne(walletId);
-    return wallet[mmyy];
+    const wallet = await this.findOne(walletId, { lean: true });
+    const expenses = await this.expensesService.findMany(wallet[mmyy]);
+    console.log(expenses);
+    return expenses;
   }
 
   getExpensesInWallet(walletId: string): Promise<string[]> {

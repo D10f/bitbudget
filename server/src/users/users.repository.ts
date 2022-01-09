@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import * as argon2 from 'argon2';
-import { FilterQuery, LeanDocument, Model } from 'mongoose';
+import { FilterQuery, LeanDocument, Model, QueryOptions } from 'mongoose';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User, UserDocument } from './schemas/user.schema';
 
@@ -11,8 +11,9 @@ export class UsersRepository {
 
   async findOne(
     userFilterQuery: FilterQuery<UserDocument>,
+    userQueryOptions?: QueryOptions,
   ): Promise<LeanDocument<User>> {
-    return await this.userModel.findOne(userFilterQuery).lean();
+    return await this.userModel.findOne(userFilterQuery, userQueryOptions).lean();
   }
 
   async find(
