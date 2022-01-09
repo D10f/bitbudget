@@ -47,6 +47,10 @@ export class ExpensesService {
     return expense;
   }
 
+  async findMany(ids: string[]): Promise<ExpenseDocument[]> {
+    return this.expensesRepository.findMany(ids);
+  }
+
   async update(
     id: string,
     updateExpenseDto: UpdateExpenseDto,

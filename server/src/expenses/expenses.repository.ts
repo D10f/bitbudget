@@ -19,6 +19,10 @@ export class ExpensesRepository {
     return await this.expenseModel.findById(id, null, options);
   }
 
+  async findMany(ids: string[], options?: QueryOptions): Promise<ExpenseDocument[]> {
+    return await this.expenseModel.find({ _id: { $in: ids }});
+  }
+
   async update(id: string, updates: IExpenseUpdate): Promise<ExpenseDocument> {
     return await this.expenseModel.findByIdAndUpdate(id, updates);
   }
