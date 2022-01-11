@@ -14,4 +14,9 @@ export const NotificationContainer = styled.aside`
   gap: 2rem;
   z-index: ${({ theme }) => theme.depth.notifications};
   pointer-events: none;
+
+  @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
+    justify-content: flex-start;
+    width: 80%;
+  }
 `;

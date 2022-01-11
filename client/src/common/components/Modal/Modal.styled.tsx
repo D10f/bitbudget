@@ -30,8 +30,8 @@ export const Container = styled(motion.aside)`
 
   @media (max-width: ${({ theme }) => theme.breakpoints.phone}) {
     width: unset;
-    max-width: 90vw;
-    padding: 3rem 5rem;
+    max-width: 95vw;
+    padding: 3rem 4rem;
   }
 `;
 

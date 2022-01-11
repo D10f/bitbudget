@@ -14,6 +14,7 @@ export const StyledPopup = styled(motion.aside)<IPopupStyles>`
   background-color: ${({ theme }) => theme.colors.dark.darker};
   box-shadow: ${({ theme }) => theme.effects.shadow};
   z-index: ${({ theme }) => theme.depth.popup};
+  position: fixed;
 
   @media (max-width: ${({ theme }) => theme.breakpoints.tabletPortrait}) {
     /* Affects the title only */

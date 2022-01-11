@@ -46,7 +46,7 @@ const GlobalStyles = createGlobalStyle`
       "navbar" auto
       "dashboard" auto
       "expenses" auto /
-      1fr;
+      100%;
       height: unset;
     };
   }

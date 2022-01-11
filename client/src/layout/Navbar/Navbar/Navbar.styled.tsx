@@ -3,6 +3,7 @@ import styled from 'styled-components';
 export const Nav = styled.nav`
   grid-area: navbar;
   width: 10rem;
+  height: 100%;
   border: 1px solid rgba(10, 10, 10, 0.1);
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
@@ -26,5 +27,7 @@ export const NavbarMenu = styled.ul`
   @media (max-width: ${({ theme }) => theme.breakpoints.tabletLandscape}) {
     flex-direction: row;
     padding: 0 2rem;
+    overflow-x: scroll;
+    overflow-y: auto;
   }
 `;

@@ -76,7 +76,7 @@ export const deleteWalletAsync =
       dispatch(walletLoading(true));
       dispatch(deleteWallet(wallet));
       await Api.delete(`/wallets/${wallet.id}`);
-      await SnapshotService.createEncryptedSnapshot(state);
+      await SnapshotService.createEncryptedSnapshot(getState());
       dispatch(
         addNotification({
           msg: "Wallet Deleted Successfully",

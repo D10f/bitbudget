@@ -44,13 +44,13 @@ const Popup = ({ children, align, onClickOutside }: IPopupProps) => {
     const el = popupRef.current;
     if (!el) return;
     const coords = el.getBoundingClientRect();
-    const isOffscreenX = coords.x + coords.width > window.innerWidth;
-    const isOffscreenY = coords.y + coords.height > window.innerHeight;
+    const isOffscreenX = coords.x + coords.width > window.innerWidth - 20; // 20 is for 20px of padding
+    const isOffscreenY = coords.y + coords.height > window.innerHeight - 20;
     if (isOffscreenX) {
-      el.style.right = "4rem";
+      el.style.right = "10rem";
     }
     if (isOffscreenY) {
-      el.style.bottom = "0";
+      el.style.bottom = "2rem";
     }
   }, [popupRef]);
 
