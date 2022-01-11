@@ -4,7 +4,7 @@ import { ExpensesService } from '../expenses/expenses.service';
 import { WalletsRepository } from './wallets.repository';
 import { WalletsService } from './wallets.service';
 
-describe.skip('WalletsService', () => {
+describe('WalletsService', () => {
   let service: WalletsService;
   let repository;
   let expensesService;
@@ -47,14 +47,14 @@ describe.skip('WalletsService', () => {
 
   describe('create', () => {
     it('should call repository to create a new wallet', () => {
-      service.create({ _id: '123', data: 'someData' });
+      service.create({ id: '123' });
       expect(repository.create).toBeCalled();
     });
 
     it('should throw an error when wallet already exists', () => {
       repository.create.mockRejectedValueOnce({ message: 'E11000' });
       expect(
-        service.create({ _id: '123', data: 'someData' }),
+        service.create({ id: '123' }),
       ).rejects.toThrowError(ConflictException);
     });
   });
@@ -91,12 +91,12 @@ describe.skip('WalletsService', () => {
     });
   });
 
-  describe('update', () => {
-    it('should call repository to update wallet', async () => {
-      await service.update('123', { data: 'some data' });
-      expect(repository.update).toBeCalled();
-    });
-  });
+  // describe('update', () => {
+  //   it('should call repository to update wallet', async () => {
+  //     await service.update('123', { data: 'some data' });
+  //     expect(repository.update).toBeCalled();
+  //   });
+  // });
 
   describe('remove', () => {
     it('calls expense service and wallet repository to remove expenses and wallet', async () => {

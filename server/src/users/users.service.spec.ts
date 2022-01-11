@@ -3,7 +3,7 @@ import { Test } from '@nestjs/testing';
 import { UsersRepository } from './users.repository';
 import { UsersService } from './users.service';
 
-describe.only('UserService', () => {
+describe('UserService', () => {
   const mockUsersRepository = () => ({
     createUser: jest.fn(),
     findOne: jest.fn(),
@@ -50,9 +50,9 @@ describe.only('UserService', () => {
   });
 
   describe('findOne', () => {
-    it('should call repository to find a user', () => {
-      usersService.findOne({ _id: '123' });
-      expect(usersRepository.findOne).toBeCalledWith({ _id: '123' });
+    it('should call repository to find a user', async () => {
+      await usersService.findOne({ _id: '123' });
+      expect(usersRepository.findOne).toBeCalled();
     });
   });
 

@@ -7,7 +7,7 @@ import { User, UserDocument } from '../users/schemas/user.schema';
 import { IJwtPayload } from './interfaces/jwt-payload.interface';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { randomUUID } from 'crypto';
-import { WalletsService } from 'src/wallets/wallets.service';
+import { WalletsService } from '../wallets/wallets.service';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +31,8 @@ export class AuthService {
   async signUp(
     authCredentialsDto: AuthCredentialsDto,
   ): Promise<AuthResponseDto> {
-    const user = (await this.userService.createUser(
+    try {
+      const user = (await this.userService.createUser(
       authCredentialsDto,
     )) as UserDocument;
 
@@ -51,6 +52,9 @@ export class AuthService {
       accessToken: this.jwtService.sign(payload),
       defaultWalletId: walletId,
     };
+    } catch (error) {
+      throw new Error(error);
+    }
   }
 
   async signIn(

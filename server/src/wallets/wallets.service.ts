@@ -45,12 +45,12 @@ export class WalletsService {
     return wallet;
   }
 
-  update(
-    id: string,
-    updateWalletDto: UpdateWalletDto,
-  ): Promise<WalletDocument> {
-    return this.walletsRepository.update(id, updateWalletDto);
-  }
+  // update(
+  //   id: string,
+  //   updateWalletDto: UpdateWalletDto,
+  // ): Promise<WalletDocument> {
+  //   return this.walletsRepository.update(id, updateWalletDto);
+  // }
 
   async remove(id: string): Promise<WalletDocument> {
     const expensesInWallet: string[] = await this.getExpensesInWallet(id);

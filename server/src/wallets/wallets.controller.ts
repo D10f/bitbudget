@@ -42,13 +42,13 @@ export class WalletsController {
     return this.walletsService.findExpenses(id, mmyy);
   }
 
-  @Patch(':id')
-  update(
-    @Param('id') id: string,
-    @Body() updateWalletDto: UpdateWalletDto,
-  ): Promise<WalletDocument> {
-    return this.walletsService.update(id, updateWalletDto);
-  }
+  // @Patch(':id')
+  // update(
+  //   @Param('id') id: string,
+  //   @Body() updateWalletDto: UpdateWalletDto,
+  // ): Promise<WalletDocument> {
+  //   return this.walletsService.update(id, updateWalletDto);
+  // }
 
   @Delete(':id')
   remove(@Param('id') id: string): Promise<WalletDocument> {

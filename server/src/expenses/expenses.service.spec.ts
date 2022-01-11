@@ -4,7 +4,7 @@ import { ExpensesService } from './expenses.service';
 import { ExpensesRepository } from './expenses.repository';
 import { WalletsService } from '../wallets/wallets.service';
 
-describe.skip('ExpensesService', () => {
+describe('ExpensesService', () => {
   let service: ExpensesService;
   let repository;
   let walletsService;
