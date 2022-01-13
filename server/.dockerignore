@@ -1,8 +1,7 @@
 node_modules
 dist
-
+Jenkinsfile
 Dockerfile
 docker-compose.yml
 .dockerignore
-
 README.md

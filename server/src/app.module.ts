@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { LoggerModule } from 'nestjs-pino';
@@ -17,7 +17,7 @@ const mongooseConfig = {
 };
 
 const appConfig = {
-  envFilePath: ['.env'],
+  envFilePath: ['.env', 'dist/.env'],
   validationSchema: configValidationSchema,
 };
 
