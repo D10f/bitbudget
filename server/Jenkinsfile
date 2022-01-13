@@ -9,6 +9,7 @@ node {
 
   stage('Test') {
     nodejs(nodeJSInstallationName: 'nodejs') {
+      sh 'cd server'
       sh 'npm install'
       sh 'npm test'
     }
