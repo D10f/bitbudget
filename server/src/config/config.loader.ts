@@ -15,13 +15,17 @@ export interface IAppConfig {
 export function loadAppConfiguration(app): IAppConfig {
   const config = app.get(ConfigService);
   return {
-    mode: config.get('MODE'),
     port: config.get('PORT'),
+    mode: config.get('NODE_ENV'),
     domain: config.get('DOMAIN'),
   };
 }
 
-export function loadProdConfig(app: INestApplication) {
+export function isProduction(config: IAppConfig): boolean {
+  return config.mode === 'production';
+}
+
+export function loadProductionConfig(app: INestApplication) {
   app.useLogger(app.get(PinoLogger));
   app.use(helmet());
 }
@@ -30,14 +34,10 @@ export function loadCorsConfiguration(config: IAppConfig): CorsOptions {
   return {
     allowedHeaders: ['Content-Type', 'Authorization'],
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS', 'HEAD'],
-    origin: isProduction(config) ? false : "*",
+    origin: isProduction(config) ? false : '*',
     preflightContinue: false,
-    optionsSuccessStatus: 204
+    optionsSuccessStatus: 204,
   };
-}
-
-export function isProduction(config: IAppConfig): boolean {
-  return config.mode === 'production';
 }
 
 export async function loadNestApplication() {
@@ -47,5 +47,10 @@ export async function loadNestApplication() {
   });
   const config = loadAppConfiguration(app);
   const logger = new Logger(`Main Script - ${config.mode}`);
+
+  if (isProduction(config)) {
+    loadProductionConfig(app);
+  }
+
   return { app, config, logger };
 }

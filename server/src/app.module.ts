@@ -17,7 +17,7 @@ const mongooseConfig = {
 };
 
 const appConfig = {
-  envFilePath: ['.env', 'dist/.env'],
+  envFilePath: ['.env'],
   validationSchema: configValidationSchema,
 };
 

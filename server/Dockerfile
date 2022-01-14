@@ -11,6 +11,7 @@ RUN npm install --development && \
     mv package*.json dist
 
 FROM base as production
+ENV NODE_ENV=production
 COPY --from=builder --chown=1000:1000 /usr/src/app/dist ./
 RUN npm cache clean --force
 USER node
