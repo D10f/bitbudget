@@ -1,6 +1,14 @@
 version: '2.4'
 
 services:
+  node:
+    build:
+      context: .
+      target: development
+    ports:
+      - 3000:3000
+    env_file: .env
+
   mongo:
     image: mongo:5-focal
     restart: always

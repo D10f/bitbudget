@@ -4,4 +4,5 @@ Jenkinsfile
 Dockerfile
 docker-compose.yml
 .dockerignore
+.env
 README.md

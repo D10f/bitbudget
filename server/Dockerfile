@@ -1,17 +1,26 @@
-FROM node:16-buster
-
+FROM node:16-buster AS base
 WORKDIR /usr/src/app
-
+EXPOSE 3000
 COPY package*.json ./
-
-RUN npm install
-
+RUN npm install --production
 COPY . .
 
-RUN npm run build && \
-    mv .env dist && \
-    find . -maxdepth 1 ! -name 'dist' -exec rm -rf {} +
+FROM base AS builder
+RUN npm install --development && \
+    npm run build && \
+    mv package*.json dist
 
-EXPOSE 3000
+FROM base as production
+COPY --from=builder --chown=1000:1000 /usr/src/app/dist ./
+RUN npm cache clean --force
+USER node
+# ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["node", "main.js"]
 
-CMD ["node", "dist/main"]
+FROM base as development
+ENV NODE_ENV=development
+RUN npm install --development
+CMD ["node_modules/@nestjs/cli/bin/nest.js", "start", "--watch"]
+
+FROM development as test
+CMD ["npm", "test"]
