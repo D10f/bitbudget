@@ -1,22 +1,31 @@
 node {
   def commit_id
 
-  stage('Preparation') {
+  stage("Preparation") {
     checkout scm
     sh "git rev-parse --short HEAD > .git/commit-id"
-    commit_id = readFile('.git/commit-id').trim()
+    commit_id = readFile(".git/commit-id").trim()
   }
 
-  stage('Test') {
-    nodejs(nodeJSInstallationName: 'nodejs') {
-      sh 'cd server && npm install'
-      sh 'cd server && npm test'
+  stage("Test") {
+    nodejs(nodeJSInstallationName: "nodejs") {
+      sh "cd server && npm install --development"
+      sh "cd server && npm test"
     }
   }
+  
+  stage("Test In Docker") {
+    def dockerTestStage = docker.build("mycontainer:testStage", "--target=test", "./server")
+    dockertestStage.run("--rm")
+  }
 
-  stage('Docker build and publish') {
-    docker.withRegistry('https://index.docker.io/v2', 'dockerhub') {
-      def app = docker.build("folious/gadget-budget-server:${commit_id}", './server').push()
+  stage("Docker build and publish") {
+    docker.withRegistry("https://index.docker.io/v2", "dockerhub") {
+      def app = docker.build(
+        "folious/gadget-budget-server:${commit_id}",
+        "--target=production",
+        "./server"
+      ).push()
     }
   }
 }
