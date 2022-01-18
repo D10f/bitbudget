@@ -1,27 +1,30 @@
-FROM node:16-buster AS base
-WORKDIR /usr/src/app
-EXPOSE 3000
-COPY package*.json ./
-RUN npm install --production
-COPY . .
-
-FROM base AS builder
-RUN npm install --development && \
-    npm run build && \
-    mv package*.json dist
-
-FROM base as production
+FROM node:16-buster-slim AS base
+EXPOSE 80
+WORKDIR /app
 ENV NODE_ENV=production
-COPY --from=builder --chown=1000:1000 /usr/src/app/dist ./
-RUN npm cache clean --force
-USER node
-# ENTRYPOINT ["/usr/bin/tini", "--"]
-CMD ["node", "main.js"]
+ENV PATH=/app/node_modules/.bin:$PATH
+COPY package*.json ./
+RUN npm ci && \
+    npm cache clean --force
 
-FROM base as development
+FROM base AS development
 ENV NODE_ENV=development
+COPY . .
 RUN npm install --development
-CMD ["node_modules/@nestjs/cli/bin/nest.js", "start", "--watch"]
+CMD ["nest", "start", "--debug", "--watch"]
 
-FROM development as test
-CMD ["npm", "test"]
+FROM development AS test
+CMD ["jest"]
+
+FROM development AS builder
+RUN nest build
+
+FROM base AS production
+COPY --from=builder /app/dist/ /app
+RUN apt-get update && \
+    apt-get install tini --no-install-recommends && \
+    rm -rf /var/lib/apt/lists/*
+USER node
+HEALTHCHECK CMD curl -f http://localhost/healthz || exit 1
+ENTRYPOINT ["/usr/bin/tini", "--"]
+CMD ["node", "main.js"]

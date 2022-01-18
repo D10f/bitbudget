@@ -7,23 +7,24 @@ node {
     commit_id = readFile(".git/commit-id").trim()
   }
 
-  stage("Test") {
-    nodejs(nodeJSInstallationName: "nodejs") {
-      sh "cd server && npm install --development"
-      sh "cd server && npm test"
-    }
-  }
+  // stage("Test") {
+  //   nodejs(nodeJSInstallationName: "nodejs") {
+  //     sh "cd server && npm install --development"
+  //     sh "cd server && npm test"
+  //   }
+  // }
   
   stage("Test In Docker") {
-    def testStage = docker.build("mycontainer:testStage", "--target=test ./server")
-    testStage.run()
+    docker
+      .build("mycontainer:testStage", "--target=test ./server")
+      .run("--rm")
   }
 
-  stage("Docker build and publish") {
-    docker.withRegistry("https://index.docker.io/v2", "dockerhub") {
-      docker
-        .build("folious/gadget-budget-server:${commit_id}", "--target=production ./server")
-        .push()
-    }
-  }
+  // stage("Docker build and publish") {
+  //   docker.withRegistry("https://index.docker.io/v2", "dockerhub") {
+  //     docker
+  //       .build("folious/gadget-budget-server:${commit_id}", "--target=production ./server")
+  //       .push()
+  //   }
+  // }
 }
