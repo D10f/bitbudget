@@ -23,7 +23,7 @@ node {
   stage("Test In Docker") {
     def testImage = docker.build("mycontainer:testStage", "--target=test ./server")
     testImage.inside {
-      sh 'jest'
+      sh 'cd server && jest'
     }
   }
 
