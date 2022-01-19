@@ -14,10 +14,17 @@ node {
   //   }
   // }
   
+  // stage("Test In Docker") {
+  //   docker
+  //     .build("mycontainer:testStage", "--target=test ./server")
+  //     .run("--rm")
+  // }
+
   stage("Test In Docker") {
-    docker
-      .build("mycontainer:testStage", "--target=test ./server")
-      .run("--rm")
+    def testStageImg = docker.build("mycontainer:testStage", "--target=test ./server")
+    testStageImg.inside {
+      sh 'npm test'
+    }
   }
 
   // stage("Docker build and publish") {
