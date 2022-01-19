@@ -1,8 +1,12 @@
-node_modules
-dist
-Jenkinsfile
-Dockerfile
-docker-compose.yml
+dist/
+node_modules/
 .dockerignore
 .env
+.eslintrc.js
+.prettierrc
+docker-compose*.yml
+Jenkinsfile
+nest-cli.json
 README.md
+.git/
+.gitignore
