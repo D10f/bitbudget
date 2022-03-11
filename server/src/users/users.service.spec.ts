@@ -32,12 +32,6 @@ describe('UserService', () => {
     usersRepository = module.get(UsersRepository);
   });
 
-  // describe('This will fail', () => {
-  //   it('should fail', () => {
-  //     expect(1).toBe(2);
-  //   });
-  // });
-
   describe('create', () => {
     it('should call repository to create a user', async () => {
       await usersService.createUser(mockUser);

@@ -7,19 +7,6 @@ node {
     commit_id = readFile(".git/commit-id").trim()
   }
 
-  // stage("Test") {
-  //   nodejs(nodeJSInstallationName: "nodejs") {
-  //     sh "cd server && npm install --development"
-  //     sh "cd server && npm test"
-  //   }
-  // }
-  
-  // stage("Test In Docker") {
-  //   docker
-  //     .build("mycontainer:testStage", "--target=test ./server")
-  //     .run('--rm')
-  // }
-  
   stage("Test In Docker") {
     def testImage = docker.build("mycontainer:testStage", "--target=test ./server")
     testImage.inside {
