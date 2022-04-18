@@ -1,19 +1,18 @@
 import { ValidationPipe } from '@nestjs/common';
-import {
-  loadNestApplication,
-  loadCorsConfiguration,
-} from './config/config.loader';
+import { loadNestApplication } from './config/config.loader';
 import { bodyParserMiddleware } from './middleware/bodyParserMiddleware';
 
 async function bootstrap() {
   const { app, config, logger } = await loadNestApplication();
-
-  app.enableCors(loadCorsConfiguration(config));
+  
   app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
   app.use(bodyParserMiddleware);
+  
+  const PORT = config.get<string>('PORT');
+  const DOMAIN = config.get<string>('DOMAIN');
 
-  await app.listen(config.port);
-  logger.log(`App running on ${config.domain}:${config.port}`);
+  await app.listen(PORT);
+  logger.log(`App running on ${DOMAIN}:${PORT}`);
 }
 
 bootstrap();

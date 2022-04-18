@@ -1,7 +1,6 @@
 FROM node:16-buster-slim AS base
 EXPOSE 80
 WORKDIR /app
-ENV NODE_ENV=production
 ENV PATH=/app/node_modules/.bin:$PATH
 COPY package*.json ./
 RUN npm ci && \
@@ -14,12 +13,14 @@ RUN npm install --development
 CMD ["nest", "start", "--debug", "--watch"]
 
 FROM development AS test
+ENV NODE_ENV=test
 CMD ["jest"]
 
 FROM development AS builder
 RUN nest build
 
 FROM base AS production
+ENV NODE_ENV=production
 COPY --from=builder /app/dist/ /app
 RUN apt-get update && \
     apt-get install tini --no-install-recommends && \
