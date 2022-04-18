@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './config/config.schema';
 import { WalletsModule } from './wallets/wallets.module';
 import { ExpensesModule } from './expenses/expenses.module';
+import dockerSecrets from './config/config.secrets';
 
 const mongooseConfig = {
   imports: [ConfigModule],
@@ -17,7 +18,8 @@ const mongooseConfig = {
 };
 
 const appConfig = {
-  envFilePath: ['.env'],
+  ignoreEnvFile: true,
+  load: [dockerSecrets],
   validationSchema: configValidationSchema,
 };
 
