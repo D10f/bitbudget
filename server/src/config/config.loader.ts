@@ -6,6 +6,7 @@ import { Logger as PinoLogger } from 'nestjs-pino';
 import { AppModule } from '../app.module';
 
 export async function loadNestApplication() {
+
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     bodyParser: false,
@@ -13,7 +14,7 @@ export async function loadNestApplication() {
 
   const config = app.get(ConfigService);
   const MODE = config.get<string>('NODE_ENV');
-  
+
   const logger = new Logger(`Main Script - ${MODE}`);
 
   if (isProduction(MODE)) {

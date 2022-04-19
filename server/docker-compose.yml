@@ -7,11 +7,14 @@ services:
       context: .
       target: development
     ports:
-      - 3000:80
+      - 5000:5000
     environment:
-      MONGO_URI: mongodb://root:toor@mongo:27017/gadget-server?authSource=admin
+      MONGODB_NAME: gadget-server
+      MONGODB_USER: root
+      MONGODB_PASSWORD: toor
       JWT_SECRET: d58573e8a27dc86c3df759b6b7eca1d3ef2059afd1732fa7e80b5eeea0f9f575
       JWT_EXPIRE: 3600
+      PORT: 3000
     volumes:
       - ./:/app
       - /app/node_modules

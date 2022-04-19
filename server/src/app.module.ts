@@ -7,19 +7,24 @@ import { AuthModule } from './auth/auth.module';
 import { configValidationSchema } from './config/config.schema';
 import { WalletsModule } from './wallets/wallets.module';
 import { ExpensesModule } from './expenses/expenses.module';
-import { readDockerSecrets, readEnv } from './config/configuration';
+import { readDockerSecrets } from './config/configuration';
 
 const mongooseConfig = {
   imports: [ConfigModule],
   inject: [ConfigService],
-  useFactory: (configService: ConfigService) => ({
-    uri: configService.get('MONGO_URI'),
-  }),
+  useFactory: (configService: ConfigService) => {
+    const name = configService.get('MONGODB_NAME');
+    const user = configService.get('MONGODB_USER');
+    const password = configService.get('MONGODB_PASSWORD');
+    return {
+      uri: `mongodb://${user}:${password}@mongo:27017/${name}?authSource=admin`,
+    };
+  },
 };
 
 const appConfig = {
   ignoreEnvFile: true,
-  load: [readDockerSecrets, readEnv],
+  load: [readDockerSecrets],
   validationSchema: configValidationSchema,
 };
 
