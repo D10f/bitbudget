@@ -9,6 +9,7 @@
       "@styles/*": ["./common/styles/*"],
       "@validators/*": ["./common/validators/*"],
       "@constants": ["./common/constants.ts"],
+      "@enums": ["./common/enums.ts"],
       "@features/*": ["./features/*"],
       "@layout/*": ["./layout/*"],
       "@services/*": ["./services/*"],

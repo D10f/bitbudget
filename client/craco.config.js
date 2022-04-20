@@ -22,6 +22,7 @@ module.exports = {
         "@styles": path.resolve(__dirname, "src/common/styles"),
         "@validators": path.resolve(__dirname, "src/common/validators"),
         "@constants": path.resolve(__dirname, "src/common/constants.ts"),
+        "@enums": path.resolve(__dirname, "src/common/enums.ts"),
         "@features": path.resolve(__dirname, "src/features"),
         "@layout": path.resolve(__dirname, "src/layout"),
         "@services": path.resolve(__dirname, "src/services"),
