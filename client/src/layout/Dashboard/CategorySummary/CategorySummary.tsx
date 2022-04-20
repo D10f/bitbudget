@@ -9,6 +9,8 @@ import {
   selectPercentByCategory,
 } from "@features/expenses/expensesSlice";
 import { selectCurrentMMYYByName } from "@features/filters/filtersSlice";
+import { isWindowSmallerThan } from "@utils/mediaQueries";
+import { Breakpoints } from "../../../types.d";
 
 const CardContainer = styled.div`
   width: 100%;
@@ -60,6 +62,7 @@ const CategorySummary = () => {
     onClick: handleClick,
     plugins: {
       legend: {
+        display: !isWindowSmallerThan(Breakpoints.PHONE),
         position: "bottom" as const,
         labels: {
           color: "rgb(255,255,255)",
