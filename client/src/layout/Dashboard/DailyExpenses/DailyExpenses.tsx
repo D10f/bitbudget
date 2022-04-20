@@ -18,7 +18,40 @@ const Card = styled.article`
   background-color: ${({ theme }) => theme.colors.dark.darkest};
   box-shadow: ${({ theme }) => theme.effects.shadow};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
+
+  @media (max-width: ${({theme}) => theme.breakpoints.phone}) {
+    padding: 0.5rem;
+  }
 `;
+
+const tooltipTitle = (ctx: TooltipItem<"bar">[]) => {
+  const dayOfMonth = ctx[0].label.replace(/^0/, "");
+  return sufixDayOfMonth(dayOfMonth);
+};
+
+const scaleXLabel = (value: string | number) => {
+  const dayOfMonth = value.toString();
+  return sufixDayOfMonth(dayOfMonth);
+};
+
+const sufixDayOfMonth = (dayOfMonth: string) => {
+  const lastDigit = dayOfMonth[dayOfMonth.length - 1];
+
+  if (dayOfMonth.length === 2 && dayOfMonth[0] === "1") {
+    return dayOfMonth + "th";
+  }
+
+  switch (lastDigit) {
+    case "1":
+      return dayOfMonth + "st";
+    case "2":
+      return dayOfMonth + "nd";
+    case "3":
+      return dayOfMonth + "rd";
+    default:
+      return dayOfMonth + "th";
+  }
+};
 
 const DailyExpenses = () => {
   const { currency } = useAppSelector(selectCurrentWallet);
@@ -27,35 +60,6 @@ const DailyExpenses = () => {
   const [dailyExpenses] = useAppSelector(selectAmountByDay);
   const chartRef = useRef<ChartJS<"bar">>(null);
   const { updateSearchTerm } = useExpenseFilters();
-
-  const tooltipTitle = (ctx: TooltipItem<"bar">[]) => {
-    const dayOfMonth = ctx[0].label.replace(/^0/, "");
-    return sufixDayOfMonth(dayOfMonth);
-  };
-
-  const scaleXLabel = (value: string | number) => {
-    const dayOfMonth = value.toString();
-    return sufixDayOfMonth(dayOfMonth);
-  };
-
-  const sufixDayOfMonth = (dayOfMonth: string) => {
-    const lastDigit = dayOfMonth[dayOfMonth.length - 1];
-
-    if (dayOfMonth.length === 2 && dayOfMonth[0] === "1") {
-      return dayOfMonth + "th";
-    }
-
-    switch (lastDigit) {
-      case "1":
-        return dayOfMonth + "st";
-      case "2":
-        return dayOfMonth + "nd";
-      case "3":
-        return dayOfMonth + "rd";
-      default:
-        return dayOfMonth + "th";
-    }
-  };
 
   const tooltipLabel = (ctx: TooltipItem<"bar">) => {
     const amount = ctx.raw as string;
@@ -77,7 +81,7 @@ const DailyExpenses = () => {
       },
       title: {
         display: true,
-        text: `Daily Expenses For ${currentMMYY}`,
+        text: `Daily Expenses For ${currentMMYY} ( ${currency} )`,
         color: "rgb(255,255,255)",
       },
       tooltip: {
@@ -95,7 +99,7 @@ const DailyExpenses = () => {
         },
         ticks: {
           color: "rgba(255,255,255,0.8)",
-          callback: (value: string | number) => `${value} ${currency}`,
+          callback: (value: string | number) => `${value}`,
         },
       },
       x: {
