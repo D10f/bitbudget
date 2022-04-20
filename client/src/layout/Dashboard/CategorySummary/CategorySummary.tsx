@@ -4,13 +4,13 @@ import { ChartData, TooltipItem } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { useAppSelector } from "@hooks/useAppSelector";
 import useExpenseFilters from "@hooks/useExpenseFilters";
+import useMediaQuery from '@hooks/useMediaQuery';
 import {
   selectCategoriesByName,
   selectPercentByCategory,
 } from "@features/expenses/expensesSlice";
 import { selectCurrentMMYYByName } from "@features/filters/filtersSlice";
-import { isWindowSmallerThan } from "@utils/mediaQueries";
-import { Breakpoints } from "../../../types.d";
+import { Breakpoints } from "@enums";
 
 const CardContainer = styled.div`
   width: 100%;
@@ -49,6 +49,8 @@ const CategorySummary = () => {
   const currentMMYY = useAppSelector(selectCurrentMMYYByName);
   const { updateSearchTerm } = useExpenseFilters();
 
+  const isViewPortPhone = useMediaQuery(`(max-width: ${Breakpoints.PHONE})`);
+
   // TODO: Add proper typing...
   const handleClick = (...args: any) => {
     const category = args[2].tooltip.dataPoints[0].dataset.label;
@@ -62,7 +64,7 @@ const CategorySummary = () => {
     onClick: handleClick,
     plugins: {
       legend: {
-        display: !isWindowSmallerThan(Breakpoints.PHONE),
+        display: !isViewPortPhone,
         position: "bottom" as const,
         labels: {
           color: "rgb(255,255,255)",
