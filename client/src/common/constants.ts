@@ -33,4 +33,4 @@ export const months = [
   "December",
 ];
 
-export const API_URL = <string>process.env.REACT_APP_API_URL;
+export const API_URL = process.env.REACT_APP_API_URL as string;
