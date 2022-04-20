@@ -1,4 +1,4 @@
-![Image](assets/screenshot.webp)
+![Image](assets/screenshot.png)
 
 # Bit Budget
 
