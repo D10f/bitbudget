@@ -49,6 +49,10 @@ const GlobalStyles = createGlobalStyle`
       100%;
       height: unset;
     };
+    
+    @media (max-width: ${breakpoints.phone}) {
+      padding: 0.5rem;
+    };
   }
 
   ul {
