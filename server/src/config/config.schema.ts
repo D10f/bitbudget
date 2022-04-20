@@ -29,6 +29,6 @@ export const configValidationSchema = Joi.object().keys({
   NODE_ENV: Joi.string()
     .valid('development', 'production', 'test')
     .default('development'),
-  PORT: Joi.number().default(5000),
+  PORT: Joi.number().default(80),
   DOMAIN: Joi.string().default('http://localhost'),
 });
