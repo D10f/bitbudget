@@ -1,35 +1,39 @@
 import { addAuthToken } from "./interceptors";
+import { API_URL } from "@constants";
 
-type requestDataType = 'json' | 'text' | 'raw' | undefined;
+type requestDataType = "json" | "text" | "raw" | undefined;
 
 interface IConfig extends RequestInit {
-  requestType?: requestDataType,
-  responseType?: requestDataType,
+  requestType?: requestDataType;
+  responseType?: requestDataType;
 }
 
 class ApiService {
   constructor(
     private readonly baseUrl: string,
-    private interceptors: ((req: Request) => Request)[] = [],
+    private interceptors: ((req: Request) => Request)[] = []
   ) {}
 
   async makeFetch(endpoint: string, customConfig: IConfig) {
     const url = this.baseUrl + endpoint;
-    const type = customConfig.requestType || 'json';
+    const type = customConfig.requestType || "json";
     const config = {
       ...customConfig,
       headers: {
         "Content-Type": this.setRequestType(type),
         ...customConfig.headers,
       },
-      body: this.setRequestContent(customConfig.body, type)
+      body: this.setRequestContent(customConfig.body, type),
     };
 
     const request = this.runInterceptors(new Request(url, config));
 
     try {
       const response = await fetch(request);
-      const data = await this.transformResponse(response, customConfig.responseType);
+      const data = await this.transformResponse(
+        response,
+        customConfig.responseType
+      );
 
       // return axios-like response
       if (response.ok) {
@@ -57,12 +61,12 @@ class ApiService {
       originalRequest
     );
   }
-  
+
   async transformResponse(res: Response, responseType: requestDataType) {
     switch (responseType) {
-      case 'text':
+      case "text":
         return await res.text();
-      case 'raw':
+      case "raw":
         return await res.arrayBuffer();
       default:
         return await res.json();
@@ -71,24 +75,21 @@ class ApiService {
 
   setRequestType(type: requestDataType) {
     switch (type) {
-      case 'text':
-        return 'application/text';
-      case 'raw':
-        return 'application/octet-stream';
+      case "text":
+        return "application/text";
+      case "raw":
+        return "application/octet-stream";
       default:
-        return 'application/json';
+        return "application/json";
     }
   }
 
   setRequestContent(body: any, type: requestDataType) {
-    
     if (!Boolean(body)) {
       return null;
     }
 
-    return type === 'json'
-      ? JSON.stringify(body)
-      : body;
+    return type === "json" ? JSON.stringify(body) : body;
   }
 
   get(endpoint: string, config: IConfig = {}) {
@@ -125,7 +126,8 @@ class ApiService {
 }
 
 // TODO: accept environment variables
-const api = new ApiService("http://localhost:3000");
+// const api = new ApiService("http://localhost:5000");
+const api = new ApiService(API_URL);
 
 api.addInterceptor(addAuthToken);
 

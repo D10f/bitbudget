@@ -1,14 +1,14 @@
 /**
-*  MEDIA QUERY REFERENCE
-*  | Breakpoint      | Pixels |  Em   |
-*  | --------------- | ------ | ----- |
-*  | XS              | < 400  | 25    |
-*  | Phone           | < 600  | 37.5  |
-*  | TabletPortrait  | < 768  | 48    |
-*  | TabletLandscape | < 1200 | 75    |
-*  | Desktop         | < 1800 | 112.5 |
-*  | WideScreen      | > 1800 | 112.5 |
-*/
+ *  MEDIA QUERY REFERENCE
+ *  | Breakpoint      | Pixels |  Em   |
+ *  | --------------- | ------ | ----- |
+ *  | XS              | < 400  | 25    |
+ *  | Phone           | < 600  | 37.5  |
+ *  | TabletPortrait  | < 768  | 48    |
+ *  | TabletLandscape | < 1200 | 75    |
+ *  | Desktop         | < 1800 | 112.5 |
+ *  | WideScreen      | > 1800 | 112.5 |
+ */
 export const breakpoints = {
   xs: "25em",
   phone: "37.5em",
@@ -32,3 +32,5 @@ export const months = [
   "November",
   "December",
 ];
+
+export const API_URL = <string>process.env.REACT_APP_API_URL;

@@ -1,7 +1,7 @@
 node_modules
 build
-Dockerfile
-README.md
+*.md
 .dockerignore
 .gitignore
 .git
+.env
