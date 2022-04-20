@@ -9,11 +9,11 @@ RUN npm ci && \
 FROM base AS development
 ENV NODE_ENV=development
 RUN npm install --development
+COPY . .
 CMD ["nest", "start", "--debug", "--watch"]
 
 FROM development AS test
 ENV NODE_ENV=test
-COPY . .
 CMD ["jest"]
 
 FROM development AS builder
@@ -21,7 +21,7 @@ RUN nest build
 
 FROM base AS production
 ENV NODE_ENV=production
-COPY --from=builder /app/dist/ /app
+COPY --from=builder /app/dist .
 RUN apt-get update && \
     apt-get install tini --no-install-recommends && \
     rm -rf /var/lib/apt/lists/*
