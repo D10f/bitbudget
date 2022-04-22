@@ -16,7 +16,9 @@ export const readDockerSecrets = () => {
       const filePath = process.env[key];
       const secretContent = readFileSync(filePath, { encoding: 'utf-8' });
       const withoutSuffix = key.replace('_FILE', '');
-      config[withoutSuffix] = secretContent;
+
+      // readFileSync adds a new line character
+      config[withoutSuffix] = secretContent.replace('\n', '');
     }
   }
 
