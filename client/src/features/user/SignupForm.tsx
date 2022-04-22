@@ -39,7 +39,7 @@ const SignupForm = () => {
         <Controller
           name="username"
           control={control}
-          defaultValue="Morty"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
@@ -56,7 +56,7 @@ const SignupForm = () => {
         <Controller
           name="email"
           control={control}
-          defaultValue="some@example.com"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
@@ -73,7 +73,7 @@ const SignupForm = () => {
         <Controller
           name="password"
           control={control}
-          defaultValue="password"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
@@ -90,7 +90,7 @@ const SignupForm = () => {
         <Controller
           name="confirmPassword"
           control={control}
-          defaultValue="password"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}

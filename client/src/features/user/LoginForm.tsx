@@ -37,7 +37,7 @@ const LoginForm = () => {
         <Controller
           name="username"
           control={control}
-          defaultValue="Morty666"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
@@ -54,7 +54,7 @@ const LoginForm = () => {
         <Controller
           name="password"
           control={control}
-          defaultValue="password"
+          defaultValue=""
           render={({ field }) => (
             <TextInput
               {...field}
