@@ -1,7 +1,7 @@
 VERSION := $(shell grep version package.json | awk '{print $$2}' | sed s/[\",]//g)
 
 start:
-	docker-compose up -d && \
+	docker compose up -d && \
 	docker logs -f server_node_1
 
 build:
