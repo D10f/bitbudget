@@ -1,23 +1,14 @@
+const { webcrypto } = require('crypto');
+const { MongoClient } = require('mongodb');
+const moment = require('moment');
+const axios = require('axios');
+const minifaker = require('minifaker');
+require('minifaker/locales/en');
 
-/**
- *  This standalone script will be used to seed the database with fake data for demo purposes
- */
+const WALLET_ONE_ID = '6021bfe0-22cc-4d7a-b975-dbe6ab851ea6';
+const WALLET_TWO_ID = 'eed1d12b-8925-40f2-87d9-663ad96f69ae';
 
-import { webcrypto } from 'crypto';
-import moment from 'moment';
-import axios from 'axios';
-import minifaker from 'minifaker';
-import 'minifaker/dist/locales/en';
-
-const USER = {
-  username: 'Luigi',
-  email: 'luigi@example.org',
-  password: 'iamnotmario',
-  token: null
-};
-
-const CRYPTO_KEY = await generateCryptoKey();
-const SALT = webcrypto.getRandomValues(new Uint8Array(32));
+const TOTAL_EXPENSES = 3;
 
 const CATEGORIES = [
   "Travel",
@@ -52,75 +43,206 @@ const WALLET_NAMES = [
   'Road Trip 2022',
 ];
 
-let defaultWalletId = null; // to be be updated when user is created
-let createdWalletId = minifaker.uuid.v4();
+const fakeUser = {
+  username: 'Luigi',
+  password: 'iamnotmario'
+};
+
+let cryptoKey = null;
 
 async function main() {
 
-  // REGISTER NEW USER
-  const response = await axios.post('http://localhost:5000/auth/signup', {
-    username: USER.username,
-    password: USER.password,
-    email: USER.email
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
+  /**
+   *  Create DB connection
+   */
+
+  const name = process.env.MONGODB_NAME;
+  const user = process.env.MONGODB_USER;
+  const pass = process.env.MONGODB_PASSWORD;
+  const uri = `mongodb://${user}:${pass}@mongo?authSource=admin`;
+
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true
+  });
+
+  try {
+
+    await client.connect();
+
+    const users = client.db(name).collection('users');
+    const wallets = client.db(name).collection('wallets');
+
+    /**
+     *  Create an axios instance
+     */
+
+    const api = axios.create({
+      baseURL: 'http://localhost:5000',
+      timeout: 1000,
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+
+    api.interceptors.request.use(function(config) {
+      config.headers.Authorization = `Bearer ${fakeUser.token}`;
+      return config;
+    });
+
+    /**
+     *  Generate a new cryptographic key
+     */
+
+    cryptoKey = await generateCryptoKey();
+
+    /**
+     *  Delete fake user, and recreate it
+     */
+
+    await users.deleteOne({ username: fakeUser.username });
+    const response = await api.post('/auth/signup', fakeUser);
+    fakeUser.token = response.data.accessToken;
+
+    /**
+     *  Delete fake user data
+     */
+
+    try {
+      await api.delete(`/wallets/${response.data.defaultWalletId}`);
+      await api.delete(`/wallets/${WALLET_ONE_ID}`);
+      await api.delete(`/wallets/${WALLET_TWO_ID}`);
+    } catch (err) {
+      console.log(`${err.name}: ${err.message}`);
+      console.log(`${err.response.data.message}`);
+      console.log('Moving on...');
     }
-  });
 
-  // STORE AUTH JSON TOKEN
-  USER.token = response.data.accessToken;
-  defaultWalletId = response.data.defaultWalletId;
+    /**
+     * Create two new wallets 
+     */
 
-  // REGISTER NEW WALLET FOR TEST USER
-  await axios.post('http://localhost:5000/wallets/', {
-    id: createdWalletId,
-    name: minifaker.arrayElement(WALLET_NAMES),
-    budget: minifaker.number({ min: 1000, max: 5000 }),
-    currency: minifaker.arrayElement(CURRENCIES),
-    isCurrent: false,
-  }, {
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${USER.token}`,
-    },
-  });
-}
+    const walletOne = {
+      id: WALLET_ONE_ID,
+      name: minifaker.arrayElement(WALLET_NAMES),
+      budget: minifaker.number({ min: 1000, max: 5000 }),
+      currency: minifaker.arrayElement(CURRENCIES),
+      isCurrent: true,
+    };
 
+    const walletTwo = {
+      id: WALLET_TWO_ID,
+      name: minifaker.arrayElement(WALLET_NAMES),
+      budget: minifaker.number({ min: 1000, max: 5000 }),
+      currency: minifaker.arrayElement(CURRENCIES),
+      isCurrent: false,
+    };
+
+    await api.post('/wallets', walletOne);
+    await api.post('/wallets', walletTwo);
+
+    /**
+     *  Update user's encrypted data for use in frontend
+     */
+
+    const userData = {
+      wallets: [walletOne, walletTwo],
+      categories: CATEGORIES
+    };
+
+    const userDataBuffer = await objectToBuffer(userData);
+    const userDataEncrypted = await encryptData(userDataBuffer);
+
+    const res1 = await api.patch(
+      `/users/snapshot/${response.data.id}`,
+      userDataEncrypted,
+      {
+        headers: {
+          'Content-Type': 'application/octet-stream'
+        }
+      }
+    );
+
+    console.log(Buffer.from(res1.data.data, 'base64'));
+
+    const res2 = await api.get(`/users/${response.data.id}`, {
+      headers: {
+        'Content-Type': 'application/octet-stream'
+      },
+      responseType: 'arraybuffer'
+    });
+
+    console.log(res2.data);
+
+    /**
+     *  Create a set of expenses for each wallet
+     */
+
+    // await api.post('/expenses', await createExpense());
+    const creatingExpensesPromise = [];
+
+    for (let i = 0; i < TOTAL_EXPENSES; i++) {
+      creatingExpensesPromise.push(
+        api.post('/expenses', await createExpense())
+      );
+    }
+
+    await Promise.all(creatingExpensesPromise);
+
+  } catch (err) {
+
+    console.log(`${err.name}: ${err.message}`);
+    if (err.response) {
+      console.log(`${err.response.data.message}`);
+    }
+
+  } finally {
+
+    client.close();
+
+  }
+};
+
+/**
+ *  Creates an encrypted expense using random fake data
+ */
 async function createExpense() {
 
-  const currentDate = moment(Date.now());
-
-  // calculate random month based on current date
-  const m = 1 + minifaker.number({
-    min: currentDate.month() - 1,
-    max: currentDate.month() + 1,
+  /* Pick a random month, plus or minus one, from the current date */
+  const m = moment(Date.now());
+  const date = m.date();
+  const year = m.year();
+  const month = minifaker.number({
+    min: m.month() - 1,
+    max: m.month() + 1
   });
-  const y = currentDate.year();
-  const d = currentDate.date();
 
-  // actual date to be used for the random expense
-  const expenseDate = new Date(`${y}-${m}-${d}`);
+  const expenseDate = new Date(`${year}-${month}-${date}`);
 
+  /* Fill expense using random data */
   const data = {
-    title: bsGenerator(2, 5),
-    description: bsGenerator(4, 8),
-    amount: number({ min: 5, max: 600, float: Math.random() > 0.5 }),
+    title: getWords(2, 5),
+    description: getWords(4, 8),
+    amount: minifaker.number({ min: 5, max: 600, float: minifaker.boolean() }),
     category: minifaker.arrayElement(CATEGORIES),
-    // only need to specify the month for now:
-    // produce random data for current, previous or next months
-    createdAt: expenseDate,
+    createdAt: expenseDate
   };
 
-  const encryptedExpense = {
-    id: minifaker.uuid.v4(),
-    data,
-    walletId: minifaker.arrayElement([defaultWalletId, createdWalletId]),
+  /* Encrypt expense data and return wrapper */
+  const dataBuffer = await objectToBuffer(data);
+  const encryptedData = await encryptData(dataBuffer);
+
+  return {
+    _id: minifaker.uuid.v4(),
+    data: Buffer.from(encryptedData).toString('base64'),
+    walletId: minifaker.arrayElement([WALLET_ONE_ID, WALLET_TWO_ID]),
     expenseDate: formatDateAsMMYY(expenseDate)
   };
 }
 
-function bsGenerator(min, max) {
+/**
+ *  Produces a string of random words, but slightly more meaninful than fully randomized
+ */
+function getWords(min, max) {
   let res = '';
 
   for (let i = min; i <= max; i++) {
@@ -136,6 +258,9 @@ function bsGenerator(min, max) {
   return res;
 }
 
+/**
+ *  Produces a formatted string using a date object as input
+ */
 function formatDateAsMMYY(date) {
   const momentObj = moment(date);
   const month = (momentObj.month() + 1).toString().padStart(2, '0');
@@ -143,57 +268,79 @@ function formatDateAsMMYY(date) {
   return `${month}${year}`;
 }
 
-async function generateCryptoKey() {
-  const keyMaterial = await webcrypto.subtle.importKey(
-    'raw',
-    new TextEncoder().encode(USER.password),
-    'PBKDF2',
-    false,
-    ['deriveKey']
-  );
+/**
+ *  Converts a JS object into a buffer
+ */
+async function objectToBuffer(obj) {
+  return Buffer.from(JSON.stringify(obj));
+}
 
-  return await webcrypto.subtle.deriveKey(
+/**
+ *  Creates cryptographic material based off user's password 
+ */
+async function generateCryptoKey() {
+  return await webcrypto.subtle.importKey(
+    "raw",
+    new TextEncoder().encode(fakeUser.password),
+    "PBKDF2",
+    false,
+    ["deriveKey"]
+  );
+}
+
+/**
+ *  Derives a cryptographic key to be used for encryption/decryption
+ */
+async function deriveKey(salt = webcrypto.getRandomValues(new Uint8Array(32))) {
+  const key = await webcrypto.subtle.deriveKey(
     {
       name: 'PBKDF2',
-      salt: webcrypto.getRandomValues(new Uint32Array(32)),
+      salt,
       iterations: 250_000,
-      hash: 'SHA-256'
+      hash: 'SHA-256',
     },
-    keyMaterial,
+    cryptoKey,
     { name: 'AES-GCM', length: 256 },
     false,
     ['encrypt', 'decrypt']
   );
+
+  return { key, salt };
 }
 
+/**
+ *  Encrypts a piece of data
+ */
 async function encryptData(data) {
   const iv = webcrypto.getRandomValues(new Uint8Array(16));
+  const { key, salt } = await deriveKey();
 
   const encryptedBuffer = await webcrypto.subtle.encrypt(
     { name: 'AES-GCM', iv },
-    CRYPTO_KEY,
+    key,
     data
   );
 
-  return new Uint8Array([...SALT, ...iv, ...new Uint8Array(encryptedBuffer)])
+  return new Uint8Array([...salt, ...iv, ...new Uint8Array(encryptedBuffer)]);
 }
 
-async function encryptDataObj(obj) {
-  const objBuffer = Buffer.from(JSON.stringify(obj));
-  const encryptedBuffer = await encryptData(objBuffer);
-  return Buffer.from(encryptedBuffer).toString('base64');
+/**
+ *  Decrypts a piece of data
+ */
+async function decryptData(encryptedBuffer) {
+  const encryptedBytes = new Uint8Array(encryptedBuffer);
+  const salt = encryptedBytes.slice(0, 32);
+  const iv = encryptedBytes.slice(32, 32 + 16);
+  const data = encryptedBytes.slice(32 + 16);
+
+  const { key } = await deriveKey(salt);
+
+  return await webcrypto.subtle.decrypt(
+    { name: 'AES-GCM', iv },
+    key,
+    data
+  );
 }
-
-// async function decryptData(buffer) {
-//   const encryptedBytes = new Uint8Array(buffer);
-//   const iv = encryptedBytes.slice(32, 32 + 16);
-//   const data = encryptedBytes.slice(32 + 16);
-
-//   return await webcrypto.subtle.decrypt(
-//     { name: 'AES-GCM', iv },
-//     CRYPTO_KEY,
-//     data
-//   );
-// }
 
 main();
+
