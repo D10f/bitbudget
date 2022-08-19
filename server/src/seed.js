@@ -8,7 +8,7 @@ require('minifaker/locales/en');
 const WALLET_ONE_ID = '6021bfe0-22cc-4d7a-b975-dbe6ab851ea6';
 const WALLET_TWO_ID = 'eed1d12b-8925-40f2-87d9-663ad96f69ae';
 
-const TOTAL_EXPENSES = 3;
+const TOTAL_EXPENSES = 50;
 
 const CATEGORIES = [
   "Travel",
@@ -70,10 +70,9 @@ async function main() {
     await client.connect();
 
     const users = client.db(name).collection('users');
-    const wallets = client.db(name).collection('wallets');
 
     /**
-     *  Create an axios instance
+     *  Create an axios instance to make HTTP requests against the server
      */
 
     const api = axios.create({
@@ -152,7 +151,7 @@ async function main() {
     const userDataBuffer = await objectToBuffer(userData);
     const userDataEncrypted = await encryptData(userDataBuffer);
 
-    const res1 = await api.patch(
+    await api.patch(
       `/users/snapshot/${response.data.id}`,
       userDataEncrypted,
       {
@@ -162,31 +161,19 @@ async function main() {
       }
     );
 
-    console.log(Buffer.from(res1.data.data, 'base64'));
-
-    const res2 = await api.get(`/users/${response.data.id}`, {
-      headers: {
-        'Content-Type': 'application/octet-stream'
-      },
-      responseType: 'arraybuffer'
-    });
-
-    console.log(res2.data);
-
     /**
      *  Create a set of expenses for each wallet
      */
 
-    // await api.post('/expenses', await createExpense());
-    const creatingExpensesPromise = [];
+    const fakeExpenseList = [];
 
     for (let i = 0; i < TOTAL_EXPENSES; i++) {
-      creatingExpensesPromise.push(
+      fakeExpenseList.push(
         api.post('/expenses', await createExpense())
       );
     }
 
-    await Promise.all(creatingExpensesPromise);
+    await Promise.all(fakeExpenseList);
 
   } catch (err) {
 
@@ -209,12 +196,15 @@ async function createExpense() {
 
   /* Pick a random month, plus or minus one, from the current date */
   const m = moment(Date.now());
-  const date = m.date();
+  // const date = m.date();
   const year = m.year();
   const month = minifaker.number({
     min: m.month() - 1,
     max: m.month() + 1
   });
+
+  /* Pick a random date */
+  const date = minifaker.number({ min: 1, max: 28 });
 
   const expenseDate = new Date(`${year}-${month}-${date}`);
 
@@ -222,7 +212,7 @@ async function createExpense() {
   const data = {
     title: getWords(2, 5),
     description: getWords(4, 8),
-    amount: minifaker.number({ min: 5, max: 600, float: minifaker.boolean() }),
+    amount: minifaker.number({ min: -100, max: 1_000, float: minifaker.boolean() }).toFixed(2),
     category: minifaker.arrayElement(CATEGORIES),
     createdAt: expenseDate
   };
@@ -233,7 +223,7 @@ async function createExpense() {
 
   return {
     _id: minifaker.uuid.v4(),
-    data: Buffer.from(encryptedData).toString('base64'),
+    data: Buffer.from(encryptedData.toString()).toString('base64'),
     walletId: minifaker.arrayElement([WALLET_ONE_ID, WALLET_TWO_ID]),
     expenseDate: formatDateAsMMYY(expenseDate)
   };
@@ -327,20 +317,20 @@ async function encryptData(data) {
 /**
  *  Decrypts a piece of data
  */
-async function decryptData(encryptedBuffer) {
-  const encryptedBytes = new Uint8Array(encryptedBuffer);
-  const salt = encryptedBytes.slice(0, 32);
-  const iv = encryptedBytes.slice(32, 32 + 16);
-  const data = encryptedBytes.slice(32 + 16);
+// async function decryptData(encryptedBuffer) {
+//   const encryptedBytes = new Uint8Array(encryptedBuffer);
+//   const salt = encryptedBytes.slice(0, 32);
+//   const iv = encryptedBytes.slice(32, 32 + 16);
+//   const data = encryptedBytes.slice(32 + 16);
 
-  const { key } = await deriveKey(salt);
+//   const { key } = await deriveKey(salt);
 
-  return await webcrypto.subtle.decrypt(
-    { name: 'AES-GCM', iv },
-    key,
-    data
-  );
-}
+//   return await webcrypto.subtle.decrypt(
+//     { name: 'AES-GCM', iv },
+//     key,
+//     data
+//   );
+// }
 
 main();
 
