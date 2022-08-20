@@ -214,7 +214,7 @@ async function createExpense() {
     description: getWords(4, 8),
     amount: minifaker.number({ min: -100, max: 1_000, float: minifaker.boolean() }).toFixed(2),
     category: minifaker.arrayElement(CATEGORIES),
-    createdAt: expenseDate
+    createdAt: moment(expenseDate).toString()
   };
 
   /* Encrypt expense data and return wrapper */
