@@ -60,7 +60,7 @@ const ExpenseLink = styled.button`
   color: inherit;
   font-size: inherit;
   font-weight: inherit;
-  width: 15ch;
+  max-width: 20ch;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
