@@ -8,7 +8,7 @@ require('minifaker/locales/en');
 const WALLET_ONE_ID = '6021bfe0-22cc-4d7a-b975-dbe6ab851ea6';
 const WALLET_TWO_ID = 'eed1d12b-8925-40f2-87d9-663ad96f69ae';
 
-const TOTAL_EXPENSES = 50;
+const TOTAL_EXPENSES = 100;
 
 const CATEGORIES = [
   "Travel",
@@ -199,8 +199,8 @@ async function createExpense() {
   // const date = m.date();
   const year = m.year();
   const month = minifaker.number({
-    min: m.month() - 1,
-    max: m.month() + 1
+    min: m.month() - 2,
+    max: m.month() + 2
   });
 
   /* Pick a random date */
