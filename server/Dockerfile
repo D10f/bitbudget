@@ -4,7 +4,7 @@ WORKDIR /app
 ENV PATH=/app/node_modules/.bin:$PATH
 COPY package*.json ./
 RUN npm ci && \
-    npm cache clean --force
+  npm cache clean --force
 
 FROM base AS development
 ENV NODE_ENV=development
@@ -23,8 +23,8 @@ FROM base AS production
 ENV NODE_ENV=production
 COPY --from=builder /app/dist .
 RUN apt-get update && \
-    apt-get install tini --no-install-recommends && \
-    rm -rf /var/lib/apt/lists/*
+  apt-get install tini --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
 USER node
 ENTRYPOINT ["/usr/bin/tini", "--"]
 CMD ["node", "main.js"]

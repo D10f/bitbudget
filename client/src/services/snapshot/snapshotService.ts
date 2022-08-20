@@ -9,7 +9,7 @@ class SnapshotService {
     private readonly ApiService: typeof api,
     private readonly indexDBStorage: typeof IndexDBStorage,
     private readonly cryptoIndexdbKey: string
-  ) {}
+  ) { }
 
   async generateCryptoKey(password: string) {
     const keyMaterial = await crypto.subtle.importKey(

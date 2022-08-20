@@ -9,7 +9,7 @@ services:
     ports:
       - 5000:5000
     environment:
-      MONGODB_NAME_FILE: bitbudget
+      MONGODB_NAME: bitbudget
       MONGODB_USER: root
       MONGODB_PASSWORD: toor
       JWT_SECRET: d58573e8a27dc86c3df759b6b7eca1d3ef2059afd1732fa7e80b5eeea0f9f575

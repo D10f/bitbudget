@@ -8,6 +8,9 @@ ctx.addEventListener('message', (message: MessageEvent<IEncryptedExpense>) => {
   const encryptedAsString = atob(expense.data).split(",");
   const encryptedAsBytes = new Uint8Array(encryptedAsString.map(Number));
 
+  console.log(encryptedAsString);
+  console.log(encryptedAsBytes);
+
   SnapshotService.decryptData(encryptedAsBytes)
     .then((decryptedBytes) => {
       const decodedData = new TextDecoder().decode(decryptedBytes);

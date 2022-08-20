@@ -19,7 +19,7 @@ import { Response } from 'express';
 // @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Get(':id')
   @UseGuards(SameUserGuard)
@@ -28,6 +28,7 @@ export class UsersController {
     @Res({ passthrough: false }) res: Response,
   ) {
     const data = await this.usersService.getUserData(id);
+    console.log(data);
     return res.send(data);
   }
 

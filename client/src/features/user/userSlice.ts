@@ -33,93 +33,93 @@ export const signupUser =
   (
     credentials: AuthUserPDO
   ): ThunkAction<void, RootState, unknown, AnyAction> =>
-  async (dispatch, getState) => {
-    try {
-      dispatch(setLoading(true));
+    async (dispatch, getState) => {
+      try {
+        dispatch(setLoading(true));
 
-      const response = await Api.post("/auth/signup", credentials);
+        const response = await Api.post("/auth/signup", credentials);
 
-      // setup default wallet
-      dispatch(
-        addWallet({
-          id: response.data.defaultWalletId,
-          name: "Default Wallet",
-          budget: "1000",
-          currency: "EUR",
-          isCurrent: true,
-        })
-      );
+        // setup default wallet
+        dispatch(
+          addWallet({
+            id: response.data.defaultWalletId,
+            name: "Default Wallet",
+            budget: "1000",
+            currency: "EUR",
+            isCurrent: true,
+          })
+        );
 
-      SessionStorageService.set("token", response.data.accessToken);
-      await SnapshotService.generateCryptoKey(credentials.password);
+        SessionStorageService.set("token", response.data.accessToken);
+        await SnapshotService.generateCryptoKey(credentials.password);
 
-      // update state with user data
-      dispatch(
-        setUserData({
-          user: {
-            id: response.data.id,
-            username: response.data.username,
-            email: response.data.email,
-          },
-          token: response.data.accessToken,
-        })
-      );
+        // update state with user data
+        dispatch(
+          setUserData({
+            user: {
+              id: response.data.id,
+              username: response.data.username,
+              email: response.data.email,
+            },
+            token: response.data.accessToken,
+          })
+        );
 
-      await SnapshotService.createEncryptedSnapshot(getState());
-      dispatch(
-        addNotification({ msg: "Signup Successfully", type: "success" })
-      );
-    } catch (error) {
-      dispatch(
-        addNotification({ msg: (error as Error).message, type: "error" })
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+        await SnapshotService.createEncryptedSnapshot(getState());
+        dispatch(
+          addNotification({ msg: "Signup Successfully", type: "success" })
+        );
+      } catch (error) {
+        dispatch(
+          addNotification({ msg: (error as Error).message, type: "error" })
+        );
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
 
 export const loginUser =
   (
     credentials: AuthUserPDO
   ): ThunkAction<void, RootState, unknown, AnyAction> =>
-  async (dispatch) => {
-    try {
-      dispatch(setLoading(true));
-      const response = await Api.post("/auth/signin", credentials);
-      SessionStorageService.set("token", response.data.accessToken);
-      await SnapshotService.generateCryptoKey(credentials.password);
+    async (dispatch) => {
+      try {
+        dispatch(setLoading(true));
+        const response = await Api.post("/auth/signin", credentials);
+        SessionStorageService.set("token", response.data.accessToken);
+        await SnapshotService.generateCryptoKey(credentials.password);
 
-      // Retrieve user data
-      const userData = await Api.get(`/users/${response.data.id}`, {
-        responseType: "raw",
-      });
+        // Retrieve user data
+        const userData = await Api.get(`/users/${response.data.id}`, {
+          responseType: "raw",
+        });
 
-      // Decrypt user data
-      const decryptedData = await SnapshotService.decryptSnapshot(
-        userData.data
-      );
+        // Decrypt user data
+        const decryptedData = await SnapshotService.decryptSnapshot(
+          userData.data
+        );
 
-      // Update user data
-      dispatch(setWallets(decryptedData.wallets));
-      dispatch(setCategories(decryptedData.categories));
-      dispatch(
-        setUserData({
-          user: {
-            id: response.data.id,
-            username: response.data.username,
-            email: response.data.email,
-          },
-          token: response.data.accessToken,
-        })
-      );
-    } catch (error) {
-      dispatch(
-        addNotification({ msg: (error as Error).message, type: "error" })
-      );
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
+        // Update user data
+        dispatch(setWallets(decryptedData.wallets));
+        dispatch(setCategories(decryptedData.categories));
+        dispatch(
+          setUserData({
+            user: {
+              id: response.data.id,
+              username: response.data.username,
+              email: response.data.email,
+            },
+            token: response.data.accessToken,
+          })
+        );
+      } catch (error) {
+        dispatch(
+          addNotification({ msg: (error as Error).message, type: "error" })
+        );
+      } finally {
+        dispatch(setLoading(false));
+      }
+    };
 
 export const logoutUser =
   (): ThunkAction<void, RootState, unknown, AnyAction> => async (dispatch) => {

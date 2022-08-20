@@ -1,8 +1,9 @@
 FROM node:16-buster-slim AS development
 ENV NODE_ENV=development
+ENV PATH=/app/node_modules/.bin:$PATH
 WORKDIR /app
 COPY package*.json ./
-RUN npm install
+RUN npm install --force
 EXPOSE 3000
 CMD ["npm", "start"]
 

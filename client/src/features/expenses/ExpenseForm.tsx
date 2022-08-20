@@ -1,5 +1,5 @@
 import React from "react";
-import { v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { useForm, Controller, SubmitHandler } from "react-hook-form";
 import { joiResolver } from "@hookform/resolvers/joi";
 
