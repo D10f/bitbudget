@@ -22,6 +22,7 @@ RUN nest build
 FROM base AS production
 ENV NODE_ENV=production
 COPY --from=builder /app/dist .
+COPY src/seed.js .
 RUN apt-get update && \
   apt-get install tini --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
