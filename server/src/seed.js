@@ -1,9 +1,12 @@
 const { webcrypto } = require('crypto');
+const fs = require('fs').promises;
 const { MongoClient } = require('mongodb');
 const moment = require('moment');
 const axios = require('axios');
 const minifaker = require('minifaker');
 require('minifaker/locales/en');
+
+const IS_PROD = process.env.NODE_ENV === 'production';
 
 const WALLET_ONE_ID = '6021bfe0-22cc-4d7a-b975-dbe6ab851ea6';
 const WALLET_TWO_ID = 'eed1d12b-8925-40f2-87d9-663ad96f69ae';
@@ -50,17 +53,15 @@ const fakeUser = {
 
 let cryptoKey = null;
 
+
 async function main() {
 
   /**
    *  Create DB connection
    */
 
-  const name = process.env.MONGODB_NAME;
-  const user = process.env.MONGODB_USER;
-  const pass = process.env.MONGODB_PASSWORD;
-  const uri = `mongodb://${user}:${pass}@mongo?authSource=admin`;
-
+  const { name, user, pass } = await getDBCredentials();
+  const uri = `mongodb://${user}:${pass}@mongo:27017/${name}?authSource=admin`;
   const client = new MongoClient(uri, {
     useNewUrlParser: true
   });
@@ -76,7 +77,7 @@ async function main() {
      */
 
     const api = axios.create({
-      baseURL: 'http://localhost:5000',
+      baseURL: IS_PROD ? 'http://localhost:80' : 'http://localhost:5000',
       timeout: 1000,
       headers: {
         'Content-Type': 'application/json',
@@ -178,6 +179,8 @@ async function main() {
   } catch (err) {
 
     console.log(`${err.name}: ${err.message}`);
+    console.log(err.cause);
+    console.log(err.stack);
     if (err.response) {
       console.log(`${err.response.data.message}`);
     }
@@ -212,7 +215,7 @@ async function createExpense() {
   const data = {
     title: getWords(2, 5),
     description: getWords(4, 8),
-    amount: minifaker.number({ min: -100, max: 1_000, float: minifaker.boolean() }).toFixed(2),
+    amount: minifaker.number({ min: -100, max: 500, float: minifaker.boolean() }).toFixed(2),
     category: minifaker.arrayElement(CATEGORIES),
     createdAt: moment(expenseDate).toString()
   };
@@ -332,5 +335,40 @@ async function encryptData(data) {
 //   );
 // }
 
-main();
+async function readFile(filepath) {
+  return await fs.readFile(filepath);
+}
+
+async function getDBCredentials() {
+
+  let name, user, pass;
+
+  if (IS_PROD) {
+
+    const nameBuffer = await readFile(process.env.MONGODB_NAME_FILE);
+    const userBuffer = await readFile(process.env.MONGODB_USER_FILE);
+    const passBuffer = await readFile(process.env.MONGODB_PASSWORD_FILE);
+
+    // replace last empty line character added by node's readFile
+    name = nameBuffer.toString().replace('\n', '');
+    user = userBuffer.toString().replace('\n', '');
+    pass = passBuffer.toString().replace('\n', '');
+
+  } else {
+    name = process.env.MONGODB_NAME;
+    user = process.env.MONGODB_USER;
+    pass = process.env.MONGODB_PASSWORD;
+  }
+
+  return {
+    name,
+    user,
+    pass
+  };
+}
+
+main().catch(err => {
+  console.log(err.cause);
+  console.log(err.stack);
+});
 

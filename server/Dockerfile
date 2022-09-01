@@ -1,4 +1,5 @@
-FROM node:16-buster-slim AS base
+# FROM node:16-buster-slim AS base
+FROM node:16-bullseye-slim AS base
 EXPOSE 80
 WORKDIR /app
 ENV PATH=/app/node_modules/.bin:$PATH
@@ -20,9 +21,13 @@ FROM development AS builder
 RUN nest build
 
 FROM base AS production
+# Copy seed script and install required dependencies
+COPY src/seed.js .
+RUN npm install -D moment axios minifaker mongodb
+
 ENV NODE_ENV=production
 COPY --from=builder /app/dist .
-COPY src/seed.js .
+
 RUN apt-get update && \
   apt-get install tini --no-install-recommends && \
   rm -rf /var/lib/apt/lists/*
