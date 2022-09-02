@@ -43,7 +43,7 @@ const LoginForm = () => {
               {...field}
               label="Username"
               autoFocus={true}
-              placeholder="eg.: CrazyTrain98"
+              placeholder="eg.: Luigi"
               error={Boolean(errors.username)}
             />
           )}
@@ -60,7 +60,7 @@ const LoginForm = () => {
               {...field}
               label="Password"
               type="password"
-              placeholder=""
+              placeholder="eg.: iamnotmario"
               error={Boolean(errors.password)}
             />
           )}

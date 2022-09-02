@@ -21,9 +21,16 @@ const Welcome = () => {
       title={
         action === AUTH_ACTION.LOGIN ? "Login to continue" : "Create an account"
       }
-      requestClose={() => {}}
+      requestClose={() => { }}
     >
       {action === AUTH_ACTION.LOGIN ? <LoginForm /> : <SignupForm />}
+
+      {/* Just a hint that a test user actually exists */}
+      {action === AUTH_ACTION.LOGIN ?
+        <small style={{ color: 'gray', display: 'block', marginTop: '2rem' }}>
+          "Luigi" is our test user, go ahead and take a peek!
+        </small> : ""
+      }
 
       <StyledButton
         variant="link"
