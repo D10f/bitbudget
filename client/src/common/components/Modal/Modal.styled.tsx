@@ -21,6 +21,7 @@ export const Container = styled(motion.aside)`
   position: relative;
   margin: 2rem auto;
   width: max-content;
+  max-width: 80ch;
   max-height: 90vh;
   padding: 4rem 6rem;
   border: 1px solid ${({ theme }) => theme.colors.light.default};
@@ -44,5 +45,6 @@ export const ModalHeader = styled.header`
 `;
 
 export const CloseButton = styled(Button)`
-  transform: scale(1.5);
+  // font-size: 3rem;
+  transform: scale(3);
 `;

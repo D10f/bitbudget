@@ -3,13 +3,6 @@ import { createGlobalStyle } from "styled-components";
 const GlobalStyles = createGlobalStyle`
 
   @font-face {
-    font-family: 'PanameraRegular';
-    src: url(fonts/PanameraRegular.otf) format('opentype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
     font-family: 'BarlowRegular';
     src: url(fonts/barlow.regular.ttf) format('truetype');
     font-weight: normal;
@@ -19,27 +12,6 @@ const GlobalStyles = createGlobalStyle`
   @font-face {
     font-family: 'BarlowMedium';
     src: url(fonts/barlow.medium.ttf) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'CatamaranRegular';
-    src: url(fonts/catamaran.regular.ttf) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'CatamaranMedium';
-    src: url(fonts/catamaran.medium.ttf) format('truetype');
-    font-weight: normal;
-    font-style: normal;
-  }
-
-  @font-face {
-    font-family: 'RalewayRegular';
-    src: url(fonts/raleway.regular.ttf) format('truetype');
     font-weight: normal;
     font-style: normal;
   }
@@ -123,6 +95,12 @@ const GlobalStyles = createGlobalStyle`
   button,
   a {
     outline: none;
+  }
+
+  pre {
+    font-family: monospace;
+    display: inline-block;
+    background-color: ${({ theme }) => theme.colors.dark.default};
   }
 `;
 

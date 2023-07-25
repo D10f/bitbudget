@@ -28,32 +28,79 @@ export const StyledButton = styled.button<StyledButtonProps>`
     background-color: ${({ theme }) => theme.colors.primary.default};
   }
 
-  ${({ theme, variant }) =>
-    variant === "link" &&
-    css<StyledButtonProps>`
-      padding: 0.5rem 0;
-      background: none;
-      color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.light.default};
+  ${({ theme, variant }) => {
 
-      &:hover,
-      &:focus {
-        color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.primary.default};
-        background: none;
-      }
+    switch (variant) {
+      case 'link':
+        return css<StyledButtonProps>`
+          padding: 0.5rem 0;
+          background: none;
+          color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.light.default};
 
-      svg {
-        width: 1.6rem;
-        height: 1.6rem;
-        fill: ${({ theme }) => theme.colors.light.default};
+          &:hover,
+          &:focus {
+            color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.primary.default};
+            background: none;
+          }
 
-        @media (max-width: ${theme.breakpoints.phone}) {
-          width: 2rem;
-          height: 2rem;
-        }
-      }
+          svg {
+            width: 1.6rem;
+            height: 1.6rem;
+            fill: ${({ theme }) => theme.colors.light.default};
 
-      @media (max-width: ${theme.breakpoints.tabletPortrait}) {
-        font-size: 1.8rem;
-      }
-    `}
+            @media (max-width: ${theme.breakpoints.phone}) {
+              width: 2rem;
+              height: 2rem;
+            }
+          }
+
+          @media (max-width: ${theme.breakpoints.tabletPortrait}) {
+            font-size: 1.8rem;
+          }
+        `;
+      case 'icon':
+        return css<StyledButtonProps>`
+          display: inline-block;
+          background: none;
+          padding: 0;
+
+          &:hover,
+          &:focus {
+            background: none;
+          }
+
+          &:hover svg {
+            fill: ${({ theme }) => theme.colors.primary.default};
+          }
+        `;
+    }
+    // return variant === "link" &&
+    //   css<StyledButtonProps>`
+    //     padding: 0.5rem 0;
+    //     background: none;
+    //     color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.light.default};
+
+    //     &:hover,
+    //     &:focus {
+    //       color: ${({ theme, disabled }) => disabled ? theme.colors.light.darker : theme.colors.primary.default};
+    //       background: none;
+    //     }
+
+    //     svg {
+    //       width: 1.6rem;
+    //       height: 1.6rem;
+    //       fill: ${({ theme }) => theme.colors.light.default};
+
+    //       @media (max-width: ${theme.breakpoints.phone}) {
+    //         width: 2rem;
+    //         height: 2rem;
+    //       }
+    //     }
+
+    //     @media (max-width: ${theme.breakpoints.tabletPortrait}) {
+    //       font-size: 1.8rem;
+    //     }
+    //   `;
+    }
+  }
 `;

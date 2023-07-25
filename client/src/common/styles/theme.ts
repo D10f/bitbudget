@@ -22,8 +22,8 @@ export const theme: DefaultTheme = {
       darkest: "#292c3c",
     },
     light: {
-      default: "#f4f4f4",
-      darker: "#a6a6a6",
+      default: "#eff1f5",
+      darker: "#acb0be",
     },
   },
   typography: {},

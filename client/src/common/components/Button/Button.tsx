@@ -5,7 +5,7 @@ interface IButtonProps {
   children: React.ReactChild;
   className?: string;
   disabled?: boolean;
-  variant?: "action" | "link";
+  variant?: "action" | "link" | "icon";
   type?: "submit" | "button";
   icon?: JSX.Element;
   iconPosition?: "start" | "end";
