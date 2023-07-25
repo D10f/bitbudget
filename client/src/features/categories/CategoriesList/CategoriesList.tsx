@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { useAppDispatch } from "@hooks/useAppDispatch";
 import { useAppSelector } from "@hooks/useAppSelector";
@@ -27,9 +27,15 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
 
   const [currentCategories, setCurrentCategories] = useState(categories);
   const [newCategoryValue, setNewCategoryValue] = useState("");
+  const [hasChanged, setHasChanged] = useState(false);
 
-  const removeCategory = (catToDelete: string) =>
+  useEffect(() => {
+    setHasChanged(JSON.stringify(categories) === JSON.stringify(currentCategories));
+  }, [currentCategories]);
+
+  const removeCategory = (catToDelete: string) => {
     setCurrentCategories((prev) => prev.filter((cat) => cat !== catToDelete));
+  }
 
   const addCategory = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
@@ -68,7 +74,11 @@ const CategoriesList = ({ submitCallback }: ICategoriesList) => {
           </CategoryTag>
         ))}
       </CategoryList>
-      <Button variant="action" onClick={handleSave}>
+      <Button
+        disabled={hasChanged}
+        variant="action"
+        onClick={handleSave}
+      >
         Save
       </Button>
     </CategoryContainer>
