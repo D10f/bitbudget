@@ -16,7 +16,7 @@ export const StyledSelectInput = styled.select<IStyledSelectProps>`
   font-size: 1.6rem;
   min-width: 30rem;
   border: 1px solid
-    ${({ theme, error }) => (error ? "red" : theme.colors.dark.dark)};
+    ${({ theme, error }) => (error ? "red" : theme.colors.dark.darker)};
   border-radius: ${({ theme }) => theme.layout.borderRadius};
   background: ${({ theme }) => theme.colors.dark.default};
   color: ${({ theme }) => theme.colors.light.default};
