@@ -16,7 +16,7 @@ COPY . .
 RUN npm run build
 
 
-FROM nginx:1.21 AS production
+FROM nginx:1.23 AS production
 WORKDIR /usr/share/nginx/html
 EXPOSE 80
 COPY --from=build /app/build/ ./

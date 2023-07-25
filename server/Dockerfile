@@ -1,5 +1,6 @@
 # FROM node:16-buster-slim AS base
-FROM node:16-bullseye-slim AS base
+# FROM node:16-bullseye-slim AS base
+FROM node:18-bookworm-slim AS base
 EXPOSE 80
 WORKDIR /app
 ENV PATH=/app/node_modules/.bin:$PATH
