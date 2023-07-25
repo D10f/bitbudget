@@ -1,6 +1,7 @@
+import { DefaultTheme } from "styled-components";
 import { breakpoints } from "@constants";
 
-export const theme = {
+export const theme: DefaultTheme = {
   colors: {
     primary: {
       default: "#FF8C00",

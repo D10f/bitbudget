@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import { breakpoints } from '@constants';
 
 const GlobalStyles = createGlobalStyle`
   *,
@@ -24,7 +23,7 @@ const GlobalStyles = createGlobalStyle`
     box-sizing: border-box;
     overflow: hidden;
 
-    @media (max-width: ${breakpoints.tabletLandscape}) {
+    @media (max-width: ${({theme}) => theme.breakpoints.tabletLandscape}) {
       overflow: unset;
       overflow-x: hidden;
     };
@@ -40,8 +39,8 @@ const GlobalStyles = createGlobalStyle`
     grid-template:
       "navbar expenses dashboard" auto /
       auto    3fr      4fr;
-    
-    @media (max-width: ${breakpoints.tabletLandscape}) {
+
+    @media (max-width: ${({theme}) => theme.breakpoints.tabletLandscape}) {
       grid-template:
       "navbar" auto
       "dashboard" auto
@@ -49,8 +48,8 @@ const GlobalStyles = createGlobalStyle`
       100%;
       height: unset;
     };
-    
-    @media (max-width: ${breakpoints.phone}) {
+
+    @media (max-width: ${({theme}) => theme.breakpoints.phone}) {
       padding: 0.5rem;
     };
   }
