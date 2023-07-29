@@ -1,0 +1,19 @@
+---
+version: '2.4'
+
+services:
+  nginx:
+    image: 1:23
+    volumes:
+      - ./:/usr/share/nginx/html
+    ports:
+      - 3000:80
+    depends_on:
+      - webpack
+
+  webpack:
+    image: node:16-buster-slim
+    volumes:
+      - ./:/usr/share/nginx/html
+    working_dir: /usr/share/nginx/html
+    command: sh -c "npm i && ./node_modules/.bin/craco"
