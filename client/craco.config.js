@@ -44,6 +44,17 @@ module.exports = {
   },
   debug: true,
   devServer: {
+    host: '0.0.0.0',
+    port: 3000,
+    public: 'localhost:3000',
+    hot: true,
+    inline: true,
+    compress: false,
+    watchOptions: {
+      aggregateTimeout: 300,
+      poll: 1000,
+      ignored: /node_modules/,
+    },
     open: false,
   },
 };

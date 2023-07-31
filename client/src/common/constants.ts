@@ -56,4 +56,5 @@ export const tableau20 = [
   "rgba(158, 218, 229, 0.85)",
 ];
 
-export const API_URL = process.env.REACT_APP_API_URL as string;
+// export const API_URL = process.env.REACT_APP_API_URL as string;
+export const API_URL = (window as any).__ENV__.REACT_APP_API_URL as string;
