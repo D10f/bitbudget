@@ -1,8 +1,8 @@
 VERSION = $(shell grep -m 1 version package.json | awk '{print $$2}' | sed s/[\",]//g)
 
 start:
-	docker compose up -d && \
-	docker logs -f client_react-app_1
+	docker compose -f docker-compose.dev.yml up -d && \
+	docker logs -f client-react-app-1
 
 build:
 	docker build \
