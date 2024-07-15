@@ -1,0 +1,16 @@
+.navbar {
+  background-color: var(--bg-color-2);
+  box-shadow: var(--shadow);
+
+  menu {
+    display: flex;
+    justify-content: space-flex;
+    align-items: center;
+    gap: 2em;
+    padding: 1em;
+  }
+
+  li:last-child {
+    margin-left: auto;
+  }
+}
