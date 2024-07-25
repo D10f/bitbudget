@@ -7,7 +7,10 @@ import { AuthService } from '../auth.service';
 import { IJwtPayload } from '../interfaces/jwt-payload.interface';
 
 @Injectable()
-export class JwtStrategy extends PassportStrategy(Strategy) {
+export class JwtRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'jwt-refresh',
+) {
   constructor(
     private authService: AuthService,
     private configService: ConfigService,
@@ -15,7 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
-      secretOrKey: configService.get('JWT_ACCESS_SECRET'),
+      secretOrKey: configService.get('JWT_REFRESH_SECRET'),
     });
   }
 
@@ -23,4 +26,3 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     return this.authService.validateUser(jwtPayload);
   }
 }
-
