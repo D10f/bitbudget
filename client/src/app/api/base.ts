@@ -23,6 +23,7 @@ enum HTTP_STATUS {
     UNAUTHORIZED = 401,
     FORBIDDEN = 403,
     NOT_FOUND = 404,
+    UNPROCESSABLE_ENTITY = 422,
 }
 
 const baseQuery = fetchBaseQuery({
