@@ -17,14 +17,7 @@ import {
 } from '@reduxjs/toolkit/query/react';
 import type { RootState } from '@app/store';
 import { logout, setToken } from '@features/auth/authSlice';
-
-enum HTTP_STATUS {
-    BAD_REQUEST = 400,
-    UNAUTHORIZED = 401,
-    FORBIDDEN = 403,
-    NOT_FOUND = 404,
-    UNPROCESSABLE_ENTITY = 422,
-}
+import { HTTP_STATUS } from '../../types/http';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:5000',

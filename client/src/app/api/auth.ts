@@ -1,20 +1,6 @@
 import { baseApi } from '@app/api/base';
-
-enum HTTP_METHOD {
-    GET = 'GET',
-    POST = 'POST',
-    PATCH = 'PATCH',
-    UPDATE = 'UPDATE',
-    HEAD = 'HEAD',
-    OPTIONS = 'OPTIONS',
-    DELETE = 'DELETE',
-}
-
-type User = {
-    username: string;
-    email: string;
-    data: string;
-};
+import { User } from '../../types/user';
+import { HTTP_METHOD } from '../../types/http';
 
 type AuthResponse = {
     user: User;
@@ -22,6 +8,7 @@ type AuthResponse = {
 };
 
 type Credentials = {
+    name: string;
     email: string;
     password: string;
 };
