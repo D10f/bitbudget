@@ -5,6 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useAppDispatch } from '@features/store.ts';
 import { useSignupMutation } from '@app/api/auth';
 import { setToken } from '@features/auth/authSlice';
+import { formErrorHandler } from '../../../helpers/formErrorHandler';
 
 const signupFormSchema = z
     .object({
@@ -36,16 +37,8 @@ export default function SignupForm() {
             const userData = await signup({ name, email, password }).unwrap();
             dispatch(setToken(userData.token));
             navigate('/');
-        } catch (error) {
-            switch (error.status) {
-                case 422:
-                    error.data.message.forEach(({ property, message }) => {
-                        setError(property, { message });
-                    });
-                    break;
-                default:
-                //setError('root', { message: (error as Error).message });
-            }
+        } catch (e) {
+            formErrorHandler<FormTypes>(e, setError);
         }
     };
 
