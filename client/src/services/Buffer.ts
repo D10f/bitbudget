@@ -65,7 +65,7 @@ export class Buffer {
     get hex() {
         const bytes = this.raw;
         if (bytes instanceof Promise) {
-            return new Promise((resolve) => {
+            return new Promise<string>((resolve) => {
                 bytes.then((b) => resolve(this._hex(new Uint8Array(b))));
             });
         }
@@ -75,7 +75,7 @@ export class Buffer {
     get base64() {
         const bytes = this.raw;
         if (bytes instanceof Promise) {
-            return new Promise((resolve) => {
+            return new Promise<string>((resolve) => {
                 bytes.then((b) => resolve(this._base64(new Uint8Array(b))));
             });
         }
