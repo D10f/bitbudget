@@ -6,9 +6,9 @@ type HashAlgorithm = 'SHA-256' | 'SHA-384' | 'SHA-512';
  * Produces a fixed-length digest of the provided data.
  */
 export async function hash(algorithm: HashAlgorithm, data: unknown) {
-    const input = await Buffer.from(data).raw;
+    const input = Buffer.from(data).bytes;
     const hash = await crypto.subtle.digest(algorithm, input);
-    return await Buffer.from(hash).hex;
+    return Buffer.from(hash).hex;
 }
 
 /**
@@ -21,12 +21,12 @@ export async function pbkdf2Hash(
     iterations = 250_000,
 ) {
     //const dataBuffer = Buffer.from(data);
-    const saltBuffer = await Buffer.from(salt).raw;
+    const saltBuffer = Buffer.from(salt).bytes;
 
     const key =
         data instanceof CryptoKey
             ? data
-            : await deriveKeyFromPassword(await Buffer.from(data).raw);
+            : await deriveKeyFromPassword(Buffer.from(data).bytes);
 
     const bitLength = parseInt(hash.match(/-(\d+)$/)![1]);
 
@@ -47,7 +47,7 @@ export async function deriveKeyFromPassword(
 ) {
     return await crypto.subtle.importKey(
         'raw',
-        await Buffer.from(password).raw,
+        Buffer.from(password).bytes,
         'PBKDF2',
         false,
         ['deriveKey', 'deriveBits'],
@@ -66,7 +66,7 @@ export async function deriveKey(
     salt: unknown = crypto.getRandomValues(new Uint8Array(32)),
 ) {
     const key = await deriveKeyFromPassword(password);
-    const saltBuffer = await Buffer.from(salt).raw;
+    const saltBuffer = Buffer.from(salt).bytes;
 
     return await window.crypto.subtle.deriveKey(
         {
