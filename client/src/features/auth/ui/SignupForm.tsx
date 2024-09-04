@@ -4,8 +4,10 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useAppDispatch } from '@features/store.ts';
 import { useSignupMutation } from '@app/api/auth';
-import { setToken } from '@features/auth/authSlice';
+import { setToken, setUser } from '@features/auth/authSlice';
 import { formErrorHandler } from '../../../helpers/formErrorHandler';
+import { pbkdf2Hash } from '../../../services/crypto';
+import { Buffer } from '../../../services/Buffer';
 
 const signupFormSchema = z
     .object({
@@ -34,8 +36,17 @@ export default function SignupForm() {
 
     const onSubmit = async ({ name, email, password }: FormTypes) => {
         try {
-            const userData = await signup({ name, email, password }).unwrap();
-            dispatch(setToken(userData.token));
+            const ha = await pbkdf2Hash(password, password);
+
+            const authHash = await Buffer.from(ha).hex;
+
+            const userData = await signup({
+                name,
+                email,
+                password: authHash,
+            }).unwrap();
+            //dispatch(setToken(userData.accessToken));
+            //dispatch(setUser(userData.user));
             navigate('/');
         } catch (e) {
             formErrorHandler<FormTypes>(e, setError);

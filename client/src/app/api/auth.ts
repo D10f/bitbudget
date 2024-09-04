@@ -4,7 +4,7 @@ import { HTTP_METHOD } from '../../types/http';
 
 type AuthResponse = {
     user: User;
-    token: string;
+    accessToken: string;
 };
 
 type Credentials = {
