@@ -1,7 +1,7 @@
-import { User } from '../../types/user';
+import { UserData } from '@features/user/types';
 
 export type AuthResponse = {
-    user: User;
+    user: Pick<UserData, 'name' | 'email'>;
     accessToken: string;
 };
 
