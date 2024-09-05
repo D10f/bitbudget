@@ -2,16 +2,7 @@ import { baseApi } from '@app/api/base';
 import { User } from '../../types/user';
 import { HTTP_METHOD } from '../../types/http';
 
-type AuthResponse = {
-    user: User;
-    accessToken: string;
-};
-
-type Credentials = {
-    name: string;
-    email: string;
-    password: string;
-};
+import type { AuthResponse, Credentials } from '@features/auth/types';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
