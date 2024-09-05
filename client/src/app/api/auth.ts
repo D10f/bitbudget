@@ -1,32 +1,37 @@
 import { baseApi } from '@app/api/base';
-import { setToken, setUser } from '@features/auth/authSlice';
+import { setToken } from '@features/auth/authSlice';
 import { HTTP_METHOD } from '../../types/http';
 import { generateMasterKey } from '../../services/keys';
+import { updateUserData, addKey } from '@features/user/userSlice';
 import type { AuthResponse, Credentials } from '@features/auth/types';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         signup: builder.mutation<AuthResponse, Credentials>({
-            queryFn: async (credentials, api, _extra, baseQuery) => {
+            queryFn: async (
+                { name, email, password },
+                { dispatch },
+                _extra,
+                baseQuery,
+            ) => {
                 try {
-                    const masterKey = await generateMasterKey(
-                        credentials.name,
-                        credentials.password,
-                    );
+                    const masterKey = await generateMasterKey(name, password);
 
                     const res = await baseQuery({
                         url: '/auth/signup',
                         method: HTTP_METHOD.POST,
                         body: {
-                            ...credentials,
+                            name,
+                            email,
                             password: masterKey.hash,
                         },
                     });
 
                     const data = res.data as AuthResponse;
 
-                    api.dispatch(setToken(data.accessToken));
-                    api.dispatch(setUser(data.user));
+                    dispatch(setToken(data.accessToken));
+                    dispatch(updateUserData({ name, email }));
+                    dispatch(addKey(masterKey.key));
                     return { data };
                 } catch (error) {
                     return { error };
