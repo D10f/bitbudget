@@ -44,7 +44,7 @@ export class Buffer {
         for (const byte of this.raw) {
             b64 += String.fromCodePoint(byte);
         }
-        return b64;
+        return btoa(b64);
     }
 
     /**
