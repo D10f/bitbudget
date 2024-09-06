@@ -14,50 +14,93 @@ enum DATA_TYPE {
     UNDEFINED = 'Undefined',
 }
 
+async function objectToBuffer(obj: object) {
+    const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
+    return await blob.arrayBuffer();
+}
+
 /**
  * Wrapper class around ArrayBuffer and Uint8Array instances.
  */
 export class Buffer {
-    private data: Uint8Array | null = null;
+    private constructor(private readonly data: Uint8Array) {}
 
-    constructor(buffer: unknown) {
+    get raw() {
+        return this.data;
+    }
+
+    get hex() {
+        let hex = '';
+        for (const byte of this.raw) {
+            hex += byte.toString(16).padStart(2, '0');
+        }
+        return hex;
+    }
+
+    get base64() {
+        let b64 = '';
+        for (const byte of this.raw) {
+            b64 += String.fromCodePoint(byte);
+        }
+        return b64;
+    }
+
+    static async concat(...args: Array<Buffer | Uint8Array | ArrayBuffer>) {
+        let byteLength = 0;
+        const buffers: Uint8Array[] = [];
+
+        for (const b in args) {
+            const buffer = await Buffer.from(b);
+            buffers.push(buffer.raw);
+            byteLength += buffer.raw.length;
+        }
+
+        const combinedBuffer = await Buffer.from(new Uint8Array(byteLength));
+
+        buffers.forEach((buffer, idx) => {
+            combinedBuffer.raw.set(buffer, idx * buffer.byteLength);
+        });
+
+        return combinedBuffer;
+    }
+
+    static async from(input: unknown) {
+        if (input instanceof Buffer) {
+            return input;
+        }
+
         const type = Object.prototype.toString
-            .call(buffer)
+            .call(input)
             .match(/(\w+)[^[]$/)![1] as DATA_TYPE;
+
+        let bytes: Uint8Array | BufferSource;
 
         switch (type) {
             case DATA_TYPE.STRING:
-                this.data = new TextEncoder().encode(buffer as string);
+                bytes = new TextEncoder().encode(input as string);
                 break;
 
             case DATA_TYPE.DATE:
-                this.data = new TextEncoder().encode(
-                    (buffer as Date).toString(),
-                );
+                bytes = new TextEncoder().encode((input as Date).toString());
                 break;
 
             case DATA_TYPE.UNSIGNED_BYTE_ARRAY:
-                this.data = buffer as Uint8Array;
+                bytes = input as Uint8Array;
                 break;
 
             case DATA_TYPE.ARRAY_BUFFER:
-                this.data = new Uint8Array(buffer as ArrayBuffer);
+                bytes = new Uint8Array(input as ArrayBuffer);
                 break;
 
             case DATA_TYPE.CRYPTO_KEY:
-                crypto.subtle
-                    .exportKey('raw', buffer as CryptoKey)
-                    .then(
-                        (keyBuffer) => (this.data = new Uint8Array(keyBuffer)),
-                    );
+                bytes = await crypto.subtle.exportKey(
+                    'raw',
+                    input as CryptoKey,
+                );
                 break;
 
             case DATA_TYPE.OBJECT:
-                new Blob([JSON.stringify(buffer)], { type: 'application/json' })
-                    .arrayBuffer()
-                    .then(
-                        (keyBuffer) => (this.data = new Uint8Array(keyBuffer)),
-                    );
+                bytes = await objectToBuffer(input as object);
                 break;
 
             case DATA_TYPE.NUMBER:
@@ -68,45 +111,11 @@ export class Buffer {
             default:
                 throw new Error('Unable to extract buffer.');
         }
-    }
 
-    static from(input: unknown) {
-        if (input instanceof Buffer) {
-            return input;
-        }
-        return new Buffer(input);
-    }
-
-    get bytes() {
-        return new Promise<Uint8Array>((resolve) => {
-            if (this.data) resolve(this.data);
-            setTimeout(() => {
-                resolve(this.bytes);
-            }, 100);
-        });
-    }
-
-    get hex() {
-        return new Promise<string>((resolve) => {
-            this.bytes.then((bytes) => {
-                let hex = '';
-                for (const byte of bytes) {
-                    hex += byte.toString(16).padStart(2, '0');
-                }
-                resolve(hex);
-            });
-        });
-    }
-
-    get base64() {
-        return new Promise<string>((resolve) => {
-            this.bytes.then((bytes) => {
-                let b64 = '';
-                for (const byte of bytes) {
-                    b64 += String.fromCodePoint(byte);
-                }
-                resolve(btoa(b64));
-            });
-        });
+        return new Buffer(
+            bytes instanceof Uint8Array
+                ? bytes
+                : new Uint8Array(bytes as ArrayBuffer),
+        );
     }
 }
