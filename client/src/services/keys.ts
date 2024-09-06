@@ -95,3 +95,16 @@ export function serializeKey(key: CryptoKey) {
     }
     return window.crypto.subtle.exportKey('jwk', key);
 }
+
+export function deserializeKey(key: JsonWebKey) {
+    return window.crypto.subtle.importKey(
+        'jwk',
+        key,
+        {
+            name: 'AES-KW',
+            length: 256,
+        },
+        true,
+        ['wrapKey', 'unwrapKey'],
+    );
+}
