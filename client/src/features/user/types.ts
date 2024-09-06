@@ -2,7 +2,11 @@ export type User = {
     name: string;
     email: string;
     prefs: UserPrefs;
-    vault: SymmetricKey[];
+
+    /**
+     * A tuple containing the user's master key and the vault key.
+     */
+    vault: [SymmetricKey, SymmetricKey] | [null, null];
 };
 
 export type UserPrefs = {

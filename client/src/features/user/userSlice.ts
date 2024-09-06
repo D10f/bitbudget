@@ -7,7 +7,7 @@ const initialState: User = {
     prefs: {
         theme: 'default',
     },
-    vault: [],
+    vault: [null, null],
 };
 
 export const userSlice = createSlice({
@@ -25,11 +25,19 @@ export const userSlice = createSlice({
             Object.assign(state.prefs, action.payload);
         },
         addKey(state, action: PayloadAction<SymmetricKey>) {
-            state.vault.push(action.payload);
+            const emptyIdx = state.vault.findIndex((pos) => pos === null);
+            if (emptyIdx < 0) {
+                throw new Error('Unable to add more keys to vault!');
+            }
+            state.vault[emptyIdx] = action.payload;
+        },
+        resetKeys(state) {
+            state.vault = initialState.vault;
         },
     },
 });
 
-export const { setUserData, setUserPrefs, addKey } = userSlice.actions;
+export const { setUserData, setUserPrefs, addKey, resetKeys } =
+    userSlice.actions;
 
 export default userSlice.reducer;
