@@ -14,6 +14,10 @@ enum DATA_TYPE {
     UNDEFINED = 'Undefined',
 }
 
+/**
+ * Takes a regular JavaScript object and converts it into its byte
+ * representation.
+ */
 async function objectToBuffer(obj: object) {
     const blob = new Blob([JSON.stringify(obj)], { type: 'application/json' });
     return await blob.arrayBuffer();
@@ -27,10 +31,16 @@ async function objectToBuffer(obj: object) {
 export class Buffer {
     private constructor(private readonly data: Uint8Array) {}
 
+    /**
+     * Returns the underlying Uint8Array data.
+     */
     get raw() {
         return this.data;
     }
 
+    /**
+     * Returns the data in hexadecimal format.
+     */
     get hex() {
         let hex = '';
         for (const byte of this.raw) {
@@ -39,6 +49,9 @@ export class Buffer {
         return hex;
     }
 
+    /**
+     * Returns the data in base64 format.
+     */
     get base64() {
         let b64 = '';
         for (const byte of this.raw) {

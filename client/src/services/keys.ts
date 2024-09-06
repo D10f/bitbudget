@@ -1,5 +1,14 @@
 import { Buffer } from './Buffer';
 
+/**
+ * Generates a cryptographic key using user information, and returns the
+ * key along with its cryptographic hash (calculated using PBKDF2).
+ * The master key is used to encrypt a vault key, which in turn is later
+ * used to encrypt further encryption keys used for encrypting data.
+ * This level of indirection is in place as an extra layer of security
+ * and convenience (if the user changes its password, only the vault
+ * key needs to be re-encrypted).
+ */
 export async function generateMasterKey(username: string, password: string) {
     const usernameBuffer = await Buffer.from(username);
     const passwordBuffer = await Buffer.from(password);
@@ -45,6 +54,10 @@ export async function generateMasterKey(username: string, password: string) {
     };
 }
 
+/**
+ * Randomly generates a cryptographic key used with the explicit
+ * purpose of encrypting encryption keys.
+ */
 export function generateVaultKey() {
     return window.crypto.subtle.generateKey(
         {
@@ -56,6 +69,10 @@ export function generateVaultKey() {
     );
 }
 
+/**
+ * Randomly generates a cryptographic key used with the explicit
+ * purpose of encryption and decryption.
+ */
 export function generateEncryptionKey() {
     return window.crypto.subtle.generateKey(
         {
@@ -67,6 +84,11 @@ export function generateEncryptionKey() {
     );
 }
 
+/**
+ * Converts the cryptographic key into a portable format suitable for
+ * serialization. This is done in order to store cryptographic keys
+ * securely stored in Redux's state.
+ */
 export function serializeKey(key: CryptoKey) {
     if (!key.extractable) {
         throw new Error('The provided key cannot be extracted!');
