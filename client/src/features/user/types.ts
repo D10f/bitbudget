@@ -1,14 +1,12 @@
 export type User = {
-    data: UserData;
-    prefs: UserPrefs;
-    vault: CryptoKey[];
-};
-
-export type UserData = {
     name: string;
     email: string;
+    prefs: UserPrefs;
+    vault: SymmetricKey[];
 };
 
 export type UserPrefs = {
     theme: string;
 };
+
+export type SymmetricKey = JsonWebKey;
