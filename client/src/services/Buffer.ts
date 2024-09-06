@@ -20,7 +20,9 @@ async function objectToBuffer(obj: object) {
 }
 
 /**
- * Wrapper class around ArrayBuffer and Uint8Array instances.
+ * Wrapper class around typed array instances. Provides various methods
+ * to access the raw bytes and to perform common operations like base64
+ * or hexadecimal encoding.
  */
 export class Buffer {
     private constructor(private readonly data: Uint8Array) {}
@@ -45,6 +47,10 @@ export class Buffer {
         return b64;
     }
 
+    /**
+     * Accepts as input any number of sources of buffer or typed array,
+     * and returns them as single instance of Buffer.
+     */
     static async concat(...args: Array<Buffer | Uint8Array | ArrayBuffer>) {
         let byteLength = 0;
         const buffers: Uint8Array[] = [];
@@ -64,6 +70,11 @@ export class Buffer {
         return combinedBuffer;
     }
 
+    /**
+     * Accepts as input any form of data and converts it into its byte
+     * representation. This is the entrypoint to make new instances of
+     * this class.
+     */
     static async from(input: unknown) {
         if (input instanceof Buffer) {
             return input;
