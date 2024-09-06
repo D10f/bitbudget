@@ -1,21 +1,30 @@
 import { baseApi } from '@app/api/base';
 import { setToken } from '@features/auth/authSlice';
 import { HTTP_METHOD } from '../../types/http';
-import { generateMasterKey } from '../../services/keys';
-import { updateUserData, addKey } from '@features/user/userSlice';
+import {
+    generateMasterKey,
+    generateVaultKey,
+    serializeKey,
+} from '../../services/keys';
+import { encrypt, wrapKey } from '../../services/crypto';
+import { addKey, setUserData } from '@features/user/userSlice';
 import type { AuthResponse, Credentials } from '@features/auth/types';
+import { RootState } from '@app/store';
 
 export const authApi = baseApi.injectEndpoints({
     endpoints: (builder) => ({
         signup: builder.mutation<AuthResponse, Credentials>({
             queryFn: async (
                 { name, email, password },
-                { dispatch },
+                { dispatch, getState },
                 _extra,
                 baseQuery,
             ) => {
                 try {
-                    const masterKey = await generateMasterKey(name, password);
+                    const { key, hash } = await generateMasterKey(
+                        name,
+                        password,
+                    );
 
                     const res = await baseQuery({
                         url: '/auth/signup',
@@ -23,16 +32,32 @@ export const authApi = baseApi.injectEndpoints({
                         body: {
                             name,
                             email,
-                            password: masterKey.hash,
+                            password: hash,
                         },
                     });
 
-                    const data = res.data as AuthResponse;
+                    const vaultKey = await generateVaultKey();
+                    const wrappedVaultKey = await wrapKey(vaultKey, key);
 
-                    dispatch(setToken(data.accessToken));
-                    dispatch(updateUserData({ name, email }));
-                    dispatch(addKey(masterKey.key));
-                    return { data };
+                    dispatch(setToken((res.data as AuthResponse).accessToken));
+                    dispatch(setUserData({ name, email }));
+                    dispatch(addKey(await serializeKey(vaultKey)));
+                    dispatch(addKey(await serializeKey(key)));
+
+                    const encryptedPrefs = await encrypt(vaultKey, {
+                        prefs: (getState() as RootState).user.prefs,
+                    });
+
+                    await baseQuery({
+                        url: '/user/update',
+                        method: HTTP_METHOD.PATCH,
+                        body: {
+                            vaultKey: wrappedVaultKey.base64,
+                            data: encryptedPrefs.base64,
+                        },
+                    });
+
+                    return { data: res.data as AuthResponse };
                 } catch (error) {
                     return { error };
                 }
