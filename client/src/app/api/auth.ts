@@ -1,4 +1,5 @@
 import { baseApi } from '@app/api/base';
+import { userApi } from '@app/api/user';
 import { setToken } from '@features/auth/authSlice';
 import { HTTP_METHOD } from '../../types/http';
 import {
@@ -6,8 +7,7 @@ import {
     generateVaultKey,
     serializeKey,
 } from '../../services/keys';
-import { encrypt, wrapKey } from '../../services/crypto';
-import { addKey, setUserData } from '@features/user/userSlice';
+import { addKey, resetKeys, setUserData } from '@features/user/userSlice';
 import type { AuthResponse, Credentials } from '@features/auth/types';
 import { RootState } from '@app/store';
 
@@ -36,29 +36,29 @@ export const authApi = baseApi.injectEndpoints({
                         },
                     });
 
-                    const vaultKey = await generateVaultKey();
-                    const wrappedVaultKey = await wrapKey(vaultKey, key);
-
+                    // Update access token
                     dispatch(setToken((res.data as AuthResponse).accessToken));
-                    dispatch(setUserData({ name, email }));
+
+                    // Update local state
+                    const vaultKey = await generateVaultKey();
                     dispatch(addKey(await serializeKey(vaultKey)));
                     dispatch(addKey(await serializeKey(key)));
+                    dispatch(setUserData({ name, email }));
 
-                    const encryptedPrefs = await encrypt(vaultKey, {
-                        prefs: (getState() as RootState).user.prefs,
-                    });
-
-                    await baseQuery({
-                        url: '/user/update',
-                        method: HTTP_METHOD.PATCH,
-                        body: {
-                            vaultKey: wrappedVaultKey.base64,
-                            data: encryptedPrefs.base64,
-                        },
-                    });
+                    // Update remote state. This creates the initial user
+                    // preferences on the server, along with the
+                    // encrypted vault key
+                    await dispatch(
+                        userApi.endpoints.updateUser.initiate({
+                            email,
+                            prefs: (getState() as RootState).user.prefs,
+                            vaultKey: await serializeKey(vaultKey),
+                        }),
+                    );
 
                     return { data: res.data as AuthResponse };
                 } catch (error) {
+                    dispatch(resetKeys());
                     return { error };
                 }
             },
