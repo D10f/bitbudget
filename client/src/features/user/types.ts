@@ -6,7 +6,7 @@ export type User = {
     /**
      * A tuple containing the user's master key and the vault key.
      */
-    vault: [JsonWebKey] | [null, null];
+    vault: [JsonWebKey, JsonWebKey] | [null, null];
 };
 
 export type UserPrefs = {
