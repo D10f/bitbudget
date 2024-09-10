@@ -4,6 +4,11 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSignupMutation } from '@app/api/auth';
 import { formErrorHandler } from '../../../helpers/formErrorHandler';
+import { generateUserKeys } from '../../../services/keys';
+import { useAppDispatch, useAppSelector } from '@app/store';
+import { addKey, setUserData } from '@features/user/userSlice';
+import { useUpdateUserMutation } from '@app/api/user';
+import { setToken } from '../authSlice';
 
 const signupFormSchema = z
     .object({
@@ -20,7 +25,10 @@ const signupFormSchema = z
 type FormTypes = z.infer<typeof signupFormSchema>;
 
 export default function SignupForm() {
+    const dispatch = useAppDispatch();
+    const userPrefs = useAppSelector(({ user }) => user.prefs);
     const [signup] = useSignupMutation();
+    const [update] = useUpdateUserMutation();
     const navigate = useNavigate();
     const {
         register,
@@ -31,7 +39,25 @@ export default function SignupForm() {
 
     const onSubmit = async ({ name, email, password }: FormTypes) => {
         try {
-            await signup({ name, email, password }).unwrap();
+            const { mKey, vKey, mKeyHash } = await generateUserKeys(
+                name,
+                password,
+            );
+            const res = await signup({
+                name,
+                email,
+                password: mKeyHash,
+            }).unwrap();
+            dispatch(setToken(res.accessToken));
+            dispatch(setUserData({ name, email }));
+            dispatch(addKey(await mKey.toJSON()));
+            dispatch(addKey(await vKey.toJSON()));
+
+            await update({
+                prefs: userPrefs,
+                vaultKey: await vKey.toJSON(),
+            }).unwrap();
+
             navigate('/');
         } catch (e) {
             formErrorHandler<FormTypes>(e, setError);
