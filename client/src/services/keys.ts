@@ -1,4 +1,19 @@
 import { Buffer } from './Buffer';
+import { SymmetricKey } from './SymmetricKey';
+
+/**
+ * Convenience method to generate the master key and vault key in one
+ * go, as these are used at the same time.
+ */
+export async function generateUserKeys(username: string, password: string) {
+    const masterKey = await generateMasterKey(username, password);
+    const vaultKey = await generateVaultKey();
+    return {
+        vKey: await SymmetricKey.from(vaultKey),
+        mKey: masterKey.key,
+        mKeyHash: masterKey.hash,
+    };
+}
 
 /**
  * Generates a cryptographic key using user information, and returns the
@@ -49,7 +64,7 @@ export async function generateMasterKey(username: string, password: string) {
     );
 
     return {
-        key: masterKey,
+        key: await SymmetricKey.from(masterKey),
         hash: (await Buffer.from(masterKeyHash)).hex,
     };
 }
