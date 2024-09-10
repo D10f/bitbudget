@@ -85,6 +85,76 @@ export function generateEncryptionKey() {
 }
 
 /**
+ * Serializes and encrypts _key_ using _masterKey_. The output is an
+ * external format that can be used to share the key with other systems
+ * like making network requests.
+ *
+ * Note: As per RFC3394 the ciphertext will contain an additional block
+ * of 64 bits.
+ *
+ * @see https://datatracker.ietf.org/doc/html/rfc3394
+ */
+export async function wrapKey(key: CryptoKey, masterKey: CryptoKey) {
+    if (!masterKey.usages.includes('wrapKey')) {
+        throw new Error('Unable to wrap key using the provided master key.');
+    }
+    const keyBytes = await window.crypto.subtle.wrapKey(
+        'raw',
+        key,
+        masterKey,
+        'AES-KW',
+    );
+
+    return Buffer.from(keyBytes);
+}
+
+/**
+ * @param key base64 encoded string of the (wrapped) vault key.
+ */
+export async function unwrapVaultKey(key: string, masterKey: CryptoKey) {
+    if (!masterKey.usages.includes('unwrapKey')) {
+        throw new Error('Unable to unwrap key using the provided master key.');
+    }
+
+    const keyBuffer = await Buffer.from(key, 'base64');
+
+    return window.crypto.subtle.unwrapKey(
+        'raw',
+        keyBuffer.raw,
+        masterKey,
+        'AES-KW',
+        { name: 'AES-KW', length: 256 },
+        true,
+        ['wrapKey', 'unwrapKey'],
+    );
+}
+
+/**
+ * @param key base64 encoded string of the (wrapped) encryption key.
+ */
+export async function unwrapEncryptionKey(
+    key: Uint8Array,
+    masterKey: CryptoKey,
+) {
+    if (!masterKey.usages.includes('unwrapKey')) {
+        throw new Error('Unable to unwrap key using the provided master key.');
+    }
+
+    return window.crypto.subtle.unwrapKey(
+        'raw',
+        key,
+        masterKey,
+        'AES-KW',
+        {
+            name: 'AES-GCM',
+            length: 256,
+        },
+        true,
+        ['encrypt', 'decrypt'],
+    );
+}
+
+/**
  * Converts the cryptographic key into a portable format suitable for
  * serialization. This is done in order to store cryptographic keys
  * securely stored in Redux's state.
