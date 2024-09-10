@@ -1,3 +1,5 @@
+import { base64ToBytes, bytesToBase64 } from '../helpers/encoding';
+
 enum DATA_TYPE {
     ARRAY = 'Array',
     ARRAY_BUFFER = 'ArrayBuffer',
@@ -53,11 +55,7 @@ export class Buffer {
      * Returns the data in base64 format.
      */
     get base64() {
-        let b64 = '';
-        for (const byte of this.raw) {
-            b64 += String.fromCodePoint(byte);
-        }
-        return btoa(b64);
+        return bytesToBase64(this.raw);
     }
 
     /**
@@ -88,7 +86,7 @@ export class Buffer {
      * representation. This is the entrypoint to make new instances of
      * this class.
      */
-    static async from(input: unknown) {
+    static async from(input: unknown, encoding?: 'base64') {
         if (input instanceof Buffer) {
             return input;
         }
@@ -101,7 +99,10 @@ export class Buffer {
 
         switch (type) {
             case DATA_TYPE.STRING:
-                bytes = new TextEncoder().encode(input as string);
+                bytes =
+                    encoding === 'base64'
+                        ? base64ToBytes(input as string)
+                        : new TextEncoder().encode(input as string);
                 break;
 
             case DATA_TYPE.DATE:
