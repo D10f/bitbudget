@@ -64,8 +64,8 @@ export class SymmetricKey {
     }
 
     async encrypt(data: unknown) {
-        if (!this.can('encrypt')) {
-            throw new Error('This key cannot be used for encryption.');
+        if (!this.can('wrapKey')) {
+            throw new Error('This key cannot be used for wrapping.');
         }
         return encrypt(this.key, data);
     }
