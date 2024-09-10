@@ -24,7 +24,7 @@ export async function encrypt(masterKey: CryptoKey, data: unknown) {
 
     const wrappedKey = await wrapKey(key, masterKey);
 
-    return Buffer.concat(wrappedKey, iv, encryptedData);
+    return Buffer.concat(wrappedKey.raw, iv, encryptedData);
 }
 
 /**
@@ -38,7 +38,7 @@ export async function encrypt(masterKey: CryptoKey, data: unknown) {
  * @param data base64 encoded representation of the encrypted data.
  */
 export async function decrypt(masterKey: CryptoKey, data: string) {
-    const ciphertext = (await Buffer.from(atob(data))).raw;
+    const ciphertext = (await Buffer.from(data, 'base64')).raw;
 
     const encryptionKeyBuffer = ciphertext.slice(0, 40);
     const iv = ciphertext.slice(40, 40 + 16);
