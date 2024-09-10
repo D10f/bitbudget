@@ -29,8 +29,7 @@ export function base64ToBytes(str: string) {
     const byteStr = atob(str);
     const byteArr = new Uint8Array(byteStr.length);
     for (let i = 0, l = byteStr.length; i < l; ++i) {
-        //byteArr[i] = byteStr[i].codePointAt(0) as number;
-        byteArr[i] = byteStr.charCodeAt(0);
+        byteArr[i] = byteStr[i].codePointAt(0) as number;
     }
     return byteArr;
 }
