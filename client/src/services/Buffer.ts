@@ -66,16 +66,18 @@ export class Buffer {
         let byteLength = 0;
         const buffers: Uint8Array[] = [];
 
-        for (const b in args) {
+        for (const b of args) {
             const buffer = await Buffer.from(b);
             buffers.push(buffer.raw);
-            byteLength += buffer.raw.length;
+            byteLength += buffer.raw.byteLength;
         }
 
         const combinedBuffer = await Buffer.from(new Uint8Array(byteLength));
 
-        buffers.forEach((buffer, idx) => {
-            combinedBuffer.raw.set(buffer, idx * buffer.byteLength);
+        let offset = 0;
+        buffers.forEach((buffer) => {
+            combinedBuffer.raw.set(buffer, offset);
+            offset += buffer.byteLength;
         });
 
         return combinedBuffer;
