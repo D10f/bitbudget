@@ -1,5 +1,5 @@
-import { Buffer } from './Buffer';
-import { SymmetricKey } from './SymmetricKey';
+import { Buffer } from '@services/Buffer';
+import { SymmetricKey } from '@services/SymmetricKey';
 
 /**
  * Convenience method to generate the master key and vault key in one

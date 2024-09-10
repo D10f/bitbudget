@@ -3,11 +3,11 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSignupMutation } from '@app/api/auth';
-import { formErrorHandler } from '../../../helpers/formErrorHandler';
-import { generateUserKeys } from '../../../services/keys';
-import { useAppDispatch, useAppSelector } from '@app/store';
-import { addKey, setUserData } from '@features/user/userSlice';
 import { useUpdateUserMutation } from '@app/api/user';
+import { useAppDispatch, useAppSelector } from '@app/store';
+import { formErrorHandler } from '@helpers/formErrorHandler';
+import { addKey, setUserData } from '@features/user/userSlice';
+import { generateUserKeys } from '@services/keys';
 import { setToken } from '../authSlice';
 
 const signupFormSchema = z

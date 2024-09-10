@@ -2,14 +2,14 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { formErrorHandler } from '../../../helpers/formErrorHandler';
 import { useLoginMutation } from '@app/api/auth';
-import { generateMasterKey } from '../../../services/keys';
 import { useAppDispatch } from '@app/store';
-import { addKey, setUserData, setUserPrefs } from '@features/user/userSlice';
-import { setToken } from '../authSlice';
-import { SymmetricKey } from '../../../services/SymmetricKey';
+import { formErrorHandler } from '@helpers/formErrorHandler';
 import type { UserPrefs } from '@features/user/types';
+import { addKey, setUserData, setUserPrefs } from '@features/user/userSlice';
+import { generateMasterKey } from '@services/keys';
+import { SymmetricKey } from '@services/SymmetricKey';
+import { setToken } from '../authSlice';
 
 const loginFormSchema = z.object({
     name: z.string().min(3).max(255),

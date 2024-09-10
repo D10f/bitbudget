@@ -1,5 +1,9 @@
-import { Buffer } from './Buffer';
-import { generateEncryptionKey, unwrapEncryptionKey, wrapKey } from './keys';
+import { Buffer } from '@services/Buffer';
+import {
+    generateEncryptionKey,
+    unwrapEncryptionKey,
+    wrapKey,
+} from '@services/keys';
 
 /**
  * Encrypts the data provided as second argument using a randomly

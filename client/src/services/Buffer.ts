@@ -1,4 +1,4 @@
-import { base64ToBytes, bytesToBase64 } from '../helpers/encoding';
+import { base64ToBytes, bytesToBase64 } from '@helpers/encoding';
 
 enum DATA_TYPE {
     ARRAY = 'Array',

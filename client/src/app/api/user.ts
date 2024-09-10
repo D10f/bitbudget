@@ -1,7 +1,7 @@
 import { HTTP_METHOD } from '../../types/http';
 import { baseApi } from '@app/api/base';
-import { encrypt, wrapKey } from '../../services/crypto';
-import { deserializeKey } from '../../services/keys';
+import { encrypt } from '@services/crypto';
+import { deserializeKey } from '@services/keys';
 import type { User } from '@features/user/types';
 import { RootState } from '@app/store';
 

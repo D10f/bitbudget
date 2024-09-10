@@ -1,11 +1,11 @@
-import { encrypt, decryptData } from './crypto';
+import { encrypt, decryptData } from '@services/crypto';
 import {
     deserializeKey,
     serializeKey,
     unwrapEncryptionKey,
     unwrapVaultKey,
     wrapKey,
-} from './keys';
+} from '@services/keys';
 
 export class SymmetricKey {
     private constructor(public readonly key: CryptoKey) {}
