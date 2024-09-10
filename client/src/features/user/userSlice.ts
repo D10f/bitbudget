@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { SymmetricKey, User, UserPrefs } from '@features/user/types';
+import { User, UserPrefs } from '@features/user/types';
 
 const initialState: User = {
     name: 'Guest',
@@ -24,7 +24,7 @@ export const userSlice = createSlice({
         setUserPrefs(state, action: PayloadAction<Partial<UserPrefs>>) {
             Object.assign(state.prefs, action.payload);
         },
-        addKey(state, action: PayloadAction<SymmetricKey>) {
+        addKey(state, action: PayloadAction<JsonWebKey>) {
             const emptyIdx = state.vault.findIndex((pos) => pos === null);
             if (emptyIdx < 0) {
                 throw new Error('Unable to add more keys to vault!');
