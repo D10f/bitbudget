@@ -65,10 +65,10 @@ export async function decrypt(masterKey: CryptoKey, data: string) {
  * strings before being encrypted, which makes the decryption process
  * much easier.
  */
-export async function decryptData(
+export async function decryptData<T = object>(
     masterKey: CryptoKey,
     data: string,
-): Promise<object> {
+): Promise<T> {
     const buffer = await decrypt(masterKey, data);
     return JSON.parse(new TextDecoder().decode(buffer));
 }
