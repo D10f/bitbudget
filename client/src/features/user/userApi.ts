@@ -1,4 +1,4 @@
-import { HTTP_METHOD } from '../../../types/http';
+import { HTTP_METHOD } from '../../types/http';
 import { baseApi } from '@app/api/base';
 import { RootState } from '@app/store';
 import type { User } from '@features/user/types';
