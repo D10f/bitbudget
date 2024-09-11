@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useLoginMutation } from '@app/api/auth';
+import { useLoginMutation } from '@features/auth/authApi';
 import { useAppDispatch } from '@app/store';
 import { formErrorHandler } from '@helpers/formErrorHandler';
 import type { UserPrefs } from '@features/user/types';
