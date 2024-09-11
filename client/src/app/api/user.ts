@@ -1,9 +1,8 @@
 import { HTTP_METHOD } from '../../types/http';
 import { baseApi } from '@app/api/base';
-import { encrypt } from '@services/crypto';
-import { deserializeKey } from '@services/keys';
-import type { User } from '@features/user/types';
 import { RootState } from '@app/store';
+import type { User } from '@features/user/types';
+import { SymmetricKey } from '@services/SymmetricKey';
 
 type InputUserUpdates = Partial<
     Pick<User, 'email' | 'prefs'> & { vaultKey: JsonWebKey }
@@ -20,19 +19,19 @@ export const userApi = baseApi.injectEndpoints({
             queryFn: async (updates, { getState }, _extra, baseQuery) => {
                 try {
                     const userVault = (getState() as RootState).user.vault;
-                    const vaultKey = await deserializeKey(userVault.at(-1)!);
+                    const vaultKey = await SymmetricKey.from(userVault.at(-1)!);
                     const finalUpdates: OutputUserUpdates = {};
 
                     if (updates.prefs) {
-                        const prefs = await encrypt(vaultKey, updates.prefs);
-                        finalUpdates['prefs'] = prefs.base64;
+                        const userPrefs = await vaultKey.encrypt(updates.prefs);
+                        finalUpdates['prefs'] = userPrefs.base64;
                     }
 
                     if (updates.vaultKey) {
-                        const masterKey = await deserializeKey(
+                        const masterKey = await SymmetricKey.from(
                             userVault.at(0)!,
                         );
-                        const wrappedKey = await wrapKey(vaultKey, masterKey);
+                        const wrappedKey = await vaultKey.wrapWith(masterKey);
                         finalUpdates['vaultKey'] = wrappedKey.base64;
                     }
 
