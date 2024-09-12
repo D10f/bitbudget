@@ -1,22 +1,23 @@
-import { configureStore } from "@reduxjs/toolkit";
-import categoriesSlice from "@features/categories/categoriesSlice";
-import expensesReducer from "@features/expenses/expensesSlice";
-import filtersSlice from "@features/filters/filtersSlice";
-import notificationsReducer from "@features/notifications/notificationsSlice";
-import userSlice from "@features/user/userSlice";
-import walletsSlice from "@features/wallets/walletsSlice";
+import { configureStore } from '@reduxjs/toolkit';
+import authReducer from '@features/auth/authSlice';
+import userReducer from '@features/user/userSlice';
+import { baseApi } from '@app/api/base';
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
-  reducer: {
-    expenses: expensesReducer,
-    wallets: walletsSlice,
-    notifications: notificationsReducer,
-    user: userSlice,
-    categories: categoriesSlice,
-    filters: filtersSlice,
-  }
+    reducer: {
+        [baseApi.reducerPath]: baseApi.reducer,
+        auth: authReducer,
+        user: userReducer,
+    },
+    middleware(getDefaultMiddleware) {
+        return getDefaultMiddleware().concat(baseApi.middleware);
+    },
+    devTools: true,
 });
 
-// Infer the `RootState` and `AppDispatch` types from the store itself
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
+
+export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
