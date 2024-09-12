@@ -20,7 +20,7 @@
                 "./assets/*"
             ],
             "@components/*": [
-                "./common/components/*"
+                "./components/*"
             ],
             "@features/*": [
                 "./features/*"
