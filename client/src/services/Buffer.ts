@@ -31,7 +31,7 @@ async function objectToBuffer(obj: object) {
  * or hexadecimal encoding.
  */
 export class Buffer {
-    private constructor(public readonly data: Uint8Array) {}
+    private constructor(private _data: Uint8Array) {}
 
     /**
      * Returns the buffer data encoded using the specified encoding. If
@@ -41,16 +41,20 @@ export class Buffer {
         switch (encoding) {
             case 'utf-8':
             case 'utf8':
-                return new TextDecoder().decode(this.data);
+                return new TextDecoder().decode(this._data);
             case 'hex':
-                return bytesToHex(this.data);
+                return bytesToHex(this._data);
             case 'base64':
-                return bytesToBase64(this.data);
+                return bytesToBase64(this._data);
         }
     }
 
-    get length() {
-        return this.data.byteLength;
+    get data() {
+        return this._data;
+    }
+
+    get size() {
+        return this._data.byteLength;
     }
 
     static alloc(size: number) {
@@ -62,25 +66,22 @@ export class Buffer {
      * and returns them as single instance of Buffer.
      */
     static async concat(...args: Array<Buffer | Uint8Array | ArrayBuffer>) {
-        let combinedBuffer = Buffer.alloc(1024);
+        const combinedBuffer = Buffer.alloc(1024);
         let offset = 0;
-        let tmp = null;
 
         for (const arg of args) {
             const buffer = await Buffer.from(arg);
 
-            if (buffer.length + offset > combinedBuffer.length) {
-                tmp = combinedBuffer.data.subarray();
-                combinedBuffer = Buffer.alloc(tmp.length * 2);
-                combinedBuffer.data.set(tmp);
-                tmp = null;
+            while (buffer.size + offset > combinedBuffer.size) {
+                combinedBuffer.expand();
             }
 
             combinedBuffer.data.set(buffer.data, offset);
-            offset += buffer.length;
+            offset += buffer.size;
         }
 
-        return Buffer.from(combinedBuffer.data.subarray(0, offset));
+        combinedBuffer.shrink(offset);
+        return combinedBuffer;
     }
 
     /**
@@ -144,5 +145,23 @@ export class Buffer {
                 ? bytes
                 : new Uint8Array(bytes as ArrayBuffer),
         );
+    }
+
+    /**
+     * Reduces the size of the underlying Uint8Array. If *new_size* is
+     * greater than the current size, it does nothing.
+     */
+    private shrink(newSize: number) {
+        if (newSize >= this.size) return;
+        this._data = this._data.subarray(0, newSize);
+    }
+
+    /**
+     * Doubles the size of the underlying Uint8Array.
+     */
+    private expand() {
+        const tmp = this._data.subarray();
+        this._data = new Uint8Array(this.size * 2);
+        this._data.set(tmp);
     }
 }
