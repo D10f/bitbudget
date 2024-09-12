@@ -24,7 +24,7 @@ export const userApi = baseApi.injectEndpoints({
 
                     if (updates.prefs) {
                         const userPrefs = await vaultKey.encrypt(updates.prefs);
-                        finalUpdates['prefs'] = userPrefs.base64;
+                        finalUpdates['prefs'] = userPrefs.toString('base64');
                     }
 
                     if (updates.vaultKey) {
@@ -32,7 +32,8 @@ export const userApi = baseApi.injectEndpoints({
                             userVault.at(0)!,
                         );
                         const wrappedKey = await vaultKey.wrapWith(masterKey);
-                        finalUpdates['vaultKey'] = wrappedKey.base64;
+                        finalUpdates['vaultKey'] =
+                            wrappedKey.toString('base64');
                     }
 
                     const res = await baseQuery({

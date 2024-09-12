@@ -1,4 +1,4 @@
-import { base64ToBytes, bytesToBase64 } from '@helpers/encoding';
+import { base64ToBytes, bytesToBase64, bytesToHex } from '@helpers/encoding';
 
 enum DATA_TYPE {
     ARRAY = 'Array',
@@ -31,31 +31,30 @@ async function objectToBuffer(obj: object) {
  * or hexadecimal encoding.
  */
 export class Buffer {
-    private constructor(private readonly data: Uint8Array) {}
+    private constructor(public readonly data: Uint8Array) {}
 
     /**
-     * Returns the underlying Uint8Array data.
+     * Returns the buffer data encoded using the specified encoding. If
+     * not specified, it defaults to UTF-8.
      */
-    get raw() {
-        return this.data;
-    }
-
-    /**
-     * Returns the data in hexadecimal format.
-     */
-    get hex() {
-        let hex = '';
-        for (const byte of this.raw) {
-            hex += byte.toString(16).padStart(2, '0');
+    toString(encoding: 'hex' | 'base64' | 'utf-8' | 'utf8' = 'utf-8') {
+        switch (encoding) {
+            case 'utf-8':
+            case 'utf8':
+                return new TextDecoder().decode(this.data);
+            case 'hex':
+                return bytesToHex(this.data);
+            case 'base64':
+                return bytesToBase64(this.data);
         }
-        return hex;
     }
 
-    /**
-     * Returns the data in base64 format.
-     */
-    get base64() {
-        return bytesToBase64(this.raw);
+    get length() {
+        return this.data.byteLength;
+    }
+
+    static alloc(size: number) {
+        return new Buffer(new Uint8Array(size));
     }
 
     /**
@@ -63,24 +62,25 @@ export class Buffer {
      * and returns them as single instance of Buffer.
      */
     static async concat(...args: Array<Buffer | Uint8Array | ArrayBuffer>) {
-        let byteLength = 0;
-        const buffers: Uint8Array[] = [];
+        let combinedBuffer = Buffer.alloc(1024);
+        let offset = 0;
+        let tmp = null;
 
-        for (const b of args) {
-            const buffer = await Buffer.from(b);
-            buffers.push(buffer.raw);
-            byteLength += buffer.raw.byteLength;
+        for (const arg of args) {
+            const buffer = await Buffer.from(arg);
+
+            if (buffer.length + offset > combinedBuffer.length) {
+                tmp = combinedBuffer.data.subarray();
+                combinedBuffer = Buffer.alloc(tmp.length * 2);
+                combinedBuffer.data.set(tmp);
+                tmp = null;
+            }
+
+            combinedBuffer.data.set(buffer.data, offset);
+            offset += buffer.length;
         }
 
-        const combinedBuffer = await Buffer.from(new Uint8Array(byteLength));
-
-        let offset = 0;
-        buffers.forEach((buffer) => {
-            combinedBuffer.raw.set(buffer, offset);
-            offset += buffer.byteLength;
-        });
-
-        return combinedBuffer;
+        return Buffer.from(combinedBuffer.data.subarray(0, offset));
     }
 
     /**

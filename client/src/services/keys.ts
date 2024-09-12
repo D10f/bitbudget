@@ -30,7 +30,7 @@ export async function generateMasterKey(username: string, password: string) {
 
     const material = await window.crypto.subtle.importKey(
         'raw',
-        passwordBuffer.raw,
+        passwordBuffer.data,
         'PBKDF2',
         false,
         ['deriveKey', 'deriveBits'],
@@ -39,7 +39,7 @@ export async function generateMasterKey(username: string, password: string) {
     const masterKey = await window.crypto.subtle.deriveKey(
         {
             name: 'PBKDF2',
-            salt: usernameBuffer.raw,
+            salt: usernameBuffer.data,
             iterations: 250_000,
             hash: 'SHA-256',
         },
@@ -55,7 +55,7 @@ export async function generateMasterKey(username: string, password: string) {
     const masterKeyHash = await window.crypto.subtle.deriveBits(
         {
             name: 'PBKDF2',
-            salt: usernameBuffer.raw,
+            salt: usernameBuffer.data,
             iterations: 250_000,
             hash: 'SHA-256',
         },
@@ -65,7 +65,7 @@ export async function generateMasterKey(username: string, password: string) {
 
     return {
         key: await SymmetricKey.from(masterKey),
-        hash: (await Buffer.from(masterKeyHash)).hex,
+        hash: (await Buffer.from(masterKeyHash)).toString('hex'),
     };
 }
 
@@ -135,7 +135,7 @@ export async function unwrapVaultKey(key: string, masterKey: CryptoKey) {
 
     return window.crypto.subtle.unwrapKey(
         'raw',
-        keyBuffer.raw,
+        keyBuffer.data,
         masterKey,
         'AES-KW',
         { name: 'AES-KW', length: 256 },

@@ -23,12 +23,12 @@ export async function encrypt(masterKey: CryptoKey, data: unknown) {
             iv,
         },
         key,
-        clearText.raw,
+        clearText.data,
     );
 
     const wrappedKey = await wrapKey(key, masterKey);
 
-    return Buffer.concat(wrappedKey.raw, iv, encryptedData);
+    return Buffer.concat(wrappedKey.data, iv, encryptedData);
 }
 
 /**
@@ -42,7 +42,7 @@ export async function encrypt(masterKey: CryptoKey, data: unknown) {
  * @param data base64 encoded representation of the encrypted data.
  */
 export async function decrypt(masterKey: CryptoKey, data: string) {
-    const ciphertext = (await Buffer.from(data, 'base64')).raw;
+    const ciphertext = (await Buffer.from(data, 'base64')).data;
 
     const encryptionKeyBuffer = ciphertext.slice(0, 40);
     const iv = ciphertext.slice(40, 40 + 16);
@@ -100,7 +100,7 @@ export async function unwrap(
 
     return window.crypto.subtle.unwrapKey(
         'raw',
-        keyBuffer.raw,
+        keyBuffer.data,
         masterKey,
         'AES-KW',
         algorithm,
