@@ -33,3 +33,18 @@ export function base64ToBytes(str: string) {
     }
     return byteArr;
 }
+
+export function bytesToHex(bytes: Uint8Array) {
+    let hex = '';
+    for (const byte of bytes) {
+        hex += byte.toString(16).padStart(2, '0');
+    }
+    return hex;
+}
+
+//export function hexToBytes(str: string) {
+//    const bytes = new Uint8Array(str.length / 2);
+//    for (let i = 0, c = 0; c < str.length; c += 2, i++)
+//        bytes[i] = parseInt(str.substring(c, 2), 16);
+//    return bytes;
+//}
