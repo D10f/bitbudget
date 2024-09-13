@@ -6,14 +6,19 @@ import { useSignupMutation } from '@features/auth/authApi';
 import { useUpdateUserMutation } from '@features/user/userApi';
 import { useAppDispatch, useAppSelector } from '@app/store';
 import { formErrorHandler } from '@helpers/formErrorHandler';
-import { addKey, setUserData } from '@features/user/userSlice';
+import { addKey, setUserData, selectUserPrefs } from '@features/user/userSlice';
 import { generateUserKeys } from '@services/keys';
 import { setToken } from '../authSlice';
 
 const signupFormSchema = z
     .object({
         name: z.string().min(3).max(255),
-        email: z.string().max(255).email(),
+        email: z
+            .string()
+            .max(255)
+            .email()
+            .or(z.literal(''))
+            .transform((val) => val || undefined),
         password: z.string().min(8).max(255),
         confirm: z.string(),
     })
@@ -26,7 +31,7 @@ type FormTypes = z.infer<typeof signupFormSchema>;
 
 export default function SignupForm() {
     const dispatch = useAppDispatch();
-    const userPrefs = useAppSelector(({ user }) => user.prefs);
+    const userPrefs = useAppSelector(selectUserPrefs);
     const [signup] = useSignupMutation();
     const [update] = useUpdateUserMutation();
     const navigate = useNavigate();
