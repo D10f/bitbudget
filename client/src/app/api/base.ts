@@ -21,7 +21,7 @@ import { HTTP_STATUS } from '../../types/http';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:5000',
-    credentials: 'same-origin',
+    credentials: 'include', // https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch#including_credentials
     prepareHeaders(headers, { getState }) {
         const token = (getState() as RootState).auth.token;
 
