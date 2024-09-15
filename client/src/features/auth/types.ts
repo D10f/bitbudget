@@ -1,5 +1,9 @@
 import { User } from '@features/user/types';
 
+export type AuthRefreshResponse = {
+    accessToken: string;
+};
+
 export type AuthSignupResponse = {
     user: Pick<User, 'name' | 'email'>;
     accessToken: string;

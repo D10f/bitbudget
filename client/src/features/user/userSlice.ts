@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { User, UserPrefs } from '@features/user/types';
+import { RootState } from '@app/store';
 
 const initialState: User = {
     name: 'Guest',
@@ -41,3 +42,5 @@ export const { setUserData, setUserPrefs, addKey, resetKeys } =
     userSlice.actions;
 
 export default userSlice.reducer;
+
+export const selectUserPrefs = (state: RootState) => state.user.prefs;
