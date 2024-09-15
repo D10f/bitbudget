@@ -18,6 +18,7 @@ import {
 import type { RootState } from '@app/store';
 import { logout, setToken } from '@features/auth/authSlice';
 import { HTTP_STATUS } from '../../types/http';
+import { AuthRefreshResponse } from '@features/auth/types';
 
 const baseQuery = fetchBaseQuery({
     baseUrl: 'http://localhost:5000',
@@ -38,14 +39,14 @@ const baseQueryWithReauth: BaseQueryFn = async (args, api, extraOptions) => {
 
     if (result?.error?.status === HTTP_STATUS.FORBIDDEN) {
         // attempt to refresh access token
-        const refreshTokenResult = await baseQuery(
+        const refreshTokenResult = (await baseQuery(
             '/auth/refresh',
             api,
             extraOptions,
-        );
+        )) as { data: AuthRefreshResponse };
 
         if (refreshTokenResult.data) {
-            api.dispatch(setToken(refreshTokenResult.data as string));
+            api.dispatch(setToken(refreshTokenResult.data.accessToken));
             result = await baseQuery(args, api, extraOptions);
         } else {
             api.dispatch(logout());
